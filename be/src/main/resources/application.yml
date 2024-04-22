@@ -1,0 +1,76 @@
+server:
+  port: 8080
+
+spring:
+  profiles:
+    active: @spring.profiles.active@
+  main:
+    allow-bean-definition-overriding: true
+
+  application:
+    name: content-digital-calendar
+
+#  datasource:
+#    url: ${DATASOURCE_URL:jdbc:mysql://mysql-container:3306/ContentDigitalCalendar}
+#    username: ${DATABASE_USERNAME:root}
+#    password: ${DATABASE_PASSWORD:12345}
+#    driver-class-name: com.mysql.jdbc.Driver
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        format_sql: true
+
+  cache:
+    type: redis
+
+  redis:
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
+
+  messages:
+    basename: i18n/messages
+    encoding: UTF-8
+
+  mail:
+    default-encoding: UTF-8
+    host: smtp.gmail.com
+    port: 587
+    username: EMAIL_USERNAME
+    password: EMAIL_PASSWORD
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+        debug: true
+    test-connection: false
+    protocol: smtp
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: GOOGLE_CLIENT_ID
+            client-secret: GOOGLE_CLIENT_SECRET
+  flyway:
+    locations: classpath:/db/migration,classpath:/dev/db/migration
+    baseline-on-migrate: true
+    baseline-version: 0
+
+logging:
+  level:
+    org:
+      springframework.security: DEBUG
+
+openapi:
+  service:
+    api-docs: api-service
+    server: http://localhost:8080
+    title: API Service
+    version: 1.0.0
