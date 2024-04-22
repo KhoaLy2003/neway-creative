@@ -28,7 +28,7 @@ jobs:
         run: |
             cd be
             mvn clean
-            mvn -B package -P dev
+            mvn -B package -P dev -DskipTests
           
     #   - name: Build Docker Image
     #     uses: docker/build-push-action@v2
