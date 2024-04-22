@@ -156,13 +156,35 @@ CREATE TABLE `users` (
   CONSTRAINT `FKditu6lr4ek16tkxtdsne0gxib` FOREIGN KEY (`address_id`) REFERENCES `address` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-
 INSERT INTO `category` (is_delete,name) VALUES
 	 (0,'Business'),
 	 (0,'Education'),
 	 (0,'Health & Fitness'),
 	 (0,'Travel'),
 	 (0,'Food & Drink');
+
+INSERT INTO `calendar`
+(`calendar_id`,
+`created_at`,
+`updated_at`,
+`description`,
+`image`,
+`is_delete`,
+`link_notion`,
+`price`,
+`title`,
+`category_id`)
+VALUES
+(1, '2024-02-16 10:00:00', '2024-02-16 10:00:00', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et ultricies odio, nec aliquam felis. Integer euismod euismod ipsum ut commodo.', 'image1.jpg', 0, 'https://www.notion.so/calendar1', 10.99, 'Sample Calendar 1', 1),
+(2, '2024-02-16 11:00:00', '2024-02-16 11:00:00', 'Vivamus sagittis vestibulum sem, nec fermentum leo interdum quis. Phasellus sed libero mi.', 'image2.jpg', 0, 'https://www.notion.so/calendar2', 14.99, 'Sample Calendar 2', 2),
+(3, '2024-02-16 12:00:00', '2024-02-16 12:00:00', 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nunc quis semper orci.', 'image3.jpg', 0, 'https://www.notion.so/calendar3', 9.99, 'Sample Calendar 3', 3),
+(4, '2024-02-16 13:00:00', '2024-02-16 13:00:00', 'Fusce rutrum augue nec faucibus finibus. Nullam non massa elit.', 'image4.jpg', 0, 'https://www.notion.so/calendar4', 12.99, 'Sample Calendar 4', 1),
+(5, '2024-02-16 14:00:00', '2024-02-16 14:00:00', 'Suspendisse potenti. Quisque non nibh ut nisi vehicula fermentum. Proin ac tristique nisi.', 'image5.jpg', 0, 'https://www.notion.so/calendar5', 11.99, 'Sample Calendar 5', 2),
+(6, '2024-02-16 15:00:00', '2024-02-16 15:00:00', 'Donec ac sem eu sapien convallis interdum. Nullam auctor urna non justo lobortis, nec hendrerit nunc tempus.', 'image6.jpg', 0, 'https://www.notion.so/calendar6', 8.99, 'Sample Calendar 6', 3),
+(7, '2024-02-16 16:00:00', '2024-02-16 16:00:00', 'Integer placerat turpis at ligula lobortis, ac fermentum libero ultricies. Fusce vitae urna id turpis consequat.', 'image7.jpg', 0, 'https://www.notion.so/calendar7', 15.99, 'Sample Calendar 7', 1),
+(8, '2024-02-16 17:00:00', '2024-02-16 17:00:00', 'Etiam convallis libero quis diam finibus ultrices. Fusce ac vestibulum quam. In euismod sem vitae enim pulvinar rhoncus.', 'image8.jpg', 0, 'https://www.notion.so/calendar8', 10.49, 'Sample Calendar 8', 2),
+(9, '2024-02-16 18:00:00', '2024-02-16 18:00:00', 'Mauris aliquam lorem ac libero vestibulum, vel dictum justo consequat. Vivamus sit amet velit libero.', 'image9.jpg', 0, 'https://www.notion.so/calendar9', 13.29, 'Sample Calendar 9', 3),
+(10, '2024-02-16 19:00:00', '2024-02-16 19:00:00', 'Curabitur vel velit justo. Mauris ullamcorper leo ac nulla varius tincidunt. Duis sit amet ex vel ante ultricies dignissim.', 'image10.jpg', 0, 'https://www.notion.so/calendar10', 11.79, 'Sample Calendar 10', 1);
 	 
 INSERT INTO `role` (name) VALUES
 	 ('admin'),

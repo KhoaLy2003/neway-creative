@@ -28,6 +28,7 @@ public class WebSecurityConfig {
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(configurer ->
                         configurer
+                                .antMatchers("/actuator/**").permitAll()
                                 .antMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
                                 .antMatchers("/register", "/login", "/send").permitAll()
                                 .antMatchers("/api/calendars/**").permitAll()
