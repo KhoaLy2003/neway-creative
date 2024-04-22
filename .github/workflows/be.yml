@@ -19,13 +19,14 @@ jobs:
           distribution: 'adopt'
           java-version: 17
     
-      - name: Change to backend directory
-        run: |
-            cd be
-            ls
+    #   - name: Change to backend directory
+    #     run: |
+    #         cd be
+    #         ls
 
       - name: Build the application
         run: |
+            cd be
             mvn clean
             mvn -B package -P dev
           
