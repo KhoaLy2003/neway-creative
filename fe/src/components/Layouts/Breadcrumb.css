@@ -1,0 +1,21 @@
+.breadcrumb-container {
+  align-items: center;
+}
+
+.breadcrumb-container li,
+.breadcrumb-container a {
+  text-transform: uppercase;
+  font-size: 13px;
+  font-weight: 700;
+  color: #121212;
+  display: inline-block;
+  margin: 0px 10px;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.breadcrumb-container .active,
+.breadcrumb-container a.active,
+.breadcrumb-container a:hover {
+  color: #f33f3f;
+}
