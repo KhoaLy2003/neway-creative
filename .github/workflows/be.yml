@@ -18,9 +18,12 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: 17
+    
+      - name: Change to backend directory
+        run: cd be
 
       - name: Build the application
-        run: mvn clean install
+        run: mvn clean package -P dev
           
     #   - name: Build Docker Image
     #     uses: docker/build-push-action@v2
