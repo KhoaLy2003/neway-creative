@@ -25,6 +25,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,17 +37,13 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @Tag(name = "Test Controller", description = "API for testing")
+@RequestMapping("/api/testing")
 public class TestController {
     private static final Logger LOGGER = LoggerFactory.getLogger(TestController.class);
     private final MailService mailService;
     private final PaymentService paymentService;
     private final AuthenticationService authenticationService;
     private final MessageLocalization messageLocalization;
-
-//    @GetMapping("/elasticCalendars")
-//    public List<Role> fetchByNameOrDesc(@RequestParam String query) {
-//        return elasticSearchService.processSearch(query);
-//    }
 
     @Operation(method = "POST", summary = "Register account", description = "Send a request via this API to register new account")
     @PostMapping("/register")

@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class VnPayConstant {
     public static final String VNP_PAY_URL = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-    public static final String VNP_RETURN_URL = "http://localhost:8080/result";
+    public static final String VNP_RETURN_URL = "http://localhost:8080/api/testing/result";
     public static final String VNP_TMN_CODE = "I5KQIAXB";
     public static final String SECRET_KEY = "TBBRHMODHEETYDDLMFQFGIJHDZGXQTZF";
     public static final String VNP_API_URL = "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction";
