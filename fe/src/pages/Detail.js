@@ -16,7 +16,7 @@ const DetailPage = () => {
           )}
         </Await>
       </Suspense>
-      <RelatedCalendars calendarId={calendar.calendarId}/>
+      <RelatedCalendars calendarId={calendar.calendarId} />
     </div>
   );
 };
@@ -31,7 +31,7 @@ async function loadCalendar(id) {
       { message: "Failed to fetch data" },
       {
         status: 400,
-      }
+      },
     );
   } else {
     const resData = await response.json();
