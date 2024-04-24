@@ -1,34 +1,44 @@
 import React, { Fragment, useState } from "react";
+import momo from "../../assets/momo.jpg";
+import vnPay from "../../assets/vn-pay.jpg";
 
 function PaymentMethod() {
   const [selectedOption, setSelectedOption] = useState(null);
 
-  const handleOptionChange = (option) => {
-    setSelectedOption(option);
+  const handleOptionChange = (event) => {
+    setSelectedOption(event.target.value);
   };
 
   return (
     <Fragment>
       <h3>Payment method</h3>
 
-      <div className="payment-method">
-        <label className="image-radio">
+      <div className="payment-method mt-3">
+        <label className="payment-method">
           <input
             type="radio"
-            value="option1"
-            checked={selectedOption === "option1"}
-            onChange={() => handleOptionChange("option1")}
+            value="momo"
+            checked={selectedOption === "momo"}
+            onChange={handleOptionChange}
           />
-          <img src="image1.png" alt="Option 1" />
+          <img
+            style={{ width: "5rem", height: "3rem" }}
+            src={momo}
+            alt="Momo"
+          />
         </label>
-        <label className="image-radio">
+        <label className="payment-method mt-3">
           <input
             type="radio"
-            value="option2"
-            checked={selectedOption === "option2"}
-            onChange={() => handleOptionChange("option2")}
+            value="vn-pay"
+            checked={selectedOption === "vn-pay"}
+            onChange={handleOptionChange}
           />
-          <img src="image2.png" alt="Option 2" />
+          <img
+            style={{ width: "5rem", height: "3rem" }}
+            src={vnPay}
+            alt="VN Pay"
+          />
         </label>
       </div>
     </Fragment>

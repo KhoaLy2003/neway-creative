@@ -1,7 +1,7 @@
-import { React, Fragment, useState } from "react";
+import { Fragment, React, useState } from "react";
 
-import PageHeading from "../components/Layouts/PageHeading";
 import About from "../components/Layouts/About";
+import PageHeading from "../components/Layouts/PageHeading";
 import PaymentMethod from "../components/Sections/PaymentMethod";
 
 function PaymentPage() {
