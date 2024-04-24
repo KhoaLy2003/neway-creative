@@ -6,8 +6,8 @@ import PaymentMethod from "../components/Sections/PaymentMethod";
 
 function PaymentPage() {
   const options = [
-    { value: "momo", label: "Momo", imageSrc: "" },
-    { value: "vn-pay", label: "VN Pay", imageSrc: "" },
+    { value: "momo", label: "Momo", imageSrc: "../assets/momo.png" },
+    { value: "vn-pay", label: "VN Pay", imageSrc: "../assets/vn-pay.png" },
   ];
 
   return (
