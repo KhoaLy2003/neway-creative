@@ -5,6 +5,7 @@ import HomePage from "./pages/Home";
 import ProductsPage from "./pages/Calendars";
 import ErrorPage from "./pages/Error";
 import DetailPage, { loader as calendarLoader } from "./pages/Detail";
+import PaymentPage from "./pages/PaymentPage";
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
         id: "calendar-detail",
         element: <DetailPage />,
         loader: calendarLoader,
+      },
+      {
+        path: "payment",
+        element: <PaymentPage />,
       },
     ],
   },
