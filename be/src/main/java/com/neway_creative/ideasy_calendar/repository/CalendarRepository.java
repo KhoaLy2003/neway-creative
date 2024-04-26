@@ -17,7 +17,6 @@ import java.util.List;
 @Repository
 public interface CalendarRepository extends JpaRepository<Calendar, Integer> {
     Page<Calendar> findAllByCategoryCategoryId(int categoryId, Pageable pageable);
-    List<Calendar> findTop4ByCategoryOrderByCalendarIdAsc(Category category);
+    List<Calendar> findAllByCategoryOrderByCalendarIdAsc(Category category);
     List<Calendar> findTop8ByOrderByUpdatedAtDesc();
-    List<Calendar> findAllByTitleContaining(String title);
 }

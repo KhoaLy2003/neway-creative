@@ -3,12 +3,15 @@ package com.neway_creative.ideasy_calendar.enumeration;
 import lombok.Getter;
 
 /**
- * RoleEnum
+ * DurationUnitEnum
  *
  * @author khoaly
  */
 @Getter
-public enum RoleEnum {
-    ADMIN,
-    CUSTOMER;
+public enum DurationUnitEnum {
+    DAYS,
+    WEEKS,
+    MONTHS,
+    YEARS
 }
+

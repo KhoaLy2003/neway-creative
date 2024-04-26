@@ -3,12 +3,13 @@ package com.neway_creative.ideasy_calendar.enumeration;
 import lombok.Getter;
 
 /**
- * RoleEnum
+ * StatusEnum
  *
  * @author khoaly
  */
 @Getter
-public enum RoleEnum {
-    ADMIN,
-    CUSTOMER;
+public enum StatusEnum {
+    ACTIVE,
+    INACTIVE;
 }
+
