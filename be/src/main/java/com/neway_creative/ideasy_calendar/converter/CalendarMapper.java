@@ -29,7 +29,6 @@ public interface CalendarMapper {
     @Mapping(target = "calendarId", source = "entity.calendarId")
     @Mapping(target = "title", source = "entity.title")
     @Mapping(target = "description", source = "entity.description")
-    @Mapping(target = "price", source = "entity.price")
     @Mapping(target = "image", source = "entity.image")
     @Mapping(target = "category", source = "entity.category")
     CalendarDto entityToDTO(Calendar entity);
@@ -43,7 +42,6 @@ public interface CalendarMapper {
     @Mapping(target = "calendarId", source = "dto.calendarId")
     @Mapping(target = "title", source = "dto.title")
     @Mapping(target = "description", source = "dto.description")
-    @Mapping(target = "price", source = "dto.price")
     @Mapping(target = "image", source = "dto.image")
     @Mapping(target = "category", source = "dto.category")
     Calendar dtoToEntity(CalendarDto dto);

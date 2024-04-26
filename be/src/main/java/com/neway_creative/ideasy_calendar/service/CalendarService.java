@@ -3,6 +3,7 @@ package com.neway_creative.ideasy_calendar.service;
 
 import com.neway_creative.ideasy_calendar.dto.CalendarDto;
 import com.neway_creative.ideasy_calendar.dto.request.CalendarRequest;
+import com.neway_creative.ideasy_calendar.dto.response.CalendarDetailResponse;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public interface CalendarService {
      * @param id the id
      * @return the calendar dto by id
      */
-    CalendarDto getCalendarDtoById(int id);
+    CalendarDetailResponse getCalendarDtoById(int id);
 
     /**
      * Gets calendars by category id.

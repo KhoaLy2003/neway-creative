@@ -5,13 +5,13 @@ import com.neway_creative.ideasy_calendar.constant.UriConstant;
 import com.neway_creative.ideasy_calendar.dto.CalendarDto;
 import com.neway_creative.ideasy_calendar.dto.request.CalendarRequest;
 import com.neway_creative.ideasy_calendar.dto.response.BaseResponse;
+import com.neway_creative.ideasy_calendar.dto.response.CalendarDetailResponse;
 import com.neway_creative.ideasy_calendar.service.CalendarService;
 import com.neway_creative.ideasy_calendar.utils.MessageLocalization;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -54,10 +54,10 @@ public class CalendarController {
 
     @CrossOrigin
     @GetMapping(UriConstant.CALENDAR_VARIABLE_URI)
-    public ResponseEntity<BaseResponse> getProductByProductId(@PathVariable int calendarId) {
-        CalendarDto  calendarDto = calendarService.getCalendarDtoById(calendarId);
+    public ResponseEntity<BaseResponse> getCalendarByCalendarId(@PathVariable int calendarId) {
+        CalendarDetailResponse calendarDetailResponse = calendarService.getCalendarDtoById(calendarId);
 
-        return ResponseEntity.status(HttpStatus.OK).body(new BaseResponse(SUCCESSFUL_CODE, SUCCESSFUL_MESSAGE, calendarDto));
+        return ResponseEntity.status(HttpStatus.OK).body(new BaseResponse(SUCCESSFUL_CODE, SUCCESSFUL_MESSAGE, calendarDetailResponse));
     }
 
     @CrossOrigin
@@ -85,7 +85,7 @@ public class CalendarController {
     }
 
     @PostMapping(UriConstant.CALENDAR_CREATE)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    //@PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<BaseResponse> createCalendar(@Valid @RequestBody CalendarRequest calendarRequest, BindingResult result) {
         if(result.hasErrors()) {
             List<String> errorMessages = result.getFieldErrors()
