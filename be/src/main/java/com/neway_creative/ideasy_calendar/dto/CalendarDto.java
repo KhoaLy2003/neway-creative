@@ -16,7 +16,6 @@ public class CalendarDto implements Serializable {
     private int calendarId;
     private String title;
     private String description;
-    private long price;
     private String image;
     private CategoryDto category;
 }
