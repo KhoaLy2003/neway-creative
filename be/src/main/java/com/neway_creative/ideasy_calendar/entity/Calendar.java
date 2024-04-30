@@ -3,6 +3,7 @@ package com.neway_creative.ideasy_calendar.entity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -29,6 +30,7 @@ import java.util.List;
  */
 @Getter
 @Setter
+@NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "calendar")
@@ -61,8 +63,4 @@ public class Calendar extends BaseEntity implements Serializable {
 
     @OneToMany(mappedBy = "calendar", cascade = CascadeType.ALL)
     private List<Package> packages;
-
-    public Calendar() {
-        this.isDelete = false;
-    }
 }

@@ -1,8 +1,8 @@
 import React from "react";
 
-import About from "../components/Layouts/About";
-import PageHeading from "../components/Layouts/PageHeading";
-import LatestCalendars from "../components/Sections/LatestCalendars";
+import About from "../../components/Layouts/About";
+import PageHeading from "../../components/Layouts/PageHeading";
+import LatestCalendars from "../../components/Sections/LatestCalendars";
 
 const HomePage = () => {
   return (

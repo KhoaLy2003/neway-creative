@@ -41,5 +41,13 @@ public final class UriConstant {
     /**
      * The constant CALENDAR_CREATE.
      */
-    public static final String CALENDAR_CREATE = "/create";
+    public static final String CALENDAR_CREATE = "/admin/create";
+    /**
+     * The constant CALENDAR_UPLOAD.
+     */
+    public static final String CALENDAR_UPLOAD = "/admin/upload";
+    /**
+     * The constant CALENDAR_ADMIN_LIST.
+     */
+    public static final String CALENDAR_ADMIN_LIST = "/admin/list";
 }

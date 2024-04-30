@@ -10,7 +10,7 @@ const Header = () => {
         <div className="custom-container">
           <Link className="navbar-brand" to="/">
             <h2>
-              Sixteen <em>Clothing</em>
+              Neway <em>Creative</em>
             </h2>
           </Link>
           <button
@@ -32,7 +32,11 @@ const Header = () => {
                 </NavLink>
               </li>
               <li className="nav-item">
-                <NavLink className="nav-link" activeClassName="active" to="/calendars">
+                <NavLink
+                  className="nav-link"
+                  activeClassName="active"
+                  to="/calendars"
+                >
                   Our Products
                 </NavLink>
               </li>

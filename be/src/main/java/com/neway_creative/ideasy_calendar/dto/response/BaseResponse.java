@@ -13,7 +13,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class BaseResponse {
-    private int code;
+    private int status;
     private String message;
     private Object data;
 }
