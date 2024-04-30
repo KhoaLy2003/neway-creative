@@ -8,8 +8,8 @@ const PageHeading = () => {
         <div className="row">
           <div className="col-md-12">
             <div className="text-content">
-              <h4>new arrivals</h4>
-              <h2>sixteen products</h2>
+              <h4>new products</h4>
+              <h2>ideasy calendar</h2>
             </div>
           </div>
         </div>

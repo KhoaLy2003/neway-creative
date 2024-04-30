@@ -1,5 +1,5 @@
 import React from "react";
-import './Footer.css';
+import "./Footer.css";
 import "../../assets/root.css";
 
 const Footer = () => {
@@ -10,13 +10,9 @@ const Footer = () => {
           <div className="col-md-12">
             <div className="inner-content">
               <p>
-                Copyright &copy; 2020 Sixteen Clothing Co., Ltd. - Design:{" "}
-                <a
-                  rel="nofollow noopener"
-                  href="#"
-                  target="_blank"
-                >
-                  TemplateMo
+                IDEASY Calendar ©{new Date().getFullYear()}:{" "}
+                <a rel="nofollow noopener" href="#" target="_blank">
+                  Neway Creative
                 </a>
               </p>
             </div>

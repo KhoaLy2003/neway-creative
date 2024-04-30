@@ -11,11 +11,12 @@ import java.util.List;
 @Setter
 @Getter
 @Builder
-public class CalendarDetailResponse implements Serializable {
+public class CalendarDetailAdminResponse implements Serializable {
     private int calendarId;
     private String title;
-    private String description;
     private String image;
+    private boolean isDelete;
+    private String description;
     private CategoryDto category;
     private List<PackageResponse> packages;
 }

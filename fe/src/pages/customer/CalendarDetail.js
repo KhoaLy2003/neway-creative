@@ -1,8 +1,9 @@
 import { Suspense } from "react";
-import { useRouteLoaderData, json, defer, Await } from "react-router-dom";
+import { useRouteLoaderData, defer, Await } from "react-router-dom";
 
-import CalendarDetail from "../components/Calendars/CalendarDetail";
-import RelatedCalendars from "../components/Sections/RelatedCalendars";
+import CalendarDetail from "../../components/Calendars/CalendarDetail";
+import RelatedCalendars from "../../components/Sections/RelatedCalendars";
+import { fetchCalendarDetail } from "../../api/calendar";
 
 const DetailPage = () => {
   const { calendar } = useRouteLoaderData("calendar-detail");
@@ -23,26 +24,10 @@ const DetailPage = () => {
 
 export default DetailPage;
 
-async function loadCalendar(id) {
-  const response = await fetch("http://localhost:8080/api/calendars/" + id);
-
-  if (!response.ok) {
-    throw json(
-      { message: "Failed to fetch data" },
-      {
-        status: 400,
-      }
-    );
-  } else {
-    const resData = await response.json();
-    return resData.data;
-  }
-}
-
 export async function loader({ params }) {
   const id = params.calendarId;
 
   return defer({
-    calendar: await loadCalendar(id),
+    calendar: await fetchCalendarDetail(id),
   });
 }

@@ -31,6 +31,6 @@ public class CategoryController {
     public ResponseEntity<BaseResponse> getAllCategories() {
         List<CategoryDto> categoryDTOs = categoryService.getActiveCategories();
 
-        return ResponseEntity.status(HttpStatus.OK).body(new BaseResponse(MessageConstant.SUCCESSFUL_CODE, MessageConstant.SUCCESSFUL_MESSAGE, categoryDTOs));
+        return ResponseEntity.status(HttpStatus.OK).body(new BaseResponse(HttpStatus.OK.value(), MessageConstant.SUCCESSFUL_MESSAGE, categoryDTOs));
     }
 }

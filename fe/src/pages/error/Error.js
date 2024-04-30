@@ -1,5 +1,5 @@
 import { useRouteError } from "react-router-dom";
-import FillButton from "../components/Layouts/FillButton";
+import FillButton from "../../components/Layouts/FillButton";
 
 function ErrorPage() {
   const error = useRouteError();

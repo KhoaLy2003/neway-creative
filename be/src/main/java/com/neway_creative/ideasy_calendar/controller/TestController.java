@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -33,6 +34,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
@@ -44,6 +46,7 @@ public class TestController {
     private final PaymentService paymentService;
     private final AuthenticationService authenticationService;
     private final MessageLocalization messageLocalization;
+    private final RedisTemplate redisTemplate;
 
     @Operation(method = "POST", summary = "Register account", description = "Send a request via this API to register new account")
     @PostMapping("/register")
@@ -141,5 +144,15 @@ public class TestController {
         loginGoogleInfoDto.setAvatar(oAuth2AuthenticationToken.getPrincipal().getAttributes().get("picture").toString());
 
         return ResponseEntity.status(HttpStatus.OK).body(new BaseResponse(MessageConstant.SUCCESSFUL_CODE, MessageConstant.SUCCESSFUL_MESSAGE, loginGoogleInfoDto));
+    }
+
+    @GetMapping("/clear")
+    public void clearRedisCache() {
+        String REDIS_KEY = "CALENDAR";
+        Set<String> cacheKeys = redisTemplate.keys(REDIS_KEY + "_page_*");
+        if (cacheKeys != null && !cacheKeys.isEmpty()) {
+            redisTemplate.delete(cacheKeys);
+            LOGGER.info("Cache keys for all pages cleared");
+        }
     }
 }

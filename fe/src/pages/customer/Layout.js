@@ -1,7 +1,7 @@
 import { Outlet, useNavigation } from "react-router-dom";
 
-import Header from "../components/Layouts/Header";
-import Footer from "../components/Layouts/Footer";
+import Header from "../../components/Layouts/Header";
+import Footer from "../../components/Layouts/Footer";
 
 const RootLayout = () => {
   return (

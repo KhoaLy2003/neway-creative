@@ -3,6 +3,9 @@ import "../../assets/root.css";
 import "../Calendars/Calendar.css";
 import Calendar from "../Calendars/Calendar";
 import { Link } from "react-router-dom";
+import { getLatestCalendars } from "../../api/calendar";
+import { Spin } from "antd";
+import { LoadingOutlined } from '@ant-design/icons';
 
 const LatestCalendars = () => {
   const [calendars, setCalendars] = useState([]);
@@ -12,13 +15,7 @@ const LatestCalendars = () => {
   useEffect(() => {
     const fetchCalendars = async () => {
       try {
-        const response = await fetch("http://localhost:8080/api/calendars/latest");
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch data");
-        }
-
-        const data = await response.json();
+        const data = await getLatestCalendars();
 
         setCalendars(data.data);
         setIsLoading(false);
@@ -32,11 +29,22 @@ const LatestCalendars = () => {
   }, []);
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return (
+      <Spin
+        indicator={
+          <LoadingOutlined
+            style={{
+              fontSize: 24,
+            }}
+            spin
+          />
+        }
+      />
+    );
   }
 
   if (httpError) {
-    return <p>Error: {httpError}</p>;
+    return <p className="text-center">Error: {httpError}</p>;
   }
 
   return (
@@ -45,7 +53,7 @@ const LatestCalendars = () => {
         <div className="row">
           <div className="col-md-12">
             <div className="section-heading">
-              <h2>Latest Products</h2>
+              <h2>IDEASY Calendar</h2>
               <Link to="/calendars">
                 View all products <i className="fa fa-angle-right"></i>
               </Link>

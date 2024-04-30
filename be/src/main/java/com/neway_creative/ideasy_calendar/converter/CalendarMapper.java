@@ -2,6 +2,7 @@ package com.neway_creative.ideasy_calendar.converter;
 
 import com.neway_creative.ideasy_calendar.dto.CalendarDto;
 import com.neway_creative.ideasy_calendar.dto.CategoryDto;
+import com.neway_creative.ideasy_calendar.dto.response.CalendarAdminResponse;
 import com.neway_creative.ideasy_calendar.entity.Calendar;
 import com.neway_creative.ideasy_calendar.entity.Category;
 import org.mapstruct.Mapper;
@@ -45,6 +46,12 @@ public interface CalendarMapper {
     @Mapping(target = "image", source = "dto.image")
     @Mapping(target = "category", source = "dto.category")
     Calendar dtoToEntity(CalendarDto dto);
+
+    @Mapping(target = "calendarId", source = "calendarId")
+    @Mapping(target = "title", source = "title")
+    @Mapping(target = "image", source = "image")
+    @Mapping(target = "isDelete", expression = "java(entity.isDelete())")
+    CalendarAdminResponse entityToCalendarAdminResponse(Calendar entity);
 
     default CategoryDto categoryToCategoryDto(Category category) {
         if (category == null) {

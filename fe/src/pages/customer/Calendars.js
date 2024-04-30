@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Await } from "react-router-dom";
-import CalendarList from "../components/Calendars/CalendarList";
-import PageHeading from "../components/Layouts/PageHeading";
-import "../assets/root.css";
+import CalendarList from "../../components/Calendars/CalendarList";
+import PageHeading from "../../components/Layouts/PageHeading";
+import "../../assets/root.css";
 import "./CalendarPage.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import Breadcrumb from "../components/Layouts/Breadcrumb";
+import Breadcrumb from "../../components/Layouts/Breadcrumb";
+import { fetchCategories } from "../../api/category";
+import { fetchCalendarsByCategory } from "../../api/calendar";
 
 const CalendarsPage = () => {
   const [categories, setCategories] = useState([]);
@@ -14,41 +16,31 @@ const CalendarsPage = () => {
   const [currentPage, setCurrentPage] = useState(0);
 
   useEffect(() => {
-    const fetchCategories = async () => {
+    const fetchCategoriesData = async () => {
       try {
-        const response = await fetch("http://localhost:8080/api/categories");
-        if (!response.ok) {
-          throw new Error("Failed to fetch categories");
-        }
-        const data = await response.json();
-        setCategories(data.data);
+        const categoriesData = await fetchCategories();
+        setCategories(categoriesData);
       } catch (error) {
         console.error("Error fetching categories:", error.message);
       }
     };
-    fetchCategories();
+    fetchCategoriesData();
   }, []);
 
   useEffect(() => {
-    fetchCalendarsByCategory();
+    const fetchCalendars = async () => {
+      try {
+        const calendarsData = await fetchCalendarsByCategory(
+          selectedCategory,
+          currentPage
+        );
+        setFilteredCalendars(calendarsData);
+      } catch (error) {
+        console.error("Error fetching calendars:", error.message);
+      }
+    };
+    fetchCalendars();
   }, [selectedCategory, currentPage]);
-
-  const fetchCalendarsByCategory = async () => {
-    try {
-      let url = `http://localhost:8080/api/calendars/?pageNo=${currentPage}`;
-      if (selectedCategory !== null) {
-        url = `http://localhost:8080/api/calendars/category?categoryId=${selectedCategory}&pageNo=${currentPage}`;
-      }
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error("Failed to fetch calendars by category");
-      }
-      const data = await response.json();
-      setFilteredCalendars(data.data.content);
-    } catch (error) {
-      console.error("Error fetching calendars by category:", error.message);
-    }
-  };
 
   const handleCategoryClick = (categoryId) => {
     setSelectedCategory(categoryId);
