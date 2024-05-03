@@ -35,10 +35,11 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
 
+      - name: Change directory to 'fe'
+        run: cd fe
+
       - name: Install dependencies
         run: npm ci
-        working-directory: ${{ github.workspace }}/fe
 
       - name: Build application
         run: npm run build --if-present
-        working-directory: ${{ github.workspace }}/fe
