@@ -1,6 +1,7 @@
 package com.neway_creative.ideasy_calendar.dto.response;
 
 import com.neway_creative.ideasy_calendar.dto.CategoryDto;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,6 +12,7 @@ import java.util.List;
 @Setter
 @Getter
 @Builder
+@AllArgsConstructor
 public class CalendarDetailAdminResponse implements Serializable {
     private int calendarId;
     private String title;
@@ -18,5 +20,5 @@ public class CalendarDetailAdminResponse implements Serializable {
     private boolean isDelete;
     private String description;
     private CategoryDto category;
-    private List<PackageResponse> packages;
+    private List<PackageAdminResponse> packages;
 }

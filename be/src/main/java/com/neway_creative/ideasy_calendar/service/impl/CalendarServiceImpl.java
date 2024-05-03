@@ -9,7 +9,9 @@ import com.neway_creative.ideasy_calendar.converter.PackageMapper;
 import com.neway_creative.ideasy_calendar.dto.CalendarDto;
 import com.neway_creative.ideasy_calendar.dto.request.CalendarRequest;
 import com.neway_creative.ideasy_calendar.dto.response.CalendarAdminResponse;
+import com.neway_creative.ideasy_calendar.dto.response.CalendarDetailAdminResponse;
 import com.neway_creative.ideasy_calendar.dto.response.CalendarDetailResponse;
+import com.neway_creative.ideasy_calendar.dto.response.PackageAdminResponse;
 import com.neway_creative.ideasy_calendar.dto.response.PackageResponse;
 import com.neway_creative.ideasy_calendar.entity.Calendar;
 import com.neway_creative.ideasy_calendar.entity.Category;
@@ -255,9 +257,44 @@ public class CalendarServiceImpl implements CalendarService {
         }
     }
 
+    @Override
+    public CalendarDetailAdminResponse getCalendarDetailByIdInAdminRole(int id) {
+        if (StringUtils.isEmpty(String.valueOf(id))) {
+            LOGGER.error("Invalid param for product with product id {}", id);
+            throw new InvalidParameterException("Invalid param for product with product id " + id);
+        }
+
+        Optional<Calendar> calendar = calendarRepository.findById(id);
+        if (calendar.isPresent()) {
+            CalendarDetailAdminResponse calendarDetailAdminResponse = CalendarDetailAdminResponse
+                    .builder()
+                    .calendarId(calendar.get().getCalendarId())
+                    .title(calendar.get().getTitle())
+                    .image(calendar.get().getImage())
+                    .category(CategoryMapper.INSTANCE.entityToDTO(calendar.get().getCategory()))
+                    .description(calendar.get().getDescription())
+                    .isDelete(calendar.get().isDelete())
+                    .packages(mapDetailPackages(calendar.get().getPackages()))
+                    .build();
+
+            LOGGER.info("Get calendar successfully with id {}", id);
+
+            return calendarDetailAdminResponse;
+        } else {
+            LOGGER.error("Can not find calendar with id {}", id);
+            throw new ResourceNotFoundException("No calendar with id " + id);
+        }
+    }
+
     private List<PackageResponse> mapPackages(List<Package> packages) {
         return packages.stream()
                 .map(PackageMapper.INSTANCE::entityToResponse)
+                .toList();
+    }
+
+    private List<PackageAdminResponse> mapDetailPackages(List<Package> packages) {
+        return packages.stream()
+                .map(PackageMapper.INSTANCE::entityToPackageAdminResponse)
                 .toList();
     }
 

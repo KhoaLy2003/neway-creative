@@ -3,14 +3,13 @@ import {
   Button,
   Form,
   Input,
-  Layout,
   Select,
-  Space,
   Upload,
   Card,
   InputNumber,
   Spin,
   Image,
+  Modal,
 } from "antd";
 import {
   LoadingOutlined,
@@ -49,18 +48,6 @@ const formItemLayout = {
     },
   },
 };
-const tailFormItemLayout = {
-  wrapperCol: {
-    xs: {
-      span: 24,
-      offset: 0,
-    },
-    sm: {
-      span: 16,
-      offset: 8,
-    },
-  },
-};
 
 const packageTypeOptions = [
   { value: "BASIC", label: "BASIC" },
@@ -75,12 +62,12 @@ const packageDurationUnitOptions = [
   { value: "YEARS", label: "YEARS" },
 ];
 
-const AdminCalendarForm = () => {
-  const [categories, setCategories] = useState([]);
+const AdminCalendarForm = ({ modalOpen, setModalOpen, calendar }) => {
   const [form] = Form.useForm();
+  const navigate = useNavigate();
+  const [categories, setCategories] = useState([]);
   const [file, setFile] = useState(null);
   const [responseStatus, setResponseStatus] = useState(null);
-  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
@@ -102,12 +89,51 @@ const AdminCalendarForm = () => {
         console.error("Error fetching categories:", error.message);
       }
     };
-    fetchCategoriesData();
-  }, []);
+
+    if (modalOpen) {
+      fetchCategoriesData();
+    }
+  }, [modalOpen]);
+
+  useEffect(() => {
+    if (calendar) {
+      const { title, description, category, packages } = calendar;
+      form.setFieldsValue({
+        title,
+        description,
+        category: category.categoryId,
+        packages: packages.map((pkg) => ({ ...pkg })),
+      });
+
+      packages.forEach((pkg, index) => {
+        console.log(pkg);
+        form.setFieldsValue({
+          [`packages[${index}].package_price`]: 3,
+          [`packages[${index}].package_duration_value`]:
+            pkg.durationValue,
+          [`packages[${index}].package_duration_unit`]:
+            pkg.packageDurationUnit,
+          [`packages[${index}].package_type`]: pkg.packageType,
+          [`packages[${index}].link_notion`]: pkg.linkNotion,
+        });
+      });
+    }
+  }, [calendar, form]);
+
+  const handleOk = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      setModalOpen(false);
+    }, 3000);
+  };
+  const handleCancel = () => {
+    setModalOpen(false);
+    form.resetFields();
+  };
 
   useEffect(() => {
     if (responseStatus !== null) {
-      const newPath = responseStatus ? "/admin" : "/admin/calendars/create";
       navigate("/admin/result", {
         state: {
           status: responseStatus,
@@ -115,19 +141,19 @@ const AdminCalendarForm = () => {
           subTitle: responseStatus
             ? "Calendar created successfully."
             : "Failed to create calendar.",
-          btnText: responseStatus ? "Go back to dashboard" : "Try again",
-          path: newPath,
+          btnText: responseStatus ? "OK" : "Try again",
+          path: "/admin/calendars",
         },
       });
     }
   }, [responseStatus, navigate]);
 
-  const onFinish = async (values) => {
+  const onSubmit = async (values) => {
     setLoading(true);
     console.log("Received values of form: ", values);
     const { title, description, category, packages } = values;
 
-    const calendar = {
+    const calendarPayload = {
       title,
       description,
       category_id: category,
@@ -140,20 +166,31 @@ const AdminCalendarForm = () => {
       })),
     };
 
-    try {
-      const createResponse = await createCalendar(calendar);
-      console.log("Backend create calendar response: ", createResponse);
+    if (calendar && calendar.id) {
+      calendarPayload.id = calendar.id;
+    }
 
-      if (createResponse.status === 201) {
-        console.log("Create ok", createResponse);
-        const calendarId = createResponse.data;
+    let response = null;
+    try {
+      if (calendar && calendar.id) {
+        //response = await updateCalendar(calendarPayload);
+        console.log(calendar);
+      } else {
+        console.log("Create: ", calendarPayload);
+        response = await createCalendar(calendarPayload);
+        console.log("Create: ", response);
+      }
+      console.log("Backend response: ", response);
+
+      if (response.status === 201) {
+        const calendarId = response.data;
         const formData = new FormData();
         formData.append("imageFile", file);
         formData.append("id", calendarId);
 
-        const response = await uploadCalendarImage(calendarId, formData);
-        if (response.status === 200) {
-          console.log("Upload ok", response);
+        const uploadResponse = await uploadCalendarImage(calendarId, formData);
+        if (uploadResponse.status === 200) {
+          console.log("Upload ok", uploadResponse);
           setResponseStatus(true);
           form.resetFields();
         }
@@ -167,27 +204,40 @@ const AdminCalendarForm = () => {
   };
 
   return (
-    // <Layout>
-    //   <Space
-    //     size={20}
-    //     direction="vertical"
-    //     style={{
-    //       margin: "24px 16px 0",
-    //     }}
-    //   >
-    //   </Space>
-    // </Layout>
-    <div>
-      <Form
-        {...formItemLayout}
-        form={form}
-        name="create"
-        onFinish={onFinish}
-        style={{
-          maxWidth: 800,
-        }}
-        scrollToFirstError
-      >
+    <Modal
+      width={"50%"}
+      title={"Calendar infomation"}
+      centered
+      open={modalOpen}
+      onOk={() => setModalOpen(false)}
+      onCancel={() => setModalOpen(false)}
+      footer={[
+        <Button key="back" onClick={handleCancel} size="large">
+          Return
+        </Button>,
+        <Button
+          key="submit"
+          type="primary"
+          loading={loading}
+          size="large"
+          ghost="true"
+          onClick={() => {
+            form
+              .validateFields()
+              .then((values) => {
+                onSubmit(values);
+                // console.log(values);
+              })
+              .catch((info) => {
+                console.log("Validate Failed:", info);
+              });
+          }}
+        >
+          {calendar ? "Update" : "Create"}
+        </Button>,
+      ]}
+    >
+      <Form {...formItemLayout} form={form} name="form" scrollToFirstError id="my-form">
         <Form.Item
           name="title"
           label="Title"
@@ -200,6 +250,7 @@ const AdminCalendarForm = () => {
         >
           <Input />
         </Form.Item>
+
         <Form.Item
           name="description"
           label="Description"
@@ -298,6 +349,19 @@ const AdminCalendarForm = () => {
         >
           <Form.List
             name="packages"
+            // initialValue={
+            //   calendar
+            //     ? calendar?.packages.map((pkg, index) => {
+            //         console.log(
+            //           `Setting initialValue for package ${index + 1}:`,
+            //           {
+            //             ...pkg,
+            //           }
+            //         );
+            //         return { ...pkg };
+            //       })
+            //     : []
+            // }
             rules={[
               {
                 validator: (_, value) => {
@@ -320,7 +384,7 @@ const AdminCalendarForm = () => {
                   flexDirection: "column",
                 }}
               >
-                {fields.map((field) => (
+                {fields.map((field, index) => (
                   <Card
                     size="small"
                     title={`Package ${field.name + 1}`}
@@ -336,6 +400,12 @@ const AdminCalendarForm = () => {
                     <Form.Item
                       label="Price"
                       name={[field.name, "package_price"]}
+                      initialValue={
+                        calendar && calendar.packages[index] ? (() => {
+                          console.log("Initial value of package price:", calendar.packages[index].price);
+                          return calendar.packages[index].price;
+                        })() : undefined
+                      }
                       rules={[
                         {
                           required: true,
@@ -414,12 +484,6 @@ const AdminCalendarForm = () => {
             )}
           </Form.List>
         </FormItem>
-
-        <Form.Item {...tailFormItemLayout}>
-          <Button type="primary" htmlType="submit" size="large" ghost="true">
-            Create
-          </Button>
-        </Form.Item>
       </Form>
 
       {loading && (
@@ -435,7 +499,7 @@ const AdminCalendarForm = () => {
           }
         />
       )}
-    </div>
+    </Modal>
   );
 };
 

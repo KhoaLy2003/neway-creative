@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import HomePage from "./pages/customer/Home";
 import ProductsPage from "./pages/customer/Calendars";
@@ -10,11 +10,8 @@ import AdminLayout from "./pages/admin/AdminLayout";
 import RootLayout from "./pages/customer/Layout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminCalendarManagement from "./pages/admin/AdminCalendarManagement";
-import AdminCalendarForm from "./pages/admin/AdminCalendarForm";
-import { uploadCalendarImage } from "./api/calendar";
 import AdminResult from "./pages/admin/AdminResult";
 import AdminCustomerMangment from "./pages/admin/AdminCustomerManagement";
-import AdminCalendarCreate from "./pages/admin/AdminCalendarCreate";
 import AdminTransactionManagement from "./pages/admin/AdminTransactionManagement";
 
 const router = createBrowserRouter([
@@ -44,10 +41,6 @@ const router = createBrowserRouter([
       {
         path: "calendars",
         element: <AdminCalendarManagement />,
-      },
-      {
-        path: "calendars/create",
-        element: <AdminCalendarCreate />,
       },
       {
         path: "customers",

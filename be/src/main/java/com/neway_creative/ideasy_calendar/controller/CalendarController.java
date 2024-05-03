@@ -6,6 +6,7 @@ import com.neway_creative.ideasy_calendar.dto.CalendarDto;
 import com.neway_creative.ideasy_calendar.dto.request.CalendarRequest;
 import com.neway_creative.ideasy_calendar.dto.response.BaseResponse;
 import com.neway_creative.ideasy_calendar.dto.response.CalendarAdminResponse;
+import com.neway_creative.ideasy_calendar.dto.response.CalendarDetailAdminResponse;
 import com.neway_creative.ideasy_calendar.dto.response.CalendarDetailResponse;
 import com.neway_creative.ideasy_calendar.entity.Calendar;
 import com.neway_creative.ideasy_calendar.service.CalendarService;
@@ -88,7 +89,7 @@ public class CalendarController {
     }
 
     @PostMapping(UriConstant.CALENDAR_CREATE)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<BaseResponse> createCalendar(@Valid @RequestBody CalendarRequest calendarRequest,
                                                        BindingResult result) {
         if (result.hasErrors()) {
@@ -107,7 +108,7 @@ public class CalendarController {
     }
 
     @PostMapping(UriConstant.CALENDAR_UPLOAD)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<BaseResponse> uploadCalendarImage(@RequestParam("id") int id, @RequestParam MultipartFile imageFile) {
         if (imageFile == null || imageFile.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -119,10 +120,17 @@ public class CalendarController {
     }
 
     @GetMapping(UriConstant.CALENDAR_ADMIN_LIST)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<BaseResponse> getAllCalendarsInAdminRole(@RequestParam int pageNo) {
         Page<CalendarAdminResponse> calendarAdminResponses = calendarService.getCalendarsInAdminRole(pageNo);
 
         return ResponseEntity.status(HttpStatus.OK).body(new BaseResponse(HttpStatus.OK.value(), SUCCESSFUL_MESSAGE, calendarAdminResponses));
+    }
+
+    @GetMapping("/admin/{calendarId}")
+    public ResponseEntity<BaseResponse> getCalendarByCalendarIdInAdminRole(@PathVariable int calendarId) {
+        CalendarDetailAdminResponse calendarDetailResponse = calendarService.getCalendarDetailByIdInAdminRole(calendarId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(new BaseResponse(HttpStatus.OK.value(), SUCCESSFUL_MESSAGE, calendarDetailResponse));
     }
 }
