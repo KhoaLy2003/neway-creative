@@ -185,8 +185,4 @@ VALUES
 (8, '2024-02-16 17:00:00', '2024-02-16 17:00:00', 'Etiam convallis libero quis diam finibus ultrices. Fusce ac vestibulum quam. In euismod sem vitae enim pulvinar rhoncus.', 'image8.jpg', 0, 'https://www.notion.so/calendar8', 10.49, 'Sample Calendar 8', 2),
 (9, '2024-02-16 18:00:00', '2024-02-16 18:00:00', 'Mauris aliquam lorem ac libero vestibulum, vel dictum justo consequat. Vivamus sit amet velit libero.', 'image9.jpg', 0, 'https://www.notion.so/calendar9', 13.29, 'Sample Calendar 9', 3),
 (10, '2024-02-16 19:00:00', '2024-02-16 19:00:00', 'Curabitur vel velit justo. Mauris ullamcorper leo ac nulla varius tincidunt. Duis sit amet ex vel ante ultricies dignissim.', 'image10.jpg', 0, 'https://www.notion.so/calendar10', 11.79, 'Sample Calendar 10', 1);
-	 
-INSERT INTO `role` (name) VALUES
-	 ('admin'),
-	 ('member');
 
