@@ -22,13 +22,23 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: List files
+        run: ls -R
+        working-directory: ${{ github.workspace }}/fe
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
-      - run: npm ci
-        working-directory: fe
-      - run: npm run build --if-present
-        working-directory: fe
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: ${{ github.workspace }}/fe
+
+      - name: Build application
+        run: npm run build --if-present
+        working-directory: ${{ github.workspace }}/fe
