@@ -1,22 +1,20 @@
-import React, { useState } from "react";
+import React from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { uploadCalendarImage } from "./api/calendar";
 import PaymentPage from "./pages/PaymentPage";
-import AdminCalendarCreate from "./pages/admin/AdminCalendarCreate";
-import AdminCalendarForm from "./pages/admin/AdminCalendarForm";
-import AdminCalendarManagement from "./pages/admin/AdminCalendarManagement";
-import AdminCustomerMangment from "./pages/admin/AdminCustomerManagement";
-import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminLayout from "./pages/admin/AdminLayout";
-import AdminResult from "./pages/admin/AdminResult";
-import AdminTransactionManagement from "./pages/admin/AdminTransactionManagement";
 import DetailPage, {
   loader as calendarLoader,
 } from "./pages/customer/CalendarDetail";
 import ProductsPage from "./pages/customer/Calendars";
 import HomePage from "./pages/customer/Home";
 import RootLayout from "./pages/customer/Layout";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminCalendarManagement from "./pages/admin/AdminCalendarManagement";
+import AdminResult from "./pages/admin/AdminResult";
+import AdminCustomerMangment from "./pages/admin/AdminCustomerManagement";
+import AdminTransactionManagement from "./pages/admin/AdminTransactionManagement";
 import ErrorPage from "./pages/error/Error";
+
 
 const router = createBrowserRouter([
   {
@@ -49,10 +47,6 @@ const router = createBrowserRouter([
       {
         path: "calendars",
         element: <AdminCalendarManagement />,
-      },
-      {
-        path: "calendars/create",
-        element: <AdminCalendarCreate />,
       },
       {
         path: "customers",

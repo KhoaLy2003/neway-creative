@@ -3,6 +3,7 @@ package com.neway_creative.ideasy_calendar.service;
 import com.neway_creative.ideasy_calendar.dto.CalendarDto;
 import com.neway_creative.ideasy_calendar.dto.request.CalendarRequest;
 import com.neway_creative.ideasy_calendar.dto.response.CalendarAdminResponse;
+import com.neway_creative.ideasy_calendar.dto.response.CalendarDetailAdminResponse;
 import com.neway_creative.ideasy_calendar.dto.response.CalendarDetailResponse;
 import com.neway_creative.ideasy_calendar.entity.Calendar;
 import org.springframework.data.domain.Page;
@@ -69,4 +70,6 @@ public interface CalendarService {
      * @param id   the id
      */
     void uploadCalendarImage(MultipartFile file, int id);
+
+    CalendarDetailAdminResponse getCalendarDetailByIdInAdminRole(int id);
 }
