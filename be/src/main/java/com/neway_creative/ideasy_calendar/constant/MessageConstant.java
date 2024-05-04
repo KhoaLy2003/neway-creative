@@ -39,4 +39,6 @@ public final class MessageConstant {
     public static final String ACCESS_DENIED = "access_denied";
     public static final String UPLOAD_CALENDAR_IMAGE_SUCCESSFULLY = "admin.calendar.upload_image_successfully";
     public static final String UPLOAD_CALENDAR_IMAGE_FAILED = "admin.calendar.upload_image_failed";
+
+    public static final String CREATE_PAYMENT_FAILED = "customer.create_payment_failed";
 }
