@@ -14,7 +14,7 @@ spring:
 #    url: ${DATASOURCE_URL:jdbc:mysql://mysql-container:3306/ContentDigitalCalendar}
 #    username: ${DATABASE_USERNAME:root}
 #    password: ${DATABASE_PASSWORD:12345}
-#    driver-class-name: com.mysql.jdbc.Driver
+#    driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     show-sql: true
