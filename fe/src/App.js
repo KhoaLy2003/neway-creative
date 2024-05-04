@@ -1,11 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import RootLayout from "./pages/Root";
-import HomePage from "./pages/Home";
-import ProductsPage from "./pages/Calendars";
-import ErrorPage from "./pages/Error";
-import DetailPage, { loader as calendarLoader } from "./pages/Detail";
+import { uploadCalendarImage } from "./api/calendar";
 import PaymentPage from "./pages/PaymentPage";
+import AdminCalendarCreate from "./pages/admin/AdminCalendarCreate";
+import AdminCalendarForm from "./pages/admin/AdminCalendarForm";
+import AdminCalendarManagement from "./pages/admin/AdminCalendarManagement";
+import AdminCustomerMangment from "./pages/admin/AdminCustomerManagement";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminLayout from "./pages/admin/AdminLayout";
+import AdminResult from "./pages/admin/AdminResult";
+import AdminTransactionManagement from "./pages/admin/AdminTransactionManagement";
+import DetailPage, {
+  loader as calendarLoader,
+} from "./pages/customer/CalendarDetail";
+import ProductsPage from "./pages/customer/Calendars";
+import HomePage from "./pages/customer/Home";
+import RootLayout from "./pages/customer/Layout";
+import ErrorPage from "./pages/error/Error";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +38,33 @@ const router = createBrowserRouter([
       {
         path: "payment",
         element: <PaymentPage />,
+      },
+    ],
+  },
+  {
+    path: "admin/",
+    element: <AdminLayout />,
+    children: [
+      { index: true, element: <AdminDashboard /> },
+      {
+        path: "calendars",
+        element: <AdminCalendarManagement />,
+      },
+      {
+        path: "calendars/create",
+        element: <AdminCalendarCreate />,
+      },
+      {
+        path: "customers",
+        element: <AdminCustomerMangment />,
+      },
+      {
+        path: "transactions",
+        element: <AdminTransactionManagement />,
+      },
+      {
+        path: "result",
+        element: <AdminResult />,
       },
     ],
   },

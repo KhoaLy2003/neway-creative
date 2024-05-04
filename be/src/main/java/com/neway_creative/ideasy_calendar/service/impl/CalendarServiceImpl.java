@@ -1,11 +1,14 @@
 package com.neway_creative.ideasy_calendar.service.impl;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.neway_creative.ideasy_calendar.constant.ParamConstant;
 import com.neway_creative.ideasy_calendar.converter.CalendarMapper;
 import com.neway_creative.ideasy_calendar.converter.CategoryMapper;
 import com.neway_creative.ideasy_calendar.converter.PackageMapper;
 import com.neway_creative.ideasy_calendar.dto.CalendarDto;
 import com.neway_creative.ideasy_calendar.dto.request.CalendarRequest;
+import com.neway_creative.ideasy_calendar.dto.response.CalendarAdminResponse;
 import com.neway_creative.ideasy_calendar.dto.response.CalendarDetailResponse;
 import com.neway_creative.ideasy_calendar.dto.response.PackageResponse;
 import com.neway_creative.ideasy_calendar.entity.Calendar;
@@ -29,12 +32,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.InvalidParameterException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.UUID;
 
 /**
  * CalendarServiceImpl
@@ -49,6 +53,7 @@ public class CalendarServiceImpl implements CalendarService {
     private final CategoryRepository categoryRepository;
     private final ModelMapper modelMapper;
     private final RedisTemplate redisTemplate;
+    private final Cloudinary cloudinary;
     private static final String REDIS_KEY = "CALENDAR";
     @Override
     public Page<CalendarDto> getCalendars(int pageNo) {
@@ -76,7 +81,7 @@ public class CalendarServiceImpl implements CalendarService {
     }
 
     @Override
-    public CalendarDetailResponse getCalendarDtoById(int id) {
+    public CalendarDetailResponse getCalendarDetailById(int id) {
         if (StringUtils.isEmpty(String.valueOf(id))) {
             LOGGER.error("Invalid param for product with product id {}", id);
             throw new InvalidParameterException("Invalid param for product with product id " + id);
@@ -84,11 +89,11 @@ public class CalendarServiceImpl implements CalendarService {
 
         Optional<Calendar> calendar = calendarRepository.findById(id);
         if (calendar.isPresent()) {
-            LOGGER.info("Get successfully calendar with id {}", id);
             CalendarDetailResponse calendarDetailResponse = CalendarDetailResponse
                     .builder()
                     .calendarId(calendar.get().getCalendarId())
                     .title(calendar.get().getTitle())
+                    .image(calendar.get().getImage())
                     .category(CategoryMapper.INSTANCE.entityToDTO(calendar.get().getCategory()))
                     .description(calendar.get().getDescription())
                     .packages(mapPackages(calendar.get().getPackages()))
@@ -158,7 +163,7 @@ public class CalendarServiceImpl implements CalendarService {
     }
 
     @Override
-    public void createCalendar(CalendarRequest calendarRequest) {
+    public Calendar createCalendar(CalendarRequest calendarRequest) {
         Category category = categoryRepository.findById(calendarRequest.getCategoryId())
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
         try {
@@ -166,7 +171,6 @@ public class CalendarServiceImpl implements CalendarService {
                     .builder()
                     .title(calendarRequest.getTitle())
                     .description(calendarRequest.getDescription())
-                    .image(calendarRequest.getImage())
                     .category(category)
                     .build();
 
@@ -180,12 +184,16 @@ public class CalendarServiceImpl implements CalendarService {
                             .calendar(calendar)
                             .build())
                     .toList();
-
             calendar.setPackages(packages);
+
+            //TODO: Set default image
+            calendar.setImage("imageUrl");
 
             calendarRepository.save(calendar);
             clearAllPageCacheKeys();
             LOGGER.info("Create calendar successfully with title {}", calendarRequest.getTitle());
+
+            return calendar;
         } catch (Exception e) {
             LOGGER.error("Create calendar failed with exception {}", e.getMessage());
 
@@ -193,10 +201,64 @@ public class CalendarServiceImpl implements CalendarService {
         }
     }
 
+    @Override
+    public Page<CalendarAdminResponse> getCalendarsInAdminRole(int pageNo) {
+        String cacheKey = REDIS_KEY + "_page_admin_" + pageNo;
+        if(redisTemplate.hasKey(cacheKey)) {
+            return (Page<CalendarAdminResponse>) redisTemplate.opsForValue().get(cacheKey);
+        } else {
+            Pageable pageable = PageRequest
+                    .of(pageNo, ParamConstant.DEFAULT_PAGE_SIZE, Sort.by(ParamConstant.DEFAULT_SORT_FIELD)
+                            .ascending());
+            Page<Calendar> calendarPage = calendarRepository.findAll(pageable);
+
+            List<CalendarAdminResponse> calendarDTOs = calendarPage
+                    .getContent()
+                    .stream()
+                    .map(CalendarMapper.INSTANCE::entityToCalendarAdminResponse)
+                    .toList();
+
+            LOGGER.info("Get calendars list successfully with {} records", calendarDTOs.size());
+
+            redisTemplate.opsForValue().set(cacheKey, new PageImpl<>(calendarDTOs, pageable, calendarPage.getTotalElements()));
+
+            return new PageImpl<>(calendarDTOs, pageable, calendarPage.getTotalElements());
+        }
+    }
+
+    @Override
+    public void uploadCalendarImage(MultipartFile file, int id) {
+        Optional<Calendar> calendar = calendarRepository.findById(id);
+        if (calendar.isPresent()) {
+            LOGGER.info("Get successfully calendar with id {}", id);
+
+            try {
+                String imageUrl = cloudinary.uploader()
+                        .upload(file.getBytes(),
+                                ObjectUtils.asMap(
+                                        "folder", "NEWAY_CREATIVE",
+                                        "public_id", UUID.randomUUID().toString()))
+                        .get("url")
+                        .toString();
+                Calendar existingCalendar = calendar.get();
+                existingCalendar.setImage(imageUrl);
+
+                calendarRepository.save(existingCalendar);
+            } catch (Exception e) {
+                LOGGER.error("Upload calendar image failed with exception {}", e.getMessage());
+
+                throw new IllegalStateException("Calendar save failed");
+            }
+        } else {
+            LOGGER.error("Can not find calendar with id {}", id);
+            throw new ResourceNotFoundException("No calendar with id " + id);
+        }
+    }
+
     private List<PackageResponse> mapPackages(List<Package> packages) {
         return packages.stream()
                 .map(PackageMapper.INSTANCE::entityToResponse)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     private void clearAllPageCacheKeys() {

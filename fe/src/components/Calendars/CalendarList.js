@@ -1,6 +1,6 @@
 import React from "react";
 import Calendar from "./Calendar";
-import "../../pages/CalendarPage.css";
+import "../../pages/customer/CalendarPage.css";
 import "../../assets/root.css";
 
 const CalendarList = ({ calendars }) => {

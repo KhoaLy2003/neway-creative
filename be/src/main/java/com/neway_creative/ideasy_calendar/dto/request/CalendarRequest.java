@@ -21,9 +21,6 @@ public class CalendarRequest implements Serializable {
     @NotBlank(message = "Description must not be blank")
     private String description;
 
-    @NotBlank(message = "Image must not be blank")
-    private String image;
-
     @JsonProperty("category_id")
     private int categoryId;
 

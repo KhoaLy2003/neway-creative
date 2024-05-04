@@ -4,7 +4,7 @@ import "./Calendar.css";
 import "../../assets/root.css";
 
 const Calendar = ({ calendar }) => {
-  const { title, price, image, calendarId } = calendar;
+  const { title, image, description, calendarId } = calendar;
 
   return (
     <div className="col-md-3">
@@ -13,11 +13,7 @@ const Calendar = ({ calendar }) => {
           <img src={image} alt={title} />
           <div className="down-content">
             <h4>{title}</h4>
-            <h6>${price}</h6>
-            <p>
-              Lorem ipsume dolor sit amet, adipisicing elite. Itaque, corporis
-              nulla aspernatur.
-            </p>
+            <p>{description}</p>
             {/* Uncomment below if you want to include stars and reviews
           <ul className="stars">
             {[...Array(5)].map((_, index) => (
