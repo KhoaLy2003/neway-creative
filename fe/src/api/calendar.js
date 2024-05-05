@@ -1,4 +1,4 @@
-const baseUrl = "http://localhost:8080/api";
+const baseUrl = process.env.REACT_APP_BACK_END_URL;
 
 export const getLatestCalendars = async () => {
   try {
@@ -102,6 +102,22 @@ export const uploadCalendarImage = async (calendarId, formData) => {
     return data;
   } catch (error) {
     console.error("Error upload calendar image", error.message);
+    throw error;
+  }
+};
+
+export const fetchCalendarDetailInAdminRole = async (id) => {
+  try {
+    const response = await fetch(`${baseUrl}/calendars/admin/${id}`);
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch calendar detail");
+    }
+
+    const data = await response.json();
+    return data.data;
+  } catch (error) {
+    console.error("Error fetching calendar detail:", error.message);
     throw error;
   }
 };
