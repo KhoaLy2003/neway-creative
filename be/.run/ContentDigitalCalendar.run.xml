@@ -4,6 +4,8 @@
       <env name="DATABASE_PASSWORD" value="12345" />
       <env name="DATABASE_URL" value="jdbc:mysql://localhost:3306/ContentDigitalCalendar" />
       <env name="DATABASE_USERNAME" value="root" />
+<!--      <env name="EMAIL_PASSWORD" value="kjpguskvmivupqqa" />-->
+<!--      <env name="EMAIL_USERNAME" value="khoaly090141@gmail.com" />-->
       <env name="EMAIL_PASSWORD" value="thenomads8888" />
       <env name="EMAIL_USERNAME" value="thenomadscalendarproject@gmail.com" />
 <!--      <env name="GOOGLE_CLIENT_ID" value="923542838948-lmt7f838k8kr0jk34a8bv51co3usut08.apps.googleusercontent.com" />-->
