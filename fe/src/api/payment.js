@@ -10,7 +10,9 @@ export async function createPayment(paymentCreateDto) {
       body: JSON.stringify(paymentCreateDto),
     });
 
-    if (!response.ok) throw new Error("Failed to create payment");
+    if (!response.ok) {
+      throw new Error("Failed to create payment");
+    }
 
     return response.json();
   } catch (error) {
