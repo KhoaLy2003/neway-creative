@@ -24,12 +24,18 @@ public class PaymentController {
 
     @PostMapping(UriConstant.PAYMENT_CREATE)
     public ResponseEntity<BaseResponse> createPayment(HttpServletRequest servletRequest, CreatePaymentRequest paymentRequest) {
+        Map<String, Object> payload = null;
         try {
-            Map<String, Object> payload = paymentService.createPayment(servletRequest, paymentRequest);
-        } catch (UnsupportedEncodingException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BaseResponse(HttpStatus.BAD_REQUEST.value(), MessageConstant.CREATE_PAYMENT_FAILED, paymentRequest));
-        }
+            payload = paymentService.createPayment(servletRequest, paymentRequest);
 
-        return ResponseEntity.status(HttpStatus.OK).body(new BaseResponse(HttpStatus.OK.value(), MessageConstant.SUCCESSFUL_MESSAGE, paymentRequest));
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new BaseResponse(HttpStatus.OK.value(), MessageConstant.SUCCESSFUL_MESSAGE, payload));
+        } catch (UnsupportedEncodingException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new BaseResponse(HttpStatus.BAD_REQUEST.value(), MessageConstant.CREATE_PAYMENT_FAILED, null));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new BaseResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), MessageConstant.CREATE_PAYMENT_FAILED, payload));
+        }
     }
 }
