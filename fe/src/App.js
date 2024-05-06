@@ -1,6 +1,6 @@
 import React from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import PaymentPage from "./pages/PaymentPage";
+import PaymentPage from "./pages/customer/PaymentPage";
 import AdminLayout from "./pages/admin/AdminLayout";
 import DetailPage, {
   loader as calendarLoader,
@@ -14,7 +14,6 @@ import AdminResult from "./pages/admin/AdminResult";
 import AdminCustomerMangment from "./pages/admin/AdminCustomerManagement";
 import AdminTransactionManagement from "./pages/admin/AdminTransactionManagement";
 import ErrorPage from "./pages/error/Error";
-
 
 const router = createBrowserRouter([
   {
