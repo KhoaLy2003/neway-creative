@@ -1,11 +1,11 @@
 import { Fragment, React, useState } from "react";
 
-import About from "../components/Layouts/About";
-import PageHeading from "../components/Layouts/PageHeading";
-import PaymentDetails from "../components/Sections/PaymentDetails";
-import PaymentMethod from "../components/Sections/PaymentMethod";
-import momo from "../assets/momo.jpg";
-import vnPay from "../assets/vn-pay.jpg";
+import About from "../../components/Layouts/About";
+import PageHeading from "../../components/Layouts/PageHeading";
+import PaymentDetails from "../../components/Sections/PaymentDetails";
+import PaymentMethod from "../../components/Sections/PaymentMethod";
+import momo from "../../assets/momo.jpg";
+import vnPay from "../../assets/vn-pay.jpg";
 
 function PaymentPage() {
   const paymentOptions = [

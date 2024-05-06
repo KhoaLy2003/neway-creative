@@ -28,33 +28,22 @@ function PaymentDetails() {
       <h3>Payment Details</h3>
 
       <form method="POST">
-        {/* <input */}
-        {/*   className="form-control mb-3" */}
-        {/*   type="text" */}
-        {/*   placeholder="Enter Name on Card" */}
-        {/* /> */}
-        {/* <input */}
-        {/*   className="form-control mb-3" */}
-        {/*   type="text" */}
-        {/*   placeholder="Card Number" */}
-        {/* /> */}
-        {/* <input */}
-        {/*   className="form-control mb-3" */}
-        {/*   type="date" */}
-        {/*   placeholder="Expiration" */}
-        {/* /> */}
-        {/* <input */}
-        {/*   className="form-control mb-3" */}
-        {/*   type="text" */}
-        {/*   placeholder="Enter Name on Card" */}
-        {/* /> */}
-        {/* <input className="form-control mb-3" type="text" placeholder="CVV" /> */}
+        <input
+          className="form-control mb-3"
+          type="number"
+          placeholder="Enter the amount"
+        />
+        <input
+          className="form-control mb-3"
+          type="text"
+          placeholder="Enter Description"
+        />
 
         <Button style={{ marginRight: "3rem" }} type="default">
           Back
         </Button>
         <Button
-          href="  http://sandbox.vnpayment.vn/tryitnow/Home/CreateOrder"
+          href="http://sandbox.vnpayment.vn/tryitnow/Home/CreateOrder"
           onClick={handleClick}
           type="primary"
         >
