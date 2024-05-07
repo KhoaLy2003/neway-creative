@@ -39,6 +39,10 @@ public final class MessageConstant {
     public static final String ACCESS_DENIED = "access_denied";
     public static final String UPLOAD_CALENDAR_IMAGE_SUCCESSFULLY = "admin.calendar.upload_image_successfully";
     public static final String UPLOAD_CALENDAR_IMAGE_FAILED = "admin.calendar.upload_image_failed";
-
     public static final String CREATE_PAYMENT_FAILED = "customer.create_payment_failed";
+    public static final String VERIFY_ACCOUNT_SUCCESSFULLY = "customer.verify_account_successfully";
+    public static final String VERIFY_ACCOUNT_FAILED = "customer.verify_account_failed";
+    public static final String ACCOUNT_NOT_VERIFIED = "customer.account_not_verified";
+    public static final String NO_ACCOUNT_WITH_THIS_EMAIL = "customer.account_not_found";
+    public static final String REGENERATE_OTP_SUCCESSFULLY = "customer.regenerate_otp_successfully";
 }

@@ -1,14 +1,28 @@
 package com.neway_creative.ideasy_calendar.controller;
 
+import com.neway_creative.ideasy_calendar.constant.MessageConstant;
 import com.neway_creative.ideasy_calendar.constant.UriConstant;
+import com.neway_creative.ideasy_calendar.dto.request.LoginRequest;
+import com.neway_creative.ideasy_calendar.dto.request.RegisterRequest;
+import com.neway_creative.ideasy_calendar.dto.request.VerifyAccountRequest;
 import com.neway_creative.ideasy_calendar.dto.response.BaseResponse;
+import com.neway_creative.ideasy_calendar.dto.response.LoginResponse;
+import com.neway_creative.ideasy_calendar.service.AuthenticationService;
+import com.neway_creative.ideasy_calendar.utils.MessageLocalization;
+import io.swagger.v3.oas.annotations.Operation;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.neway_creative.ideasy_calendar.constant.MessageConstant.SUCCESSFUL_CODE;
-import static com.neway_creative.ideasy_calendar.constant.MessageConstant.SUCCESSFUL_MESSAGE;
+import javax.validation.Valid;
+import java.util.List;
 
 
 /**
@@ -18,15 +32,74 @@ import static com.neway_creative.ideasy_calendar.constant.MessageConstant.SUCCES
  */
 @RestController
 @RequestMapping(UriConstant.CUSTOMER_BASE_URI)
+@RequiredArgsConstructor
 public class CustomerController {
-    /**
-     * Hello world demo controller
-     *
-     * @return the response entity
-     */
-    @GetMapping("/hello")
-    public ResponseEntity<BaseResponse> helloWorld() {
+    private final AuthenticationService authenticationService;
+    private final MessageLocalization messageLocalization;
 
-        return ResponseEntity.ok(new BaseResponse(SUCCESSFUL_CODE, SUCCESSFUL_MESSAGE, "Hello world"));
+    @Operation(method = "POST", summary = "Register account", description = "Send a request via this API to register new account")
+    @PostMapping(UriConstant.CUSTOMER_REGISTER_URI)
+    public ResponseEntity<BaseResponse> register(@Valid @RequestBody RegisterRequest request, BindingResult result) {
+        if(result.hasErrors()) {
+            List<String> errorMessages = result.getFieldErrors()
+                    .stream()
+                    .map(FieldError::getDefaultMessage)
+                    .toList();
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new BaseResponse(HttpStatus.BAD_REQUEST.value(), messageLocalization.getLocalizedMessage(MessageConstant.REGISTER_FAILED), errorMessages));
+        }
+
+        authenticationService.registerNewAccount(request);
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new BaseResponse(HttpStatus.CREATED.value(), messageLocalization.getLocalizedMessage(MessageConstant.REGISTER_SUCCESSFULLY), request.getEmail()));
+    }
+
+    @PostMapping(UriConstant.CUSTOMER_VERIFY_OTP_URI)
+    public ResponseEntity<BaseResponse> verify(@Valid @RequestBody VerifyAccountRequest verifyAccountRequest, BindingResult result) {
+        if(result.hasErrors()) {
+            List<String> errorMessages = result.getFieldErrors()
+                    .stream()
+                    .map(FieldError::getDefaultMessage)
+                    .toList();
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new BaseResponse(HttpStatus.BAD_REQUEST.value(), messageLocalization.getLocalizedMessage(MessageConstant.VERIFY_ACCOUNT_FAILED), errorMessages));
+        }
+
+        boolean isCheck = authenticationService.verifyAccount(verifyAccountRequest);
+        String message = messageLocalization.getLocalizedMessage(MessageConstant.VERIFY_ACCOUNT_FAILED);
+        if (isCheck) {
+            message = messageLocalization.getLocalizedMessage(MessageConstant.VERIFY_ACCOUNT_SUCCESSFULLY);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new BaseResponse(HttpStatus.OK.value(), message, verifyAccountRequest.getEmail()));
+    }
+
+    @PostMapping(UriConstant.CUSTOMER_REGENERATE_OTP_URI)
+    public ResponseEntity<BaseResponse> regenerateOtp(@RequestParam("email") String email) {
+        authenticationService.regenerateOtp(email);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new BaseResponse(HttpStatus.OK.value(), messageLocalization.getLocalizedMessage(MessageConstant.REGENERATE_OTP_SUCCESSFULLY), email));
+    }
+
+    @PostMapping(UriConstant.CUSTOMER_LOGIN_URI)
+    public ResponseEntity<BaseResponse> login(@Valid @RequestBody LoginRequest request, BindingResult result) {
+        if(result.hasErrors()) {
+            List<String> errorMessages = result.getFieldErrors()
+                    .stream()
+                    .map(FieldError::getDefaultMessage)
+                    .toList();
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new BaseResponse(HttpStatus.BAD_REQUEST.value(), messageLocalization.getLocalizedMessage(MessageConstant.LOGIN_FAILED), errorMessages));
+        }
+
+        LoginResponse loginResponse = authenticationService.authenticateAccount(request);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new BaseResponse(HttpStatus.OK.value(), messageLocalization.getLocalizedMessage(MessageConstant.LOGIN_SUCCESSFULLY), loginResponse));
     }
 }

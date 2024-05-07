@@ -58,4 +58,8 @@ public final class UriConstant {
      * The constant CALENDAR_ADMIN_LIST.
      */
     public static final String CALENDAR_ADMIN_LIST = "/admin/list";
+    public static final String CUSTOMER_REGISTER_URI = "/register";
+    public static final String CUSTOMER_VERIFY_OTP_URI = "/verify";
+    public static final String CUSTOMER_REGENERATE_OTP_URI = "/regenerate-otp";
+    public static final String CUSTOMER_LOGIN_URI = "/login";
 }

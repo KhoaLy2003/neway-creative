@@ -34,6 +34,7 @@ public class WebSecurityConfig {
                                 .antMatchers("/api/calendars/**").permitAll()
                                 .antMatchers("/api/categories/**").permitAll()
                                 .antMatchers("/api/testing/**").permitAll()
+                                .antMatchers("/api/customers/register", "/api/customers/verify", "/api/customers/login", "/api/customers/regenerate-otp").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(configurer ->

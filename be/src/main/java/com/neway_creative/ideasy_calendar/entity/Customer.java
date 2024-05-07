@@ -22,6 +22,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -67,6 +68,12 @@ public class Customer extends BaseEntity implements UserDetails {
 
     @OneToMany(mappedBy = "customer")
     private List<Payment> payments;
+
+    @Column(name = "otp")
+    private String otp;
+
+    @Column(name = "otp_generated_time")
+    private LocalDateTime otpGeneratedTime;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
