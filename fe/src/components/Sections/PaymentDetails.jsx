@@ -1,38 +1,62 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import { Button } from "antd";
+import { createPayment } from "../../api/payment";
 
 function PaymentDetails() {
+  const [formData, setFormData] = useState({
+    amount: 0,
+    orderInfo: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const paymentDto = {
+      amount: formData.amount,
+      orderInfo: formData.orderInfo,
+    };
+
+    const response = await createPayment(paymentDto);
+
+    const payload = response.data;
+
+    window.location.href = payload["redirect_url"];
+  };
+
   return (
     <Fragment>
       <h3>Payment Details</h3>
 
-      <form method="POST">
+      <form onSubmit={handleSubmit} method="POST">
         <input
           className="form-control mb-3"
-          type="text"
-          placeholder="Enter Name on Card"
+          type="number"
+          name="amount"
+          placeholder="Enter the amount"
+          onChange={handleChange}
         />
         <input
           className="form-control mb-3"
           type="text"
-          placeholder="Card Number"
+          name="orderInfo"
+          placeholder="Enter Description"
+          onChange={handleChange}
         />
-        <input
-          className="form-control mb-3"
-          type="date"
-          placeholder="Expiration"
-        />
-        <input
-          className="form-control mb-3"
-          type="text"
-          placeholder="Enter Name on Card"
-        />
-        <input className="form-control mb-3" type="text" placeholder="CVV" />
 
         <Button style={{ marginRight: "3rem" }} type="default">
           Back
         </Button>
-        <Button type="primary">Confirm Payment</Button>
+        <Button type="primary" htmlType="submit">
+          Confirm Payment
+        </Button>
       </form>
     </Fragment>
   );

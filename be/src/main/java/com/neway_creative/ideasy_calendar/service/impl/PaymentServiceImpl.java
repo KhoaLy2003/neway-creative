@@ -32,7 +32,6 @@ public class PaymentServiceImpl implements PaymentService {
     private PaymentRepository paymentRepository;
 
     public Map<String, Object> createPayment(HttpServletRequest request, CreatePaymentRequest createPaymentRequest) throws UnsupportedEncodingException {
-
         Map<String, Object> payload = new HashMap<>(){{
             put("vnp_Version", VnPayConstant.VNP_VERSION);
             put("vnp_Command", VnPayConstant.VNP_COMMAND_ORDER);
