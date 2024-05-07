@@ -1,34 +1,35 @@
-import React, { Fragment, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { Fragment, useState } from "react";
 import { Button } from "antd";
 import { createPayment } from "../../api/payment";
 
 function PaymentDetails() {
-  const [paymentData, setPaymentData] = useState(null);
-  const [error, setError] = useState(null);
+  const [formData, setFormData] = useState({
+    amount: 0,
+    orderInfo: "",
+  });
 
-  const navigate = useNavigate();
-
-  const handleSubmit = async (paymentCreateDto) => {
-    try {
-      // const paymentCreateDto = {
-      //   amount: 6000,
-      //   orderInfo: "payment test",
-      // };
-
-      const response = await createPayment(paymentCreateDto);
-      setPaymentData(response);
-
-      const url = response["redirect_url"];
-
-      navigate(url);
-    } catch (error) {
-      setError(error.message);
-    }
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
   };
 
-  console.log(paymentData);
-  console.log(error);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const paymentDto = {
+      amount: formData.amount,
+      orderInfo: formData.orderInfo,
+    };
+
+    const response = await createPayment(paymentDto);
+
+    const payload = response.data;
+
+    window.location.href = payload["redirect_url"];
+  };
 
   return (
     <Fragment>
@@ -38,22 +39,22 @@ function PaymentDetails() {
         <input
           className="form-control mb-3"
           type="number"
+          name="amount"
           placeholder="Enter the amount"
+          onChange={handleChange}
         />
         <input
           className="form-control mb-3"
           type="text"
+          name="orderInfo"
           placeholder="Enter Description"
+          onChange={handleChange}
         />
 
         <Button style={{ marginRight: "3rem" }} type="default">
           Back
         </Button>
-        <Button
-          // href="http://sandbox.vnpayment.vn/tryitnow/Home/CreateOrder"
-          type="primary"
-          htmlType="submit"
-        >
+        <Button type="primary" htmlType="submit">
           Confirm Payment
         </Button>
       </form>
