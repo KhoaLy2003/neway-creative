@@ -16,7 +16,7 @@ export async function createPayment(paymentCreateDto) {
 
     return response.json();
   } catch (error) {
-    console.log(error);
+    console.log(error.message);
     throw error;
   }
 }

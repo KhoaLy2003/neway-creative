@@ -33,6 +33,7 @@ public class WebSecurityConfig {
                                 .antMatchers("/register", "/login", "/send").permitAll()
                                 .antMatchers("/api/calendars/**").permitAll()
                                 .antMatchers("/api/categories/**").permitAll()
+                                .antMatchers("/api/payment/**").permitAll()
                                 .antMatchers("/api/testing/**").permitAll()
                                 .anyRequest().authenticated()
                 )
