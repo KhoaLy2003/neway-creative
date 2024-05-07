@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 public class BaseExceptionContent {
-    private LocalDateTime time;
+    private int status;
     private String message;
     private String content;
 }

@@ -36,7 +36,7 @@ const formItemLayout = {
       span: 24,
     },
     sm: {
-      span: 8,
+      span: 4,
     },
   },
   wrapperCol: {
@@ -44,7 +44,7 @@ const formItemLayout = {
       span: 24,
     },
     sm: {
-      span: 16,
+      span: 20,
     },
   },
 };
@@ -70,7 +70,8 @@ const AdminCalendarForm = ({ modalOpen, setModalOpen, calendar }) => {
   const [responseStatus, setResponseStatus] = useState(null);
   const [loading, setLoading] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
-  const [previewImage, setPreviewImage] = useState("");
+  const [previewImage, setPreviewImage] = useState(null);
+  const [defaultImage, setDefaultImage] = useState(null);
 
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
@@ -97,26 +98,22 @@ const AdminCalendarForm = ({ modalOpen, setModalOpen, calendar }) => {
 
   useEffect(() => {
     if (calendar) {
-      const { title, description, category, packages } = calendar;
+      console.log(calendar);
+      const { title, description, category, image, packages } = calendar;
       form.setFieldsValue({
         title,
         description,
         category: category.categoryId,
-        packages: packages.map((pkg) => ({ ...pkg })),
       });
 
-      packages.forEach((pkg, index) => {
-        console.log(pkg);
-        form.setFieldsValue({
-          [`packages[${index}].package_price`]: 3,
-          [`packages[${index}].package_duration_value`]:
-            pkg.durationValue,
-          [`packages[${index}].package_duration_unit`]:
-            pkg.packageDurationUnit,
-          [`packages[${index}].package_type`]: pkg.packageType,
-          [`packages[${index}].link_notion`]: pkg.linkNotion,
-        });
-      });
+      const packageFieldsValue = packages.map((pkg, index) => ({
+        package_price: pkg.price,
+        package_duration_value: pkg.durationValue,
+        package_duration_unit: pkg.packageDurationUnit,
+        package_type: pkg.packageType,
+        link_notion: pkg.linkNotion,
+      }));
+      form.setFieldsValue({ packages: packageFieldsValue });
     }
   }, [calendar, form]);
 
@@ -237,7 +234,13 @@ const AdminCalendarForm = ({ modalOpen, setModalOpen, calendar }) => {
         </Button>,
       ]}
     >
-      <Form {...formItemLayout} form={form} name="form" scrollToFirstError id="my-form">
+      <Form
+        {...formItemLayout}
+        form={form}
+        name="form"
+        scrollToFirstError
+        id="my-form"
+      >
         <Form.Item
           name="title"
           label="Title"
@@ -283,63 +286,54 @@ const AdminCalendarForm = ({ modalOpen, setModalOpen, calendar }) => {
           </Select>
         </Form.Item>
 
-        <Form.Item
-          name="image"
-          label="Upload"
-          valuePropName="fileList"
-          getValueFromEvent={normFile}
-          // rules={[
-          //   {
-          //     required: true,
-          //     message: "Please import one calendar image",
-          //     validator: (_, value) => {
-          //       if (value && value.length === 1) {
-          //         return Promise.resolve();
-          //       }
-          //       return Promise.reject(
-          //         new Error("Please upload only one image")
-          //       );
-          //     },
-          //   },
-          // ]}
-        >
-          <Upload
-            style={{ marginBottom: 20 }}
-            maxCount={1}
-            listType="picture-card"
-            type="drag"
-            name="file"
-            beforeUpload={() => {
-              return false;
-            }}
-            onChange={(event) => {
-              setFile(event.file);
-            }}
-            onPreview={handlePreview}
+        {!calendar && (
+          <Form.Item
+            name="image"
+            label="Upload"
+            valuePropName="fileList"
+            getValueFromEvent={normFile}
           >
-            <button
-              style={{ border: 0, background: "none", marginBottom: 10 }}
-              type="button"
+            <Upload
+              style={{ marginBottom: 20, width: 150, height: 150 }}
+              maxCount={1}
+              listType="picture-card"
+              type="drag"
+              name="file"
+              beforeUpload={() => {
+                return false;
+              }}
+              onChange={(event) => {
+                setFile(event.file);
+              }}
+              onPreview={handlePreview}
             >
-              <PlusOutlined />
-              <div style={{ marginTop: 10 }}>Upload</div>
-            </button>
-          </Upload>
-          {/* <input type="file" name="imageFile" onChange={handleChange} /> */}
-          {previewImage && (
-            <Image
-              wrapperStyle={{
-                display: "none",
-              }}
-              preview={{
-                visible: previewOpen,
-                onVisibleChange: (visible) => setPreviewOpen(visible),
-                afterOpenChange: (visible) => !visible && setPreviewImage(""),
-              }}
-              src={previewImage}
-            />
-          )}
-        </Form.Item>
+              <button
+                style={{ border: 0, background: "none", marginBottom: 10 }}
+                type="button"
+              >
+                <PlusOutlined />
+                <div style={{ marginTop: 10 }}>Upload</div>
+              </button>
+            </Upload>
+            {/* <input type="file" name="imageFile" onChange={handleChange} /> */}
+            {/* {defaultImage && <Image width={200} src={defaultImage} />} */}
+            {previewImage && (
+              <Image
+                style={{ width: 200, height: 200 }}
+                width={200}
+                wrapperStyle={{
+                  display: "none",
+                }}
+                preview={{
+                  visible: previewOpen,
+                  onVisibleChange: (visible) => setPreviewOpen(visible),
+                  afterOpenChange: (visible) => !visible && setPreviewImage(""),
+                }}
+                src={previewImage}
+              />
+            )}
+          </Form.Item>
+        )}
 
         <FormItem
           label="Packages"
@@ -349,19 +343,6 @@ const AdminCalendarForm = ({ modalOpen, setModalOpen, calendar }) => {
         >
           <Form.List
             name="packages"
-            // initialValue={
-            //   calendar
-            //     ? calendar?.packages.map((pkg, index) => {
-            //         console.log(
-            //           `Setting initialValue for package ${index + 1}:`,
-            //           {
-            //             ...pkg,
-            //           }
-            //         );
-            //         return { ...pkg };
-            //       })
-            //     : []
-            // }
             rules={[
               {
                 validator: (_, value) => {
@@ -400,12 +381,6 @@ const AdminCalendarForm = ({ modalOpen, setModalOpen, calendar }) => {
                     <Form.Item
                       label="Price"
                       name={[field.name, "package_price"]}
-                      initialValue={
-                        calendar && calendar.packages[index] ? (() => {
-                          console.log("Initial value of package price:", calendar.packages[index].price);
-                          return calendar.packages[index].price;
-                        })() : undefined
-                      }
                       rules={[
                         {
                           required: true,

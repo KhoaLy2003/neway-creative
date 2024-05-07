@@ -8,7 +8,6 @@ import com.neway_creative.ideasy_calendar.dto.request.RegisterRequest;
 import com.neway_creative.ideasy_calendar.dto.response.BaseResponse;
 import com.neway_creative.ideasy_calendar.dto.response.PaymentResultResponse;
 import com.neway_creative.ideasy_calendar.service.AuthenticationService;
-import com.neway_creative.ideasy_calendar.service.MailService;
 import com.neway_creative.ideasy_calendar.service.PaymentService;
 import com.neway_creative.ideasy_calendar.utils.MessageLocalization;
 import io.swagger.v3.oas.annotations.Operation;
@@ -42,7 +41,6 @@ import java.util.Set;
 @RequestMapping("/api/testing")
 public class TestController {
     private static final Logger LOGGER = LoggerFactory.getLogger(TestController.class);
-    private final MailService mailService;
     private final PaymentService paymentService;
     private final AuthenticationService authenticationService;
     private final MessageLocalization messageLocalization;
@@ -104,11 +102,6 @@ public class TestController {
     @GetMapping("/log")
     public void writeLog() {
         LOGGER.info("Hello ELK");
-    }
-
-    @PostMapping("/send")
-    public void sendMail() {
-        mailService.sendMailTest();
     }
 
     @PostMapping("/payment")

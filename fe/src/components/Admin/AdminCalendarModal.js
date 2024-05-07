@@ -12,6 +12,7 @@ import {
 import Link from "antd/es/typography/Link";
 import { fetchCalendarDetailInAdminRole } from "../../api/calendar";
 import AdminCalendarForm from "./AdminCalendarForm";
+import { getColorByDurationUnit, getColorByPackageType } from "../../utils/GetColor";
 
 const AdminCalendarModal = ({ modalOpen, setModalOpen, calendarId }) => {
   const [loading, setLoading] = useState(false);
@@ -137,15 +138,7 @@ const AdminCalendarModal = ({ modalOpen, setModalOpen, calendarId }) => {
       >
         <Carousel autoplay style={{ textAlign: "center" }}>
           <div>
-            {/* <Image.PreviewGroup
-              items={[
-                "https://gw.alipayobjects.com/zos/antfincdn/LlvErxo8H9/photo-1503185912284-5271ff81b9a8.webp",
-                "https://gw.alipayobjects.com/zos/antfincdn/cV16ZqzMjW/photo-1473091540282-9b846e7965e3.webp",
-                "https://gw.alipayobjects.com/zos/antfincdn/x43I27A55%26/photo-1438109491414-7198515b166b.webp",
-              ]}
-            > */}
             <Image width={200} src={calendarData?.image} />
-            {/* </Image.PreviewGroup> */}
           </div>
         </Carousel>
         {/* <Descriptions title="Calendar Infomation" bordered items={calendars} /> */}
@@ -184,33 +177,33 @@ const AdminCalendarModal = ({ modalOpen, setModalOpen, calendarId }) => {
   );
 };
 
-const getColorByPackageType = (packageType) => {
-  switch (packageType) {
-    case "BASIC":
-      return "green";
-    case "ADVANCED":
-      return "geekblue";
-    case "PREMIUM":
-      return "gold";
-    default:
-      return "gray";
-  }
-};
+// const getColorByPackageType = (packageType) => {
+//   switch (packageType) {
+//     case "BASIC":
+//       return "green";
+//     case "ADVANCED":
+//       return "geekblue";
+//     case "PREMIUM":
+//       return "gold";
+//     default:
+//       return "gray";
+//   }
+// };
 
-const getColorByDurationUnit = (durationUnit) => {
-  switch (durationUnit) {
-    case "DAYS":
-      return "green";
-    case "WEEKS":
-      return "cyan";
-    case "MONTHS":
-      return "magenta";
-    case "YEARS":
-      return "purple";
-    default:
-      return "gray";
-  }
-};
+// const getColorByDurationUnit = (durationUnit) => {
+//   switch (durationUnit) {
+//     case "DAYS":
+//       return "green";
+//     case "WEEKS":
+//       return "cyan";
+//     case "MONTHS":
+//       return "magenta";
+//     case "YEARS":
+//       return "purple";
+//     default:
+//       return "gray";
+//   }
+// };
 
 // const packages = [
 //   {

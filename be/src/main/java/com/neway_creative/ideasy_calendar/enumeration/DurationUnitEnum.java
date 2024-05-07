@@ -9,7 +9,6 @@ import lombok.Getter;
  */
 @Getter
 public enum DurationUnitEnum {
-    DAYS,
     WEEKS,
     MONTHS,
     YEARS

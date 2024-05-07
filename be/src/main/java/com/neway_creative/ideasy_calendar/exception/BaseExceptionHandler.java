@@ -9,7 +9,6 @@ import org.springframework.web.context.request.WebRequest;
 
 import javax.persistence.EntityExistsException;
 import java.security.InvalidParameterException;
-import java.time.LocalDateTime;
 
 /**
  * BaseExceptionHandler
@@ -27,7 +26,7 @@ public class BaseExceptionHandler {
      */
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<BaseExceptionContent> handleResourceNotFoundException(ResourceNotFoundException exception, WebRequest request) {
-        BaseExceptionContent error = new BaseExceptionContent(LocalDateTime.now(), exception.getMessage(),
+        BaseExceptionContent error = new BaseExceptionContent(HttpStatus.NOT_FOUND.value(), exception.getMessage(),
                 request.getDescription(false));
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
@@ -41,7 +40,7 @@ public class BaseExceptionHandler {
      */
     @ExceptionHandler(InvalidParameterException.class)
     public ResponseEntity<BaseExceptionContent> handleInvalidParameterException(InvalidParameterException exception, WebRequest request) {
-        BaseExceptionContent error = new BaseExceptionContent(LocalDateTime.now(), exception.getMessage(),
+        BaseExceptionContent error = new BaseExceptionContent(HttpStatus.BAD_REQUEST.value(), exception.getMessage(),
                 request.getDescription(false));
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
@@ -55,14 +54,14 @@ public class BaseExceptionHandler {
      */
     @ExceptionHandler(EntityExistsException.class)
     public ResponseEntity<BaseExceptionContent> handleEntityExistsException(EntityExistsException exception,WebRequest request) {
-        BaseExceptionContent error = new BaseExceptionContent(LocalDateTime.now(), exception.getMessage(),
+        BaseExceptionContent error = new BaseExceptionContent(HttpStatus.BAD_REQUEST.value(), exception.getMessage(),
                 request.getDescription(false));
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(DuplicateEmailException.class)
     public ResponseEntity<BaseExceptionContent> handleDuplicateEmailException(DuplicateEmailException exception,WebRequest request) {
-        BaseExceptionContent error = new BaseExceptionContent(LocalDateTime.now(), exception.getMessage(),
+        BaseExceptionContent error = new BaseExceptionContent(HttpStatus.BAD_REQUEST.value(), exception.getMessage(),
                 request.getDescription(false));
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }

@@ -1,10 +1,8 @@
 import React from "react";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import PaymentPage from "./pages/customer/PaymentPage";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import PaymentPage from "./pages/PaymentPage";
 import AdminLayout from "./pages/admin/AdminLayout";
-import DetailPage, {
-  loader as calendarLoader,
-} from "./pages/customer/CalendarDetail";
+import DetailPage from "./pages/customer/CalendarDetail";
 import ProductsPage from "./pages/customer/Calendars";
 import HomePage from "./pages/customer/Home";
 import RootLayout from "./pages/customer/Layout";
@@ -15,56 +13,32 @@ import AdminCustomerMangment from "./pages/admin/AdminCustomerManagement";
 import AdminTransactionManagement from "./pages/admin/AdminTransactionManagement";
 import ErrorPage from "./pages/error/Error";
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <RootLayout />,
-    errorElement: <ErrorPage />,
-    children: [
-      { index: true, element: <HomePage /> },
-      {
-        path: "calendars",
-        element: <ProductsPage />,
-      },
-      {
-        path: "calendars/:calendarId",
-        id: "calendar-detail",
-        element: <DetailPage />,
-        loader: calendarLoader,
-      },
-      {
-        path: "payment",
-        element: <PaymentPage />,
-      },
-    ],
-  },
-  {
-    path: "admin/",
-    element: <AdminLayout />,
-    children: [
-      { index: true, element: <AdminDashboard /> },
-      {
-        path: "calendars",
-        element: <AdminCalendarManagement />,
-      },
-      {
-        path: "customers",
-        element: <AdminCustomerMangment />,
-      },
-      {
-        path: "transactions",
-        element: <AdminTransactionManagement />,
-      },
-      {
-        path: "result",
-        element: <AdminResult />,
-      },
-    ],
-  },
-]);
-
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<RootLayout />}>
+          {/* public routes */}
+          <Route index element={<HomePage />} />
+          <Route path="calendars" element={<ProductsPage />} />
+          <Route path="calendars/:calendarId" element={<DetailPage />} />
+          <Route path="payment" element={<PaymentPage />} />
+        </Route>
+
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<AdminDashboard />} />
+          <Route path="calendars" element={<AdminCalendarManagement />} />
+          <Route path="customers" element={<AdminCustomerMangment />} />
+          <Route path="transactions" element={<AdminTransactionManagement />} />
+          <Route path="result" element={<AdminResult />} />
+        </Route>
+
+        {/* catch all */}
+        <Route path="*" element={<ErrorPage />} />
+        <Route path="/error" element={<ErrorPage />} />
+      </Routes>
+    </Router>
+  );
 }
 
 export default App;
