@@ -13,6 +13,7 @@ import AdminCustomerMangment from "./pages/admin/AdminCustomerManagement";
 import AdminTransactionManagement from "./pages/admin/AdminTransactionManagement";
 import ErrorPage from "./pages/error/Error";
 import AboutUsPage from "./pages/customer/AboutUsPage";
+import AdminPostManagement from "./pages/admin/AdminPostManagement";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
           <Route path="calendars" element={<AdminCalendarManagement />} />
           <Route path="customers" element={<AdminCustomerMangment />} />
           <Route path="transactions" element={<AdminTransactionManagement />} />
+          <Route path="posts" element={<AdminPostManagement />} />
           <Route path="result" element={<AdminResult />} />
         </Route>
 

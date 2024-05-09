@@ -7,6 +7,7 @@ import {
   AreaChartOutlined,
   UserOutlined,
   TransactionOutlined,
+  EditOutlined,
 } from "@ant-design/icons";
 import { Button, Layout, Menu, Badge, theme, Flex } from "antd";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
@@ -25,9 +26,10 @@ function getItem(label, key, icon, children, type) {
 
 const items = [
   getItem("Dashboard", "/admin", <AreaChartOutlined />),
-  getItem("Calendar", "/admin/calendars", <AppstoreOutlined />), 
+  getItem("Calendar", "/admin/calendars", <AppstoreOutlined />),
   getItem("Customer", "/admin/customers", <UserOutlined />),
   getItem("Transaction", "/admin/transactions", <TransactionOutlined />),
+  getItem("Post", "/admin/posts", <EditOutlined />),
 ];
 
 const AdminLayout = () => {
