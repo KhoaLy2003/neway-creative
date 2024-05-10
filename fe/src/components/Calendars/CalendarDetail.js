@@ -1,9 +1,10 @@
 import React from "react";
 import "../../assets/root.css";
-import FillButton from "../Layouts/FillButton";
 import Breadcrumb from "../Layouts/Breadcrumb";
-import { Table, Tag } from "antd";
+import { Button, Table, Tag, Typography } from "antd";
+import Title from "antd/es/typography/Title";
 const { Column } = Table;
+const { Text } = Typography;
 
 const CalendarDetail = ({ calendarDetail }) => {
   return (
@@ -22,9 +23,15 @@ const CalendarDetail = ({ calendarDetail }) => {
               />
             </div>
             <div className="col-md-5">
-              <h1 className="display-5 fw-bolder">{calendarDetail.title}</h1>
-              <p className="lead">{calendarDetail.description}</p>
-              <Table dataSource={calendarDetail.packages.sort(customSort)} pagination={false}>
+              <Title level={1}>{calendarDetail.title}</Title>
+              <Text>
+                {calendarDetail.description}
+              </Text>
+              <Table
+                dataSource={calendarDetail.packages.sort(customSort)}
+                pagination={false}
+                style={{ marginBottom: 20, marginTop: 20 }}
+              >
                 <Column
                   defaultSortOrder={"descend"}
                   title="Type"
@@ -50,8 +57,11 @@ const CalendarDetail = ({ calendarDetail }) => {
                 />
                 <Column title="Price" dataIndex="price" key="price" />
               </Table>
+
               <div className="d-flex">
-                <FillButton href={"#"} children={"Order"} />
+                <Button type="primary" size="large">
+                  Order
+                </Button>
               </div>
             </div>
           </div>
@@ -65,11 +75,11 @@ const customSort = (a, b) => {
   const order = ["BASIC", "ADVANCED", "PREMIUM"];
   const indexA = order.indexOf(a.packageType);
   const indexB = order.indexOf(b.packageType);
-  
+
   if (indexA === -1 || indexB === -1) {
     return a.packageType.localeCompare(b.packageType);
   }
-  
+
   return indexA - indexB;
 };
 

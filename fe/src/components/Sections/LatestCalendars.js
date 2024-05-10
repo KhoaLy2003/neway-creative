@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import "../../assets/root.css";
 import "../Calendars/Calendar.css";
 import Calendar from "../Calendars/Calendar";
-import { Link } from "react-router-dom";
 import { getLatestCalendars } from "../../api/calendar";
 import { Spin } from "antd";
 import { LoadingOutlined } from '@ant-design/icons';
+import Link from "antd/es/typography/Link";
 
 const LatestCalendars = () => {
   const [calendars, setCalendars] = useState([]);
@@ -54,7 +54,7 @@ const LatestCalendars = () => {
           <div className="col-md-12">
             <div className="section-heading">
               <h2>IDEASY Calendar</h2>
-              <Link to="/calendars">
+              <Link href="/calendars">
                 View all products <i className="fa fa-angle-right"></i>
               </Link>
             </div>

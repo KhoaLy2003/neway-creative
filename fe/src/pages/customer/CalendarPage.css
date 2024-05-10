@@ -22,7 +22,7 @@
 
 .products .filters ul li.active,
 .products .filters ul li:hover {
-  color: #f33f3f;
+  color: #6C36FE;
 }
 
 .products ul.pages {
@@ -49,13 +49,13 @@
 
 .products ul.pages li a:hover,
 .products ul.pages li.active a {
-  background-color: #f33f3f;
-  border-color: #f33f3f;
+  background-color: #6C36FE;
+  border-color: #6C36FE;
   color: #fff;
 }
 
 .products .pages button {
-  background-color: #f33f3f;
+  background-color: #6C36FE;
   border: none;
   color: #fff;
   font-size: 14px;

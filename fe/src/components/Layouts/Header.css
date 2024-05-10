@@ -6,7 +6,7 @@ header {
   right: 0;
   margin: 0 auto;
   height: 80px;
-  background-color: #232323;
+  background-color: #6C36FE;
   -webkit-transition: all 0.3s ease-in-out 0s;
   -moz-transition: all 0.3s ease-in-out 0s;
   -o-transition: all 0.3s ease-in-out 0s;
@@ -30,30 +30,27 @@ header .navbar {
 .background-header .navbar-nav a.nav-link {
   color: #1e1e1e !important;
 }
-.background-header .navbar-nav .nav-link:hover,
+/* .background-header .navbar-nav .nav-link:hover,
 .background-header .navbar-nav .active > .nav-link,
 .background-header .navbar-nav .nav-link.active,
 .background-header .navbar-nav .nav-link.show,
 .background-header .navbar-nav .show > .nav-link {
   color: #f33f3f !important;
-}
+} */
 .navbar .navbar-brand {
   float: left;
   outline: none;
 }
 .navbar .navbar-brand h2 {
-  color: #fff;
+  color: #FFFFFF;
   text-transform: uppercase;
-  font-size: 24px;
-  font-weight: 700;
   -webkit-transition: all 0.3s ease 0s;
   -moz-transition: all 0.3s ease 0s;
   -o-transition: all 0.3s ease 0s;
   transition: all 0.3s ease 0s;
 }
 .navbar .navbar-brand h2 em {
-  font-style: normal;
-  color: #f33f3f;
+  color: #000000;
 }
 #navbarResponsive {
   z-index: 999;
@@ -66,10 +63,10 @@ header .navbar {
 }
 .navbar .navbar-nav a.nav-link {
   text-transform: capitalize;
-  font-size: 15px;
-  font-weight: 500;
+  /* font-size: 15px;
+  font-weight: 500; */
   letter-spacing: 0.5px;
-  color: #fff;
+  color: #FFFFFF;
   transition: all 0.5s;
   margin-top: 5px;
 }
@@ -78,14 +75,14 @@ header .navbar {
 .navbar .navbar-nav .nav-link.active,
 .navbar .navbar-nav .nav-link.show,
 .navbar .navbar-nav .show > .nav-link {
-  color: #fff;
+  color: #FFFF33;
   padding-bottom: 25px;
-  border-bottom: 3px solid #f33f3f;
+  border-bottom: 3px solid #FFFF33;
 }
-.navbar .navbar-toggler-icon {
+/* .navbar .navbar-toggler-icon {
   background-image: none;
-}
-.navbar .navbar-toggler {
+} */
+/* .navbar .navbar-toggler {
   border-color: #fff;
   background-color: #fff;
   height: 36px;
@@ -94,14 +91,14 @@ header .navbar {
   position: absolute;
   right: 30px;
   top: 20px;
-}
-.navbar .navbar-toggler-icon:after {
+} */
+/* .navbar .navbar-toggler-icon:after {
   content: "\f0c9";
   color: #f33f3f;
   font-size: 18px;
   line-height: 26px;
   font-family: "FontAwesome";
-}
+} */
 
 .ml-auto {
   margin-left: auto !important;

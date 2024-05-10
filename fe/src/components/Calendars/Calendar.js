@@ -2,9 +2,10 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "./Calendar.css";
 import "../../assets/root.css";
+import Title from "antd/es/typography/Title";
 
 const Calendar = ({ calendar }) => {
-  const { title, image, description, calendarId } = calendar;
+  const { title, image, calendarId } = calendar;
 
   return (
     <div className="col-md-3">
@@ -12,8 +13,9 @@ const Calendar = ({ calendar }) => {
         <Link to={`/calendars/${calendarId}`}>
           <img src={image} alt={title} />
           <div className="down-content">
-            <h4>{title}</h4>
-            <p>{description}</p>
+            <Title style={{ textAlign: "center" }} level={4}>
+              {title}
+            </Title>
             {/* Uncomment below if you want to include stars and reviews
           <ul className="stars">
             {[...Array(5)].map((_, index) => (
