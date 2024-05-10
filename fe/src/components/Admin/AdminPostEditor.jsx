@@ -2,6 +2,7 @@ import React, { Fragment, useState } from "react";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { Button } from "antd";
+import { createPost } from "../../api/post";
 
 function AdminPostEditor() {
   const [content, setContent] = useState("");
@@ -11,7 +12,17 @@ function AdminPostEditor() {
     setContent(data);
   };
 
-  const handleCreatePost = () => {
+  const postCreateDto = {
+    content: content,
+    thumbnail: "test",
+  };
+
+  const handleCreatePost = async () => {
+    const response = await createPost(postCreateDto);
+
+    const data = response.data;
+
+    console.log("Response with data: ", data);
     console.log("Post created with content: ", content);
   };
 
@@ -24,26 +35,20 @@ function AdminPostEditor() {
           config={{
             placeholder: "Write your post here...",
             image: {
-              toolbar: ["imageUpload", "imageInsert"], // Add the image toolbar options
-              upload: {
-                types: ["jpeg", "png", "gif", "bmp", "webp"],
-                maxSize: 1024 * 1024, // 1 MB
+              toolbar: ["insertImage"],
+            },
+            ckfinder: {
+              uploadUrl:
+                "/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files&responseType=json",
+              options: {
+                resourceType: "Images",
               },
             },
           }}
           onReady={(editor) => {
-            // You can store the "editor" and use when it is needed.
             console.log("Editor is ready to use!", editor);
           }}
           onChange={handleEditorChange}
-          onBlur={(event, editor) => {
-            console.log(event);
-            console.log("Blur.", editor);
-          }}
-          onFocus={(event, editor) => {
-            console.log(event);
-            console.log("Focus.", editor);
-          }}
         />
       </div>
       <Button onClick={handleCreatePost} type="primary" htmlType="submit">
