@@ -11,6 +11,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class UriConstant {
     /**
+     * The constant POST_BASE_URI.
+     */
+    public static final String POST_BASE_URI = "/api/posts";
+    /**
      * The constant PAYMENT_BASE_URI.
      */
     public static final String PAYMENT_BASE_URI = "/api/payment";
@@ -46,6 +50,10 @@ public final class UriConstant {
      * The constant PAYMENT_CREATE.
      */
     public static final String PAYMENT_CREATE = "/create";
+    /**
+     * The constant POST_CREATE.
+     */
+    public static final String POST_CREATE = "/admin/create";
     /**
      * The constant CALENDAR_CREATE.
      */

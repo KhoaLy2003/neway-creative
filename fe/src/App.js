@@ -13,6 +13,7 @@ import AdminCustomerMangment from "./pages/admin/AdminCustomerManagement";
 import AdminTransactionManagement from "./pages/admin/AdminTransactionManagement";
 import ErrorPage from "./pages/error/Error";
 import AboutUsPage from "./pages/customer/AboutUsPage";
+import AdminPostManagement from "./pages/admin/AdminPostManagement";
 import RequiredAuth from "./components/RequireAuth";
 
 const roles = {
@@ -42,6 +43,8 @@ function App() {
               path="transactions"
               element={<AdminTransactionManagement />}
             />
+            <Route path="posts" element={<AdminPostManagement />} />
+
             <Route path="result" element={<AdminResult />} />
           </Route>
         </Route>
