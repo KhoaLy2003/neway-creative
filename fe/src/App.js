@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import PaymentPage from "./pages/customer/PaymentPage";
 import AdminLayout from "./pages/admin/AdminLayout";
 import DetailPage from "./pages/customer/CalendarDetail";
 import ProductsPage from "./pages/customer/Calendars";
@@ -11,7 +12,7 @@ import AdminResult from "./pages/admin/AdminResult";
 import AdminCustomerMangment from "./pages/admin/AdminCustomerManagement";
 import AdminTransactionManagement from "./pages/admin/AdminTransactionManagement";
 import ErrorPage from "./pages/error/Error";
-import PaymentPage from "./pages/customer/PaymentPage";
+import AboutUsPage from "./pages/customer/AboutUsPage";
 import RequiredAuth from "./components/RequireAuth";
 
 const roles = {
@@ -29,6 +30,7 @@ function App() {
           <Route path="calendars" element={<ProductsPage />} />
           <Route path="calendars/:calendarId" element={<DetailPage />} />
           <Route path="payment" element={<PaymentPage />} />
+          <Route path="about-us" element={<AboutUsPage />} />
         </Route>
 
         <Route element={<RequiredAuth allowedRoles={[roles.Admin]} />}>

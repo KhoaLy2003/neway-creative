@@ -1,0 +1,11 @@
+.about-us-heading {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.about-us-heading h3 {
+  margin: 2rem;
+}
