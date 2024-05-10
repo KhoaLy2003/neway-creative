@@ -48,10 +48,6 @@ const UserProvider = ({ children }) => {
     }
   }, []);
 
-  useEffect(() => {
-    console.log(email, role, token);
-  }, [email, role, token]);
-
   const login = (user, token) => {
     const stringUser = JSON.stringify(user);
     const currentDate = new Date();

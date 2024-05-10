@@ -2,7 +2,7 @@ import React from "react";
 import "./About.css";
 import "../../assets/root.css";
 import featureImage from "../../assets/feature-image.jpg";
-import FillButton from "./FillButton";
+import { Button, Typography } from "antd";
 
 const About = () => {
   return (
@@ -50,7 +50,10 @@ const About = () => {
                   <a href="#">How to use calendar</a>
                 </li>
               </ul>
-              <FillButton href={"#"} children={"Try Free Version"} />
+              {/* <FillButton href={"#"} children={"Try Free Version"} /> */}
+              <Button type="primary" size="large">
+                Try Free Version
+              </Button>
             </div>
           </div>
           <div className="col-md-6">

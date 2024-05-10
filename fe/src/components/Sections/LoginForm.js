@@ -34,12 +34,13 @@ const LoginForm = ({ onSuccess, setLoading }) => {
         setLoading(false);
         onSuccess(response.data);
       }
+
+      if (response.status === 404) {
+        openNotificationWithIcon("error", response.message);
+        setLoading(false);
+      }
     } catch (error) {
       console.error("Error sending data to backend:", error);
-      //Need to fix later
-      console.log("Login failed ", error);
-      openNotificationWithIcon("error", "Login failed, try again");
-      setLoading(false);
     }
   };
 
