@@ -5,6 +5,7 @@ import com.neway_creative.ideasy_calendar.dto.request.LoginRequest;
 import com.neway_creative.ideasy_calendar.dto.request.RegisterRequest;
 import com.neway_creative.ideasy_calendar.dto.request.VerifyAccountRequest;
 import com.neway_creative.ideasy_calendar.dto.response.LoginResponse;
+import com.neway_creative.ideasy_calendar.entity.Admin;
 import com.neway_creative.ideasy_calendar.entity.Customer;
 import com.neway_creative.ideasy_calendar.enumeration.RoleEnum;
 import com.neway_creative.ideasy_calendar.enumeration.StatusEnum;
@@ -20,11 +21,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.InvalidParameterException;
 import java.text.MessageFormat;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -42,6 +43,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final MessageLocalization messageLocalization;
     private final OtpGenerator otpGenerator;
     private final MailService mailService;
+    private final Admin admin;
 
     @Override
     public void registerNewAccount(RegisterRequest request) {
@@ -70,6 +72,22 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public LoginResponse authenticateAccount(LoginRequest request) {
+        if (admin.getEmail().equals(request.getEmail()) && passwordEncoder.matches(request.getPassword(), admin.getPassword())) {
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                    request.getEmail(), request.getPassword(),
+                    admin.getAuthorities()
+            );
+
+            authenticationManager.authenticate(authenticationToken);
+
+            return LoginResponse.builder()
+                    .name("ADMIN")
+                    .email(request.getEmail())
+                    .token(jwtService.generateToken(admin))
+                    .role(RoleEnum.ADMIN.name())
+                    .build();
+        }
+
         Optional<Customer> existingUser = customerRepository.findByEmailAddress(request.getEmail());
         if (existingUser.isEmpty()) {
             throw new ResourceNotFoundException(MessageFormat.format(
@@ -83,7 +101,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             }
 
             if (!passwordEncoder.matches(request.getPassword(), currentCustomer.getPassword())) {
-                throw new BadCredentialsException("Login fail");
+                throw new InvalidParameterException(MessageFormat.format(
+                        messageLocalization.getLocalizedMessage(MessageConstant.LOGIN_FAILED), request.getEmail()));
             }
 
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
@@ -95,6 +114,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
             return LoginResponse
                     .builder()
+                    .name(currentCustomer.getName())
                     .email(request.getEmail())
                     .token(jwtService.generateToken(existingUser.get()))
                     .role(currentCustomer.getRole().name())

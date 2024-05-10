@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -7,10 +7,12 @@ import {
   AreaChartOutlined,
   UserOutlined,
   TransactionOutlined,
+  LogoutOutlined,
 } from "@ant-design/icons";
 import { Button, Layout, Menu, Badge, theme, Flex } from "antd";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Content } from "antd/es/layout/layout";
+import { UserContext } from "../../context/AuthContext";
 const { Sider, Header, Footer } = Layout;
 
 function getItem(label, key, icon, children, type) {
@@ -25,9 +27,10 @@ function getItem(label, key, icon, children, type) {
 
 const items = [
   getItem("Dashboard", "/admin", <AreaChartOutlined />),
-  getItem("Calendar", "/admin/calendars", <AppstoreOutlined />), 
+  getItem("Calendar", "/admin/calendars", <AppstoreOutlined />),
   getItem("Customer", "/admin/customers", <UserOutlined />),
   getItem("Transaction", "/admin/transactions", <TransactionOutlined />),
+  getItem("Logout", "/logout", <LogoutOutlined />, null, "logout"),
 ];
 
 const AdminLayout = () => {
@@ -35,6 +38,7 @@ const AdminLayout = () => {
   const [mailOpen, setMailOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const { logout } = useContext(UserContext);
 
   const [selectedKeys, setSelectedKeys] = useState("/");
   useEffect(() => {
@@ -42,6 +46,11 @@ const AdminLayout = () => {
     setSelectedKeys(pathName);
     console.log(pathName);
   }, [location.pathname]);
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
 
   const {
     token: { colorBgContainer },
@@ -68,7 +77,11 @@ const AdminLayout = () => {
           selectedKeys={[selectedKeys]}
           items={items}
           onClick={(item) => {
-            navigate(item.key);
+            if (item.key === "/logout") {
+              handleLogout();
+            } else {
+              navigate(item.key);
+            }
           }}
         />
       </Sider>

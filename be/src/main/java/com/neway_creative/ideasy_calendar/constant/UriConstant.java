@@ -49,17 +49,33 @@ public final class UriConstant {
     /**
      * The constant CALENDAR_CREATE.
      */
-    public static final String CALENDAR_CREATE = "/admin/create";
+    public static final String CALENDAR_CREATE_URI = "/admin/create";
     /**
      * The constant CALENDAR_UPLOAD.
      */
-    public static final String CALENDAR_UPLOAD = "/admin/upload";
+    public static final String CALENDAR_UPLOAD_URI = "/admin/upload";
     /**
      * The constant CALENDAR_ADMIN_LIST.
      */
-    public static final String CALENDAR_ADMIN_LIST = "/admin/list";
+    public static final String CALENDAR_ADMIN_LIST_URI = "/admin/list";
+    /**
+     * The constant CALENDAR_ADMIN_DETAIL_URI.
+     */
+    public static final String CALENDAR_ADMIN_DETAIL_URI = "/admin/{calendarId}";
+    /**
+     * The constant CUSTOMER_REGISTER_URI.
+     */
     public static final String CUSTOMER_REGISTER_URI = "/register";
+    /**
+     * The constant CUSTOMER_VERIFY_OTP_URI.
+     */
     public static final String CUSTOMER_VERIFY_OTP_URI = "/verify";
+    /**
+     * The constant CUSTOMER_REGENERATE_OTP_URI.
+     */
     public static final String CUSTOMER_REGENERATE_OTP_URI = "/regenerate-otp";
+    /**
+     * The constant CUSTOMER_LOGIN_URI.
+     */
     public static final String CUSTOMER_LOGIN_URI = "/login";
 }

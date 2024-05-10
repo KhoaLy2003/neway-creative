@@ -13,6 +13,12 @@ import AdminCustomerMangment from "./pages/admin/AdminCustomerManagement";
 import AdminTransactionManagement from "./pages/admin/AdminTransactionManagement";
 import ErrorPage from "./pages/error/Error";
 import AboutUsPage from "./pages/customer/AboutUsPage";
+import RequiredAuth from "./components/RequireAuth";
+
+const roles = {
+  Admin: "ADMIN",
+  Customer: "CUSTOMER",
+};
 
 function App() {
   return (
@@ -27,17 +33,23 @@ function App() {
           <Route path="about-us" element={<AboutUsPage />} />
         </Route>
 
-        <Route path="/admin" element={<AdminLayout />}>
-          <Route index element={<AdminDashboard />} />
-          <Route path="calendars" element={<AdminCalendarManagement />} />
-          <Route path="customers" element={<AdminCustomerMangment />} />
-          <Route path="transactions" element={<AdminTransactionManagement />} />
-          <Route path="result" element={<AdminResult />} />
+        <Route element={<RequiredAuth allowedRoles={[roles.Admin]} />}>
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<AdminDashboard />} />
+            <Route path="calendars" element={<AdminCalendarManagement />} />
+            <Route path="customers" element={<AdminCustomerMangment />} />
+            <Route
+              path="transactions"
+              element={<AdminTransactionManagement />}
+            />
+            <Route path="result" element={<AdminResult />} />
+          </Route>
         </Route>
 
         {/* catch all */}
-        <Route path="*" element={<ErrorPage />} />
+        <Route path="/unauthorized" element={<ErrorPage />} />
         <Route path="/error" element={<ErrorPage />} />
+        <Route path="*" element={<ErrorPage />} />
       </Routes>
     </Router>
   );

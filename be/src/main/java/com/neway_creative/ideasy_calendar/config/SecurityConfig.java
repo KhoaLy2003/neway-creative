@@ -1,7 +1,9 @@
 package com.neway_creative.ideasy_calendar.config;
 
+import com.neway_creative.ideasy_calendar.entity.Admin;
 import com.neway_creative.ideasy_calendar.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,14 +20,30 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecurityConfig {
 
     private final CustomerRepository customerRepository;
+    @Value("${admin.email}")
+    private String adminEmail;
+
+    @Value("${admin.password}")
+    private String adminPassword;
+
+    @Bean
+    public Admin admin() {
+        return new Admin(adminEmail, passwordEncoder().encode(adminPassword));
+    }
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return emailAddress -> customerRepository
-                .findByEmailAddress(emailAddress)
-                .orElseThrow(() ->
-                        new UsernameNotFoundException(
-                                "Cannot find customer with email = "+ emailAddress));
+        return emailAddress -> {
+            if (emailAddress.equals(adminEmail)) {
+                return admin();
+            } else {
+                return customerRepository
+                        .findByEmailAddress(emailAddress)
+                        .orElseThrow(() ->
+                                new UsernameNotFoundException(
+                                        "Cannot find customer with email = " + emailAddress));
+            }
+        };
     }
 
     @Bean
