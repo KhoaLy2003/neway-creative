@@ -5,7 +5,7 @@ CREATE TABLE `category` (
   `is_delete` bit(1) NOT NULL,
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`category_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 -- contentdigitalcalendar.customer definition
@@ -16,6 +16,8 @@ CREATE TABLE `customer` (
   `updated_at` datetime(6) DEFAULT NULL,
   `email_address` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
+  `otp` varchar(255) DEFAULT NULL,
+  `otp_generated_time` datetime(6) DEFAULT NULL,
   `password` varchar(255) NOT NULL,
   `role` varchar(255) NOT NULL,
   `status` varchar(255) NOT NULL,
@@ -42,6 +44,19 @@ CREATE TABLE `flyway_schema_history` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
+-- contentdigitalcalendar.post definition
+
+CREATE TABLE `post` (
+  `post_id` int NOT NULL AUTO_INCREMENT,
+  `created_at` datetime(6) NOT NULL,
+  `updated_at` datetime(6) DEFAULT NULL,
+  `content` varchar(255) NOT NULL,
+  `status` varchar(255) NOT NULL,
+  `thumbnail` varchar(255) NOT NULL,
+  PRIMARY KEY (`post_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
 -- contentdigitalcalendar.calendar definition
 
 CREATE TABLE `calendar` (
@@ -56,7 +71,7 @@ CREATE TABLE `calendar` (
   PRIMARY KEY (`calendar_id`),
   KEY `FK66kxtkmwjm0n1wc4x2a5q214p` (`category_id`),
   CONSTRAINT `FK66kxtkmwjm0n1wc4x2a5q214p` FOREIGN KEY (`category_id`) REFERENCES `category` (`category_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 -- contentdigitalcalendar.`order` definition
@@ -124,10 +139,3 @@ CREATE TABLE `payment` (
   CONSTRAINT `FK33pd2iqamm9gp5c14r1catra2` FOREIGN KEY (`order_id`) REFERENCES `order` (`order_id`),
   CONSTRAINT `FKby2skjf3ov608yb6nm16b49lg` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-INSERT INTO `category` (is_delete,name) VALUES
-	 (0,'Business'),
-	 (0,'Education'),
-	 (0,'Health & Fitness'),
-	 (0,'Travel'),
-	 (0,'Food & Drink');
