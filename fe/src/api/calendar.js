@@ -51,11 +51,16 @@ export const fetchCalendarDetail = async (id) => {
   }
 };
 
-export const fetchCalendarsInAdminRole = async (pageNo) => {
+export const fetchCalendarsInAdminRole = async (pageNo, token) => {
   try {
     let url = `${baseUrl}/calendars/admin/list/?pageNo=${pageNo}`;
 
-    const response = await fetch(url);
+    const response = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
     if (!response.ok) {
       throw new Error("Failed to fetch calendars in admin role");
     }
@@ -67,8 +72,7 @@ export const fetchCalendarsInAdminRole = async (pageNo) => {
   }
 };
 
-export const createCalendar = async (calendar) => {
-  //const jsonData = JSON.stringify(calendar);
+export const createCalendar = async (calendar, token) => {
   console.log(calendar);
 
   try {
@@ -77,6 +81,7 @@ export const createCalendar = async (calendar) => {
       method: "POST",
       body: JSON.stringify(calendar),
       headers: {
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
     });
@@ -89,13 +94,16 @@ export const createCalendar = async (calendar) => {
   }
 };
 
-export const uploadCalendarImage = async (calendarId, formData) => {
+export const uploadCalendarImage = async (calendarId, formData, token) => {
   try {
     let url = `${baseUrl}/calendars/admin/upload?id=${calendarId}`;
 
     const response = await fetch(url, {
       method: "POST",
       body: formData,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
 
     const data = await response.json();
@@ -106,9 +114,15 @@ export const uploadCalendarImage = async (calendarId, formData) => {
   }
 };
 
-export const fetchCalendarDetailInAdminRole = async (id) => {
+export const fetchCalendarDetailInAdminRole = async (id, token) => {
   try {
-    const response = await fetch(`${baseUrl}/calendars/admin/${id}`);
+    let url = `${baseUrl}/calendars/admin/${id}`;
+    const response = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
 
     if (!response.ok) {
       throw new Error("Failed to fetch calendar detail");

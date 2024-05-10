@@ -1,9 +1,17 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import { NavLink, Link } from "react-router-dom";
 import "./Header.css";
-import "../../assets/root.css";
+import AuthModal from "../Sections/AuthModal";
+import { UserContext } from "../../context/AuthContext";
 
 const Header = () => {
+  const [modalOpen, setModalOpen] = useState(false);
+  const { name } = useContext(UserContext);
+
+  const handleModalOpen = () => {
+    setModalOpen(true);
+  };
+
   return (
     <header className="">
       <nav className="navbar navbar-expand-lg">
@@ -46,14 +54,20 @@ const Header = () => {
                 </a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="contact.html">
-                  Contact Us
-                </a>
+                {!name && (
+                  <a className="nav-link" onClick={() => handleModalOpen()}>
+                    Login
+                  </a>
+                )}
+
+                {name && <a className="nav-link">{name}</a>}
               </li>
             </ul>
           </div>
         </div>
       </nav>
+
+      <AuthModal modalOpen={modalOpen} setModalOpen={setModalOpen} />
     </header>
   );
 };

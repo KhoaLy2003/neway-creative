@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -86,8 +87,8 @@ public class CalendarController {
         return ResponseEntity.status(HttpStatus.OK).body(new BaseResponse(HttpStatus.OK.value(), SUCCESSFUL_MESSAGE, calendarDTOs));
     }
 
-    @PostMapping(UriConstant.CALENDAR_CREATE)
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping(UriConstant.CALENDAR_CREATE_URI)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<BaseResponse> createCalendar(@Valid @RequestBody CalendarRequest calendarRequest,
                                                        BindingResult result) {
         if (result.hasErrors()) {
@@ -105,8 +106,8 @@ public class CalendarController {
                 .body(new BaseResponse(HttpStatus.CREATED.value(), messageLocalization.getLocalizedMessage(MessageConstant.CREATE_CALENDAR_SUCCESSFULLY), newCalendar.getCalendarId()));
     }
 
-    @PostMapping(UriConstant.CALENDAR_UPLOAD)
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping(UriConstant.CALENDAR_UPLOAD_URI)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<BaseResponse> uploadCalendarImage(@RequestParam("id") int id, @RequestParam MultipartFile imageFile) {
         if (imageFile == null || imageFile.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -117,15 +118,16 @@ public class CalendarController {
                 .body(new BaseResponse(HttpStatus.OK.value(), messageLocalization.getLocalizedMessage(MessageConstant.UPLOAD_CALENDAR_IMAGE_SUCCESSFULLY), id));
     }
 
-    @GetMapping(UriConstant.CALENDAR_ADMIN_LIST)
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping(UriConstant.CALENDAR_ADMIN_LIST_URI)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<BaseResponse> getAllCalendarsInAdminRole(@RequestParam int pageNo) {
         Page<CalendarAdminResponse> calendarAdminResponses = calendarService.getCalendarsInAdminRole(pageNo);
 
         return ResponseEntity.status(HttpStatus.OK).body(new BaseResponse(HttpStatus.OK.value(), SUCCESSFUL_MESSAGE, calendarAdminResponses));
     }
 
-    @GetMapping("/admin/{calendarId}")
+    @GetMapping(UriConstant.CALENDAR_ADMIN_DETAIL_URI)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<BaseResponse> getCalendarByCalendarIdInAdminRole(@PathVariable int calendarId) {
         CalendarDetailAdminResponse calendarDetailResponse = calendarService.getCalendarDetailByIdInAdminRole(calendarId);
 

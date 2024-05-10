@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Button,
   Modal,
@@ -13,17 +13,19 @@ import Link from "antd/es/typography/Link";
 import { fetchCalendarDetailInAdminRole } from "../../api/calendar";
 import AdminCalendarForm from "./AdminCalendarForm";
 import { getColorByDurationUnit, getColorByPackageType } from "../../utils/GetColor";
+import { UserContext } from "../../context/AuthContext";
 
 const AdminCalendarModal = ({ modalOpen, setModalOpen, calendarId }) => {
   const [loading, setLoading] = useState(false);
   const [calendarData, setCalendarData] = useState(null);
   const [modalFormOpen, setModalFormOpen] = useState(false);
+  const { token } = useContext(UserContext);
 
   useEffect(() => {
     const fetchCalendarData = async () => {
       setLoading(true);
       try {
-        const data = await fetchCalendarDetailInAdminRole(calendarId);
+        const data = await fetchCalendarDetailInAdminRole(calendarId, token);
         setCalendarData(data);
       } catch (error) {
         console.error("Error fetching calendar detail:", error.message);
