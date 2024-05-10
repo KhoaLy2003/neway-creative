@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Button,
   Form,
@@ -20,6 +20,7 @@ import FormItem from "antd/es/form/FormItem";
 import { fetchCategories } from "../../api/category";
 import { createCalendar, uploadCalendarImage } from "../../api/calendar";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../../context/AuthContext";
 const { Option } = Select;
 
 const getBase64 = (file) =>
@@ -56,7 +57,6 @@ const packageTypeOptions = [
 ];
 
 const packageDurationUnitOptions = [
-  { value: "DAYS", label: "DAYS" },
   { value: "WEEKS", label: "WEEKS" },
   { value: "MONTHS", label: "MONTHS" },
   { value: "YEARS", label: "YEARS" },
@@ -72,6 +72,7 @@ const AdminCalendarForm = ({ modalOpen, setModalOpen, calendar }) => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState(null);
   const [defaultImage, setDefaultImage] = useState(null);
+  const { token } = useContext(UserContext);
 
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
@@ -174,7 +175,7 @@ const AdminCalendarForm = ({ modalOpen, setModalOpen, calendar }) => {
         console.log(calendar);
       } else {
         console.log("Create: ", calendarPayload);
-        response = await createCalendar(calendarPayload);
+        response = await createCalendar(calendarPayload, token);
         console.log("Create: ", response);
       }
       console.log("Backend response: ", response);
@@ -185,7 +186,11 @@ const AdminCalendarForm = ({ modalOpen, setModalOpen, calendar }) => {
         formData.append("imageFile", file);
         formData.append("id", calendarId);
 
-        const uploadResponse = await uploadCalendarImage(calendarId, formData);
+        const uploadResponse = await uploadCalendarImage(
+          calendarId,
+          formData,
+          token
+        );
         if (uploadResponse.status === 200) {
           console.log("Upload ok", uploadResponse);
           setResponseStatus(true);

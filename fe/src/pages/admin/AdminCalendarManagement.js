@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Layout,
   Space,
@@ -12,6 +12,7 @@ import {
 import { fetchCalendarsInAdminRole } from "../../api/calendar";
 import AdminCalendarModal from "../../components/Admin/AdminCalendarModal";
 import AdminCalendarForm from "../../components/Admin/AdminCalendarForm";
+import { UserContext } from "../../context/AuthContext";
 
 const AdminCalendarManagement = () => {
   const [calendars, setCalendars] = useState([]);
@@ -21,11 +22,12 @@ const AdminCalendarManagement = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedCalendarId, setSelectedCalendarId] = useState(null);
   const [modalFormOpen, setModalFormOpen] = useState(false);
+  const { token } = useContext(UserContext);
 
   useEffect(() => {
     const fetchCalendars = async () => {
       try {
-        const data = await fetchCalendarsInAdminRole(currentPage);
+        const data = await fetchCalendarsInAdminRole(currentPage, token);
 
         setCalendars(data.content);
         console.log(calendars);

@@ -70,12 +70,15 @@ public class CustomerController {
 
         boolean isCheck = authenticationService.verifyAccount(verifyAccountRequest);
         String message = messageLocalization.getLocalizedMessage(MessageConstant.VERIFY_ACCOUNT_FAILED);
+        int status = HttpStatus.BAD_REQUEST.value();
+
         if (isCheck) {
             message = messageLocalization.getLocalizedMessage(MessageConstant.VERIFY_ACCOUNT_SUCCESSFULLY);
+            status = HttpStatus.OK.value();
         }
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new BaseResponse(HttpStatus.OK.value(), message, verifyAccountRequest.getEmail()));
+                .body(new BaseResponse(status, message, verifyAccountRequest.getEmail()));
     }
 
     @PostMapping(UriConstant.CUSTOMER_REGENERATE_OTP_URI)
