@@ -48,5 +48,7 @@ public final class MessageConstant {
 
     public static final String GET_POSTS_FAILED = "customer.get_posts_failed";
 
+    public static final String GET_POST_FAILED = "customer.get_post_failed";
+
     public static final String CREATE_POST_FAILED = "customer.create_post_failed";
 }

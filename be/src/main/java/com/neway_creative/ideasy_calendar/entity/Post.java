@@ -21,6 +21,12 @@ public class Post extends BaseEntity implements Serializable {
     @Column(name = "post_id")
     private int postId;
 
+    @Column(name = "title")
+    private String title;
+
+   @Column(name = "description")
+   private String description;
+
     @Column(name = "content", nullable = false)
     private String content;
 

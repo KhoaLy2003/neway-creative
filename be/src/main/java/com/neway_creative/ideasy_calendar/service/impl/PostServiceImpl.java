@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,12 +27,21 @@ public class PostServiceImpl implements PostService {
     @Override
     public Post createPost(CreatePostRequest createPostRequest) {
        Post post = Post.builder()
+               .title(createPostRequest.getTitle())
+               .description(createPostRequest.getDescription())
                .content(createPostRequest.getContent())
                .thumbnail(createPostRequest.getThumbnail())
                .status(StatusEnum.ACTIVE)
                .build();
 
        postRepository.save(post);
+
+        return post;
+    }
+
+    @Override
+    public Post getPostByPostId(int id) {
+        Post post = postRepository.findById(id).orElse(null);
 
         return post;
     }
