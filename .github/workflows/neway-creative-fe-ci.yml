@@ -1,0 +1,46 @@
+name: neway creative fe ci
+
+on:
+  push:
+    branches: ["production"]
+    paths:
+      - "fe/**"
+      - ".github/workflows/neway-creative-fe-ci.yaml"
+  pull_request:
+    branches: ["production"]
+    paths:
+      - "fe/**"
+      - ".github/workflows/neway-creative-fe-ci.yaml"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [20]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: List files
+        run: ls -R
+        working-directory: ${{ github.workspace }}/fe
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+    #   - name: Change directory to 'fe'
+    #     run: cd fe
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: fe
+
+      - name: Build application
+        run: npm run build --if-present
+        working-directory: fe
