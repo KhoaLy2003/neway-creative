@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 @Getter
@@ -11,6 +12,12 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class CreatePostRequest implements Serializable {
 
+    @NotBlank
+    private String title;
+
+    private String description;
+
+    @NotBlank
     private String content;
 
     private String thumbnail;

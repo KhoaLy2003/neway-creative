@@ -44,11 +44,32 @@ public class PostController {
        Post post = postService.createPost(createPostRequest);
 
       PostResponse postResponse = PostResponse.builder()
+              .title(post.getTitle())
+              .description(post.getDescription())
               .content(post.getContent())
               .thumbnail(post.getThumbnail())
               .build();
 
        return ResponseEntity.status(HttpStatus.OK)
                .body(new BaseResponse(HttpStatus.OK.value(), MessageConstant.SUCCESSFUL_MESSAGE, postResponse));
+   }
+
+   @GetMapping("/{postId}")
+   public ResponseEntity<BaseResponse> getPost(@PathVariable int postId) {
+     if(postId == 0)
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new BaseResponse(HttpStatus.BAD_REQUEST.value(), MessageConstant.GET_POST_FAILED, null));
+
+     Post post = postService.getPostByPostId(postId);
+
+      PostResponse postResponse = PostResponse.builder()
+              .title(post.getTitle())
+              .description(post.getDescription())
+              .content(post.getContent())
+              .thumbnail(post.getThumbnail())
+              .build();
+
+      return ResponseEntity.status(HttpStatus.OK)
+              .body(new BaseResponse(HttpStatus.OK.value(), MessageConstant.SUCCESSFUL_MESSAGE, postResponse));
    }
 }
