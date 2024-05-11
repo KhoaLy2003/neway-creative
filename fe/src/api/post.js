@@ -33,3 +33,17 @@ export async function getAllPosts() {
     throw error;
   }
 }
+
+export async function getPost(postId) {
+  try {
+    const response = await fetch(`${baseUrl}/posts/${postId}`);
+
+    if (!response.ok)
+      throw new Error(`Failed to fetch post with id: ${postId}`);
+
+    return response.json();
+  } catch (error) {
+    console.log(error.message);
+    throw error;
+  }
+}
