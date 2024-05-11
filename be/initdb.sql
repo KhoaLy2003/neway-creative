@@ -139,3 +139,45 @@ CREATE TABLE `payment` (
   CONSTRAINT `FK33pd2iqamm9gp5c14r1catra2` FOREIGN KEY (`order_id`) REFERENCES `order` (`order_id`),
   CONSTRAINT `FKby2skjf3ov608yb6nm16b49lg` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+INSERT INTO `category` (is_delete,name) VALUES
+	 (0,'Cafe'),
+	 (0,'Yoga'),
+	 (0,'Pharmacy'),
+	 (0,'Life');
+	
+INSERT INTO calendar
+(created_at, updated_at, description, image, is_delete, title, category_id)
+VALUES(CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Discover a new coffee blend every day and learn the art of coffee making.',
+'https://res.cloudinary.com/dfdwupiah/image/upload/v1707446937/samples/cup-on-a-table.jpg', 0, 'Coffee Blend of the Day', 1);
+
+INSERT INTO calendar
+(created_at, updated_at, description, image, is_delete, title, category_id)
+VALUES(CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Join us for daily yoga sessions to rejuvenate your mind and body.',
+'https://res.cloudinary.com/dfdwupiah/image/upload/v1707446916/samples/ecommerce/accessories-bag.jpg', 0, 'Daily Yoga Practice', 2);
+
+INSERT INTO calendar
+(created_at, updated_at, description, image, is_delete, title, category_id)
+VALUES(CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Get daily health tips and learn about the benefits of vitamins and supplements.',
+'https://res.cloudinary.com/dfdwupiah/image/upload/v1707446933/samples/breakfast.jpg', 0, 'Health and Wellness Tips', 3);
+
+INSERT INTO calendar
+(created_at, updated_at, description, image, is_delete, title, category_id)
+VALUES(CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Start your day with an inspirational quote and a quick overview of world news.',
+'https://res.cloudinary.com/dfdwupiah/image/upload/v1707446919/samples/landscapes/nature-mountains.jpg', 0, 'Daily Inspiration and News', 4);
+
+INSERT INTO package
+(created_at, updated_at, duration_unit, duration_value, link_notion, package_type, price, calendar_id)
+VALUES(CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'MONTHS', 3, 'https://example.com/package-basic', 'BASIC', 100000, 1);
+
+INSERT INTO package
+(created_at, updated_at, duration_unit, duration_value, link_notion, package_type, price, calendar_id)
+VALUES(CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'MONTHS', 3, 'https://example.com/package-basic', 'BASIC', 100000, 2);
+
+INSERT INTO package
+(created_at, updated_at, duration_unit, duration_value, link_notion, package_type, price, calendar_id)
+VALUES(CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'MONTHS', 3, 'https://example.com/package-basic', 'BASIC', 100000, 3);
+
+INSERT INTO package
+(created_at, updated_at, duration_unit, duration_value, link_notion, package_type, price, calendar_id)
+VALUES(CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'MONTHS', 3, 'https://example.com/package-basic', 'BASIC', 100000, 4);
