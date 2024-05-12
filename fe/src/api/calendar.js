@@ -1,5 +1,23 @@
 const baseUrl = process.env.REACT_APP_BACK_END_URL;
 
+export const getRelatedCalendars = async (calendarId) => {
+  console.log("ID", calendarId);
+  try {
+    const response = await fetch(`${baseUrl}/calendars/${calendarId}/related`);
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch data");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.log("Error: " + error);
+    throw error;
+  }
+};
+
 export const getLatestCalendars = async () => {
   try {
     const response = await fetch(`${baseUrl}/calendars/latest`);

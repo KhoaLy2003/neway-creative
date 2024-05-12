@@ -84,14 +84,7 @@ const CalendarsPage = () => {
               fallback={<p style={{ textAlign: "center" }}>Loading...</p>}
             >
               {(loadedCalendars) => (
-                <>
-                  <CalendarList calendars={loadedCalendars} />
-                  {loadedCalendars.length === 0 && (
-                    <p style={{ textAlign: "center", marginTop: "20px" }}>
-                      No more calendars available.
-                    </p>
-                  )}
-                </>
+                <CalendarList calendars={loadedCalendars} />
               )}
             </Await>
             <div className="col-md-12">

@@ -3,6 +3,7 @@ import { NavLink, Link } from "react-router-dom";
 import "./Header.css";
 import AuthModal from "../Sections/AuthModal";
 import { UserContext } from "../../context/AuthContext";
+import logo from "../../assets/ideasy.png";
 
 const Header = () => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -16,10 +17,16 @@ const Header = () => {
     <header className="">
       <nav className="navbar navbar-expand-lg">
         <div className="custom-container">
-          <Link className="navbar-brand" to="/">
-            <h2>
-              Neway <em>Creative</em>
-            </h2>
+          <Link className="navbar-brand" to="/" style={{ padding: 0 }}>
+            <img
+              src={logo}
+              alt="Logo"
+              style={{
+                width: 150,
+                height: "auto",
+                objectFit: "cover",
+              }}
+            />
           </Link>
           <button
             className="navbar-toggler"
