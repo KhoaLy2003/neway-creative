@@ -1,10 +1,22 @@
 package com.neway_creative.ideasy_calendar.entity;
 
 import com.neway_creative.ideasy_calendar.enumeration.StatusEnum;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 
 @Getter
@@ -24,8 +36,8 @@ public class Post extends BaseEntity implements Serializable {
     @Column(name = "title")
     private String title;
 
-   @Column(name = "description")
-   private String description;
+    @Column(name = "description")
+    private String description;
 
     @Column(name = "content", nullable = false)
     private String content;
