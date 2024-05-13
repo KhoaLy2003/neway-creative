@@ -3,12 +3,10 @@ package com.neway_creative.ideasy_calendar.service.impl;
 import com.neway_creative.ideasy_calendar.constant.MessageConstant;
 import com.neway_creative.ideasy_calendar.constant.VnPayConstant;
 import com.neway_creative.ideasy_calendar.dto.request.CreatePaymentRequest;
-import com.neway_creative.ideasy_calendar.repository.PaymentRepository;
 import com.neway_creative.ideasy_calendar.service.PaymentService;
 import com.neway_creative.ideasy_calendar.utils.VnPay;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,9 +25,6 @@ import java.util.Map;
 public class PaymentServiceImpl implements PaymentService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PaymentServiceImpl.class);
-
-    @Autowired
-    private PaymentRepository paymentRepository;
 
     public Map<String, Object> createPayment(HttpServletRequest request, CreatePaymentRequest createPaymentRequest) throws UnsupportedEncodingException {
         Map<String, Object> payload = new HashMap<>(){{

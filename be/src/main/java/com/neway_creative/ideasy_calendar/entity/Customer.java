@@ -66,9 +66,6 @@ public class Customer extends BaseEntity implements UserDetails {
     @OneToMany(mappedBy = "customer")
     private List<Order> orders;
 
-    @OneToMany(mappedBy = "customer")
-    private List<Payment> payments;
-
     @Column(name = "otp")
     private String otp;
 

@@ -19,6 +19,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
@@ -60,4 +61,8 @@ public class Package extends BaseEntity{
     @ManyToOne
     @JoinColumn(name = "calendar_id", nullable = false)
     private Calendar calendar;
+
+    @OneToOne
+    @JoinColumn(name = "order_id", referencedColumnName = "order_id", unique = true)
+    private Order order;
 }

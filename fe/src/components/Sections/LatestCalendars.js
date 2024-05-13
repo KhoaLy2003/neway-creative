@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import "../../assets/root.css";
 import "../Calendars/Calendar.css";
-import Calendar from "../Calendars/Calendar";
 import { getLatestCalendars } from "../../api/calendar";
-import { Spin } from "antd";
-import { LoadingOutlined } from '@ant-design/icons';
+import { Card, List, Spin } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
 import Link from "antd/es/typography/Link";
+import Meta from "antd/es/card/Meta";
 
 const LatestCalendars = () => {
   const [calendars, setCalendars] = useState([]);
@@ -59,9 +59,33 @@ const LatestCalendars = () => {
               </Link>
             </div>
           </div>
-          {calendars.map((calendar) => (
-            <Calendar key={calendar.calendarId} calendar={calendar} />
-          ))}
+          <List
+            grid={{
+              gutter: 16,
+              column: 4,
+            }}
+            dataSource={calendars}
+            renderItem={(item) => (
+              <List.Item>
+                <Link href={`/calendars/${item.calendarId}`}>
+                  <Card
+                    hoverable
+                    cover={
+                      <div style={{ overflow: "hidden", height: "200px" }}>
+                        <img
+                          alt="example"
+                          style={{ height: "100%", width: "100%" }}
+                          src={item.image}
+                        />
+                      </div>
+                    }
+                  >
+                    <Meta title={item.title} style={{ textAlign: "center" }} />
+                  </Card>
+                </Link>
+              </List.Item>
+            )}
+          />
         </div>
       </div>
     </div>
