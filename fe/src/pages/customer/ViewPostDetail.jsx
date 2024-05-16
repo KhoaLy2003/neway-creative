@@ -37,7 +37,7 @@ export default function ViewPostDetail() {
       <Button
         type="text"
         style={{ margin: "auto" }}
-        icon=<ArrowLeftOutlined />
+        icon={<ArrowLeftOutlined />}
         onClick={() => navigate(-1)}
       >
         Back

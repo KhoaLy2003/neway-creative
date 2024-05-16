@@ -3,19 +3,55 @@ import PageHeading from "../../components/Layouts/PageHeading";
 import { Footer } from "antd/es/layout/layout";
 import { getAllPosts } from "../../api/post";
 import { Link } from "react-router-dom";
+import aboutUs1 from "../../assets/about-us-1.jpg";
+import { LikeOutlined, MessageOutlined, StarOutlined } from '@ant-design/icons';
+import { Avatar, List, Space } from 'antd';
+import { Col, Row } from 'antd';
 
 export default function ViewPostPage() {
   const [posts, setPosts] = useState([]);
 
   const fetchPosts = async () => {
     try {
-      const response = await getAllPosts(); // Fetch all posts from your service
+      const response = await getAllPosts();
       const allPosts = response.data;
-      setPosts(allPosts); // Update the state with the fetched posts
+      setPosts(allPosts);
     } catch (error) {
       console.error("Error fetching posts:", error.message);
     }
   };
+
+  const formatDate = (dateTimeStr) => {
+    dateTimeStr = dateTimeStr.toString();
+  
+    const year = dateTimeStr.substring(0, 4);
+    let month = '';
+    let day = '';
+  
+    if (dateTimeStr.length >= 6) {
+      month = dateTimeStr.substring(4, 6).padStart(2, '0');
+    }
+    if (dateTimeStr.length >= 8) {
+      day = dateTimeStr.substring(6, 8).padStart(2, '0');
+    }
+  
+    let formattedDate = '';
+    if (day && month) {
+      formattedDate = `${year}`;
+    }
+  
+    return formattedDate;
+  };
+  
+  
+  
+
+  const IconText = ({ icon, text }) => (
+    <Space>
+      {React.createElement(icon)}
+      {text}
+    </Space>
+  );
 
   useEffect(() => {
     fetchPosts();
@@ -26,21 +62,40 @@ export default function ViewPostPage() {
   return (
     <Fragment>
       <PageHeading />
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
+        <div style={{ width: '50%' }}>
+          <List
+            itemLayout="vertical"
+            size="large"
+            pagination={{
+              onChange: (page) => {
+                console.log(page);
+              },
+              pageSize: 3,
+            }}
+            dataSource={posts}
 
-      <div className="post d-flex justify-content-center mb-3">
-        <ul className="mb-3 mt-3">
-          {posts.map((post) => (
-            <li className="mb-3" key={post.postId}>
-              <Link to={`/posts/${post.postId}`}>
-                <h2>{post.title}</h2>
-                <p>{post.description}</p>
-              </Link>
-            </li>
-          ))}{" "}
-        </ul>
+            renderItem={(item) => (
+              <List.Item
+                key={item.title}
+                extra={<img width={400} alt="logo" src={aboutUs1} />}
+              >
+                <List.Item.Meta
+                  title={
+                    <Link to={`/posts/${item.postId}`}>
+                      <h2 style={{fontWeight: 'bold'}}>{item.title}</h2>
+                    </Link>
+                  }
+                  description={item.description}
+                />
+                {item.content}
+
+                <div style={{ marginTop: '20px' }}>Posted on {formatDate(item.updatedAt)} by Admin</div>
+              </List.Item>
+            )}
+          />
+        </div>
       </div>
-
-      <Footer />
     </Fragment>
   );
 }
