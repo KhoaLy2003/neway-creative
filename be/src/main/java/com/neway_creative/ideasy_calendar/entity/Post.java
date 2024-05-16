@@ -39,7 +39,7 @@ public class Post extends BaseEntity implements Serializable {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "content", nullable = false)
+    @Column(name = "content", columnDefinition = "TEXT", nullable = false)
     private String content;
 
     @Enumerated(EnumType.STRING)
