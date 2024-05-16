@@ -9,27 +9,23 @@ function PaymentMethod({ options }) {
 
   const paymentOptions = options.map((item) => {
     return (
-      <label key={item.id} className="payment-method mt-3">
+      <label key={item.id} className="mt-3 mb-3 mr-3">
         <input
           type="radio"
           value={item.value}
           checked={selectedOption === item.value}
           onChange={handleOptionChange}
         />
-        <img
-          style={{ width: "5rem", height: "3rem" }}
-          src={item.imgUrl}
-          alt={item.value}
-        />
+        <img width="140px" height="140px" src={item.imgUrl} alt={item.value} />
       </label>
     );
   });
 
   return (
     <Fragment>
-      <h3>Payment method</h3>
+      <h2 className="mb-3 mt-3 text-center">Payment method</h2>
 
-      <div className="payment-method mt-3">{paymentOptions}</div>
+      <div className="mt-3 d-flex justify-content-center">{paymentOptions}</div>
     </Fragment>
   );
 }

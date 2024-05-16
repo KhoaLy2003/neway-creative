@@ -3,10 +3,17 @@ import "../../assets/root.css";
 import Breadcrumb from "../Layouts/Breadcrumb";
 import { Button, Table, Tag, Typography } from "antd";
 import Title from "antd/es/typography/Title";
+import { useNavigate } from "react-router-dom";
 const { Column } = Table;
 const { Text } = Typography;
 
 const CalendarDetail = ({ calendarDetail }) => {
+  const navigate = useNavigate();
+
+  const handleOrderClick = () => {
+    navigate("/payment", { state: { calendarDetail } });
+  };
+
   return (
     <div className="py-5">
       <div className="custom-container my-5">
@@ -24,9 +31,7 @@ const CalendarDetail = ({ calendarDetail }) => {
             </div>
             <div className="col-md-5">
               <Title level={1}>{calendarDetail.title}</Title>
-              <Text>
-                {calendarDetail.description}
-              </Text>
+              <Text>{calendarDetail.description}</Text>
               <Table
                 dataSource={calendarDetail.packages.sort(customSort)}
                 pagination={false}
@@ -59,7 +64,7 @@ const CalendarDetail = ({ calendarDetail }) => {
               </Table>
 
               <div className="d-flex">
-                <Button type="primary" size="large">
+                <Button type="primary" size="large" onClick={handleOrderClick}>
                   Order
                 </Button>
               </div>
