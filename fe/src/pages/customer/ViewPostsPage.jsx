@@ -1,12 +1,9 @@
 import React, { Fragment, useState, useEffect } from "react";
 import PageHeading from "../../components/Layouts/PageHeading";
-import { Footer } from "antd/es/layout/layout";
 import { getAllPosts } from "../../api/post";
 import { Link } from "react-router-dom";
 import aboutUs1 from "../../assets/about-us-1.jpg";
-import { LikeOutlined, MessageOutlined, StarOutlined } from '@ant-design/icons';
-import { Avatar, List, Space } from 'antd';
-import { Col, Row } from 'antd';
+import { List } from 'antd';
 
 export default function ViewPostPage() {
   const [posts, setPosts] = useState([]);
@@ -23,35 +20,25 @@ export default function ViewPostPage() {
 
   const formatDate = (dateTimeStr) => {
     dateTimeStr = dateTimeStr.toString();
-  
+
     const year = dateTimeStr.substring(0, 4);
     let month = '';
     let day = '';
-  
+
     if (dateTimeStr.length >= 6) {
       month = dateTimeStr.substring(4, 6).padStart(2, '0');
     }
     if (dateTimeStr.length >= 8) {
       day = dateTimeStr.substring(6, 8).padStart(2, '0');
     }
-  
+
     let formattedDate = '';
     if (day && month) {
       formattedDate = `${year}`;
     }
-  
+
     return formattedDate;
   };
-  
-  
-  
-
-  const IconText = ({ icon, text }) => (
-    <Space>
-      {React.createElement(icon)}
-      {text}
-    </Space>
-  );
 
   useEffect(() => {
     fetchPosts();
@@ -63,7 +50,7 @@ export default function ViewPostPage() {
     <Fragment>
       <PageHeading />
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
-        <div style={{ width: '50%' }}>
+        <div style={{ width: '60%' }}>
           <List
             itemLayout="vertical"
             size="large"
@@ -76,22 +63,29 @@ export default function ViewPostPage() {
             dataSource={posts}
 
             renderItem={(item) => (
-              <List.Item
-                key={item.title}
-                extra={<img width={400} alt="logo" src={aboutUs1} />}
-              >
-                <List.Item.Meta
-                  title={
-                    <Link to={`/posts/${item.postId}`}>
-                      <h2 style={{fontWeight: 'bold'}}>{item.title}</h2>
-                    </Link>
-                  }
-                  description={item.description}
-                />
-                {item.content}
+              <List.Item key={item.title} style={{ display: 'flex', alignItems: 'center' }}>
+                <div style={{ flex: '0 0 auto', marginRight: '70px' }}>
+                  <img width={400} alt="logo" src={aboutUs1} />
+                </div>
+                <div style={{ flex: '1', minWidth: 0 }}>
+                  <List.Item.Meta
+                    title={
+                      <Link to={`/posts/${item.postId}`}>
+                        <h2 style={{ fontWeight: 'bold' }}>{item.title}</h2>
+                      </Link>
+                    }
+                    description={item.description}
+                  />
+                  {item.content.length > 100 ? (
+                    <>{item.content.substring(0, 100)}... <Link to={`/posts/${item.postId}`}>Read more</Link></>
+                  ) : (
+                    <>{item.content} <Link to={`/posts/${item.postId}`}>Read more</Link></>
+                  )}
 
-                <div style={{ marginTop: '20px' }}>Posted on {formatDate(item.updatedAt)} by Admin</div>
+                  <div style={{ marginTop: '20px' }}>Posted on {formatDate(item.updatedAt)} by Admin</div>
+                </div>
               </List.Item>
+
             )}
           />
         </div>

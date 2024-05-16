@@ -5,6 +5,8 @@ import { getPost } from "../../api/post";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "antd";
 import { ArrowLeftOutlined } from "@ant-design/icons";
+import aboutUs1 from "../../assets/about-us-1.jpg";
+
 
 export default function ViewPostDetail() {
   const [post, setPost] = useState(null);
@@ -46,6 +48,7 @@ export default function ViewPostDetail() {
       {post ? (
         <div className="post mb-3">
           <h2 style={{ textAlign: "center" }}>{post.title}</h2>
+          <img src={aboutUs1} alt="test img"/>
           <div dangerouslySetInnerHTML={{ __html: post.content }}></div>
         </div>
       ) : (
