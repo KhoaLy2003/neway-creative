@@ -66,36 +66,12 @@ export default function ViewPostDetail() {
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
             <div style={{ width: '45%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
 
-              <h5 style={{ marginLeft: 'auto', marginBottom: '20px' }}><UserOutlined />   Admin</h5>
+              {/* <h5 style={{ marginLeft: 'auto', marginBottom: '20px' }}><UserOutlined />   Admin</h5> */}
               <div style={{ marginBottom: '35px' }}>
                 <h3>{post.description}</h3>
               </div>
               <img width={800} src={aboutUs1} alt="test img" style={{ borderRadius: '25px', marginBottom: '35px' }} />
               <div dangerouslySetInnerHTML={{ __html: post.content }}></div>
-              <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Nullam ut ante nec leo consequat elementum. Cras sagittis
-                  libero sit amet justo fermentum, at fringilla libero accumsan.
-                  Sed auctor lectus sit amet augue fermentum blandit. Nullam
-                  fermentum magna eu fermentum ultrices. Morbi convallis
-                  bibendum magna, eget feugiat lorem hendrerit non. Curabitur
-                  pulvinar, nisl nec dignissim vulputate, libero magna maximus
-                  nulla, nec tempor arcu purus eget justo. Ut ut nulla quam.
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Nullam ut ante nec leo consequat elementum. Cras sagittis
-                  libero sit amet justo fermentum, at fringilla libero accumsan.
-                  Sed auctor lectus sit amet augue fermentum blandit. Nullam
-                  fermentum magna eu fermentum ultrices. Morbi convallis
-                  bibendum magna, eget feugiat lorem hendrerit non. Curabitur
-                  pulvinar, nisl nec dignissim vulputate, libero magna maximus
-                  nulla, nec tempor arcu purus eget justo. Ut ut nulla quam.
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Nullam ut ante nec leo consequat elementum. Cras sagittis
-                  libero sit amet justo fermentum, at fringilla libero accumsan.
-                  Sed auctor lectus sit amet augue fermentum blandit. Nullam
-                  fermentum magna eu fermentum ultrices. Morbi convallis
-                  bibendum magna, eget feugiat lorem hendrerit non. Curabitur
-                  pulvinar, nisl nec dignissim vulputate, libero magna maximus
-                  nulla, nec tempor arcu purus eget justo. Ut ut nulla quam. </div>
             </div>
           </div>
 

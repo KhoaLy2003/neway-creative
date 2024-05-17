@@ -3,8 +3,8 @@ import PageHeading from "../../components/Layouts/PageHeading";
 import { getAllPosts } from "../../api/post";
 import { Link } from "react-router-dom";
 import aboutUs1 from "../../assets/about-us-1.jpg";
-import { List } from 'antd';
-import { UserOutlined } from '@ant-design/icons';
+import { List } from "antd";
+import { UserOutlined } from "@ant-design/icons";
 
 export default function ViewPostPage() {
   const [posts, setPosts] = useState([]);
@@ -23,17 +23,17 @@ export default function ViewPostPage() {
     dateTimeStr = dateTimeStr.toString();
 
     const year = dateTimeStr.substring(0, 4);
-    let month = '';
-    let day = '';
+    let month = "";
+    let day = "";
 
     if (dateTimeStr.length >= 6) {
-      month = dateTimeStr.substring(4, 6).padStart(2, '0');
+      month = dateTimeStr.substring(4, 6).padStart(2, "0");
     }
     if (dateTimeStr.length >= 8) {
-      day = dateTimeStr.substring(6, 8).padStart(2, '0');
+      day = dateTimeStr.substring(6, 8).padStart(2, "0");
     }
 
-    let formattedDate = '';
+    let formattedDate = "";
     if (day && month) {
       formattedDate = `${year}`;
     }
@@ -50,8 +50,15 @@ export default function ViewPostPage() {
   return (
     <Fragment>
       <PageHeading />
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
-        <div style={{ width: '60%' }}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          width: "100%",
+        }}
+      >
+        <div style={{ width: "60%" }}>
           <List
             itemLayout="vertical"
             size="large"
@@ -62,40 +69,45 @@ export default function ViewPostPage() {
               pageSize: 3,
             }}
             dataSource={posts}
-
             renderItem={(item) => (
-              <List.Item key={item.title} style={{ display: 'flex', alignItems: 'center' }}>
-                <div style={{ flex: '0 0 auto', marginRight: '70px' }}>
-                  <img width={400} alt="logo" src={aboutUs1} style={{ borderRadius: '20px', marginBottom: '5px' }} />
+              <List.Item
+                key={item.title}
+                style={{ display: "flex", alignItems: "center" }}
+              >
+                <div style={{ flex: "0 0 auto", marginRight: "70px" }}>
+                  <img
+                    width={400}
+                    alt="logo"
+                    src={aboutUs1}
+                    style={{ borderRadius: "20px", marginBottom: "5px" }}
+                  />
                 </div>
-                <div style={{ flex: '1', minWidth: 0 }}>
+                <div style={{ flex: "1", minWidth: 0 }}>
                   <List.Item.Meta
                     title={
                       <Link to={`/posts/${item.postId}`}>
-                        <h2 style={{ fontWeight: 'bold' }}>{item.title}</h2>
+                        <h2 style={{ fontWeight: "bold" }}>{item.title}</h2>
                       </Link>
                     }
                     description={item.description}
                   />
-                  {item.content.length > 100 ? (
+                  {/* {item.content.length > 100 ? (
                     <>{item.content.substring(0, 100)}... <Link to={`/posts/${item.postId}`}>Read more</Link></>
                   ) : (
                     <>{item.content} <Link to={`/posts/${item.postId}`}>Read more</Link></>
-                  )}
+                  )} */}
 
-
-                  <div style={{ display: 'flex', alignItems: 'center', marginTop: '20px' }}>
-                    <div style={{ marginRight: 'auto', display: 'flex', alignItems: 'center' }}>
-                      <UserOutlined style={{ marginRight: '5px' }} />
-                      Admin
-                    </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      marginTop: "20px",
+                    }}
+                  >
                     <div>Posted on {formatDate(item.updatedAt)}</div>
                   </div>
-
-
                 </div>
               </List.Item>
-
             )}
           />
         </div>
