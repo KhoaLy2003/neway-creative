@@ -8,6 +8,7 @@ import java.io.Serializable;
 @Setter
 @Getter
 public class PackageResponse implements Serializable {
+    private int id;
     private long price;
     private int durationValue;
     private String packageDurationUnit;

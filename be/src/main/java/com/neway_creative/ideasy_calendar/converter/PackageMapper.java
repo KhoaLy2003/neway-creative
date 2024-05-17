@@ -15,6 +15,7 @@ public interface PackageMapper {
     @Mapping(target = "packageDurationUnit", expression = "java(entity.getDurationUnit().name())")
     @Mapping(target = "durationValue", source = "durationValue")
     @Mapping(target = "price", source = "price")
+    @Mapping(target = "id", source = "packageId")
     PackageResponse entityToResponse(Package entity);
 
     @Mapping(target = "packageType", expression = "java(entity.getPackageType().name())")
