@@ -21,7 +21,7 @@ root.render(
         },
         token: {
           colorPrimary: "#6C36FE",
-          fontFamily: "Be Vietnam Pro",
+          fontFamily: "'Be Vietnam Pro', Arial, sans-serif",
           fontSize: 16,
           colorLink: "#000000",
           colorLinkHover: "#6C36FE",

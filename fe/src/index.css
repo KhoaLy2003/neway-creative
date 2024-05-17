@@ -11,3 +11,17 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  src: url('./assets/Be_Vietnam_Pro/BeVietnamPro-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  src: url('./assets/Be_Vietnam_Pro/BeVietnamPro-Light.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
