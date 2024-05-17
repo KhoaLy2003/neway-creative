@@ -18,6 +18,7 @@ import Column from "antd/es/table/Column";
 import { getColorByPackageType } from "../../utils/GetColor";
 import { useLocation, useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/AuthContext";
+import { createPayment, saveOrder, updateOrder } from "../../api/payment";
 
 const steps = [
   {
@@ -47,8 +48,10 @@ function PaymentPage() {
   const [current, setCurrent] = useState(0);
   const [isNavigating, setIsNavigating] = useState(false);
   const { name, email } = useContext(UserContext);
+  const [order, setOrder] = useState(null);
+  const [orderInfo, setOrderInfo] = useState([]);
 
-  // console.log("Calendar", calendarDetail);
+  console.log("Calendar", calendarDetail);
 
   useEffect(() => {
     if (!calendarDetail) {
@@ -58,7 +61,81 @@ function PaymentPage() {
     }
   }, [calendarDetail, navigate]);
 
-  const next = () => {
+  const next = async () => {
+    if (current === 0) {
+      const orderDto = {
+        price: calendarDetail.packages.find((pkg) => {
+          return pkg.id === selectedRowKey;
+        }).price,
+        packageId: selectedRowKey,
+        email: email,
+      };
+
+      console.log(orderDto);
+
+      try {
+        const response = await saveOrder(orderDto);
+        const data = response.data;
+        const orderInfoItems = [
+          {
+            key: "1",
+            label: "Name",
+            children: <p>{data.name}</p>,
+          },
+          {
+            key: "2",
+            label: "Email",
+            children: <p>{data.email}</p>,
+          },
+          {
+            key: "3",
+            label: "Calendar Title",
+            children: <p>{calendarDetail.title}</p>,
+          },
+          {
+            key: "4",
+            label: "Package Type",
+            children: <p>{data.packageType}</p>,
+          },
+          {
+            key: "5",
+            label: "Price",
+            children: <p>{data.price}</p>,
+          },
+        ];
+
+        setOrder(data);
+        setOrderInfo(orderInfoItems);
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
+    }
+
+    if (current === 1) {
+      const orderDto = {
+        orderId: order.orderId,
+        status: "WAITING",
+      };
+
+      const response = await updateOrder(orderDto);
+      const data = response.data;
+
+      console.log(data);
+    }
+
+    if (current === 2) {
+      const paymentDto = {
+        amount: order.price,
+        orderInfo: `${order.packageType} ${calendarDetail.title}`,
+      };
+
+      const response = await createPayment(paymentDto);
+      const payload = response.data;
+
+      window.location.href = payload["redirect_url"];
+    }
+
     setCurrent(current + 1);
   };
   const prev = () => {
@@ -72,7 +149,7 @@ function PaymentPage() {
   useEffect(() => {
     if (selectedRowKey !== null && calendarDetail) {
       const selectedRow = calendarDetail.packages.find(
-        (pkg) => pkg.id === selectedRowKey
+        (pkg) => pkg.id === selectedRowKey,
       );
       console.log("Selected Row:", selectedRow);
     }
@@ -264,34 +341,5 @@ function PaymentPage() {
     </div>
   );
 }
-
-//TODO: Call api get order detail to display
-const orderInfo = [
-  {
-    key: "1",
-    label: "UserName",
-    children: "Zhou Maomao",
-  },
-  {
-    key: "2",
-    label: "Telephone",
-    children: "1810000000",
-  },
-  {
-    key: "3",
-    label: "Live",
-    children: "Hangzhou, Zhejiang",
-  },
-  {
-    key: "4",
-    label: "Remark",
-    children: "empty",
-  },
-  {
-    key: "5",
-    label: "Address",
-    children: "No. 18, Wantang Road, Xihu District, Hangzhou, Zhejiang, China",
-  },
-];
 
 export default PaymentPage;
