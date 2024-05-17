@@ -4,6 +4,7 @@ import { getAllPosts } from "../../api/post";
 import { Link } from "react-router-dom";
 import aboutUs1 from "../../assets/about-us-1.jpg";
 import { List } from 'antd';
+import { UserOutlined } from '@ant-design/icons';
 
 export default function ViewPostPage() {
   const [posts, setPosts] = useState([]);
@@ -65,7 +66,7 @@ export default function ViewPostPage() {
             renderItem={(item) => (
               <List.Item key={item.title} style={{ display: 'flex', alignItems: 'center' }}>
                 <div style={{ flex: '0 0 auto', marginRight: '70px' }}>
-                  <img width={400} alt="logo" src={aboutUs1} />
+                  <img width={400} alt="logo" src={aboutUs1} style={{ borderRadius: '20px', marginBottom: '5px' }} />
                 </div>
                 <div style={{ flex: '1', minWidth: 0 }}>
                   <List.Item.Meta
@@ -82,7 +83,16 @@ export default function ViewPostPage() {
                     <>{item.content} <Link to={`/posts/${item.postId}`}>Read more</Link></>
                   )}
 
-                  <div style={{ marginTop: '20px' }}>Posted on {formatDate(item.updatedAt)} by Admin</div>
+
+                  <div style={{ display: 'flex', alignItems: 'center', marginTop: '20px' }}>
+                    <div style={{ marginRight: 'auto', display: 'flex', alignItems: 'center' }}>
+                      <UserOutlined style={{ marginRight: '5px' }} />
+                      Admin
+                    </div>
+                    <div>Posted on {formatDate(item.updatedAt)}</div>
+                  </div>
+
+
                 </div>
               </List.Item>
 
