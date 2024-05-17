@@ -3,16 +3,29 @@ package com.neway_creative.ideasy_calendar.service.impl;
 import com.neway_creative.ideasy_calendar.constant.MessageConstant;
 import com.neway_creative.ideasy_calendar.constant.VnPayConstant;
 import com.neway_creative.ideasy_calendar.dto.request.CreatePaymentRequest;
+import com.neway_creative.ideasy_calendar.dto.request.SaveOrderRequest;
+import com.neway_creative.ideasy_calendar.dto.request.UpdateOrderRequest;
+import com.neway_creative.ideasy_calendar.dto.response.OrderDetailResponse;
+import com.neway_creative.ideasy_calendar.entity.Customer;
+import com.neway_creative.ideasy_calendar.entity.Order;
+import com.neway_creative.ideasy_calendar.entity.Package;
+import com.neway_creative.ideasy_calendar.enumeration.OrderEnum;
+import com.neway_creative.ideasy_calendar.repository.CustomerRepository;
+import com.neway_creative.ideasy_calendar.repository.OrderRepository;
+import com.neway_creative.ideasy_calendar.repository.PackageRepository;
 import com.neway_creative.ideasy_calendar.service.PaymentService;
 import com.neway_creative.ideasy_calendar.utils.VnPay;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -22,7 +35,12 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class PaymentServiceImpl implements PaymentService {
+
+    private final OrderRepository orderRepository;
+    private final PackageRepository packageRepository;
+    private final CustomerRepository customerRepository;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PaymentServiceImpl.class);
 
@@ -127,5 +145,40 @@ public class PaymentServiceImpl implements PaymentService {
         } else {
             return MessageConstant.INVALID_PAYMENT_SIGN;
         }
+    }
+
+    @Override
+    public Order saveOrder(SaveOrderRequest saveOrderRequest) {
+        Package calendarPackage = packageRepository.findById(saveOrderRequest.getPackageId())
+                .orElseThrow(() -> new ResourceNotFoundException("Package not found"));
+
+        Customer customer = customerRepository.findByEmailAddress(saveOrderRequest.getEmail())
+                .orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
+
+        Order order = new Order();
+        order.setOrderDate(LocalDateTime.now());
+        order.setPrice(saveOrderRequest.getPrice());
+        order.setStatus(OrderEnum.PENDING);
+        order.setCalendarPackage(calendarPackage);
+        order.setCustomer(customer);
+        order.setCreatedAt(LocalDateTime.now());
+        order.setUpdatedAt(LocalDateTime.now());
+
+        orderRepository.save(order);
+
+        return order;
+    }
+
+    @Override
+    public Order updateOrder(UpdateOrderRequest updateOrderRequest) {
+        Order order = orderRepository.findById(updateOrderRequest.getOrderId())
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
+
+        order.setStatus(updateOrderRequest.getStatus());
+        order.setUpdatedAt(LocalDateTime.now());
+
+        orderRepository.save(order);
+
+        return order;
     }
 }

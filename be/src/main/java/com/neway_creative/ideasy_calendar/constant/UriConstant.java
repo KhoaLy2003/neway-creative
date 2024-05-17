@@ -51,6 +51,14 @@ public final class UriConstant {
      */
     public static final String PAYMENT_CREATE = "/create";
     /**
+     * The constant PAYMENT_CREATE.
+     */
+    public static final String PAYMENT_SAVE = "/save";
+    /**
+     * The constant PAYMENT_UPDATE.
+     */
+    public static final String PAYMENT_UPDATE = "/update";
+    /**
      * The constant POST_CREATE.
      */
     public static final String POST_CREATE = "/admin/create";

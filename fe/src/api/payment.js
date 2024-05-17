@@ -20,3 +20,45 @@ export async function createPayment(paymentCreateDto) {
     throw error;
   }
 }
+
+export async function saveOrder(orderDto) {
+  try {
+    const response = await fetch(`${baseUrl}/payment/save`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(orderDto),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to save order");
+    }
+
+    return response.json();
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function updateOrder(orderDto) {
+  try {
+    const response = await fetch(`${baseUrl}/payment/update`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(orderDto),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to update order");
+    }
+
+    return response.json();
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}

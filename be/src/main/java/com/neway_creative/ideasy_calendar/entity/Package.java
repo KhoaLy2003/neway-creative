@@ -62,7 +62,7 @@ public class Package extends BaseEntity{
     @JoinColumn(name = "calendar_id", nullable = false)
     private Calendar calendar;
 
-    @OneToOne
-    @JoinColumn(name = "order_id", referencedColumnName = "order_id", unique = true)
-    private Order order;
+//    @OneToOne
+//    @JoinColumn(name = "order_id", referencedColumnName = "order_id", unique = true)
+//    private Order order;
 }

@@ -40,6 +40,8 @@ public final class MessageConstant {
     public static final String UPLOAD_CALENDAR_IMAGE_SUCCESSFULLY = "admin.calendar.upload_image_successfully";
     public static final String UPLOAD_CALENDAR_IMAGE_FAILED = "admin.calendar.upload_image_failed";
     public static final String CREATE_PAYMENT_FAILED = "customer.create_payment_failed";
+    public static final String SAVE_ORDER_FAILED = "customer.save_order_failed";
+    public static final String UPDATE_ORDER_FAILED = "customer.update_order.failed";
     public static final String VERIFY_ACCOUNT_SUCCESSFULLY = "customer.verify_account_successfully";
     public static final String VERIFY_ACCOUNT_FAILED = "customer.verify_account_failed";
     public static final String ACCOUNT_NOT_VERIFIED = "customer.account_not_verified";
