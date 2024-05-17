@@ -32,10 +32,13 @@ function App() {
           <Route index element={<HomePage />} />
           <Route path="calendars" element={<ProductsPage />} />
           <Route path="calendars/:calendarId" element={<DetailPage />} />
-          <Route path="payment" element={<PaymentPage />} />
           <Route path="about-us" element={<AboutUsPage />} />
           <Route path="posts" element={<ViewPostPage />} />
           <Route path="posts/:postId" element={<ViewPostDetail />} />
+
+          <Route element={<RequiredAuth allowedRoles={[roles.Customer]} />}>
+            <Route path="payment" element={<PaymentPage />} />
+          </Route>
         </Route>
 
         <Route element={<RequiredAuth allowedRoles={[roles.Admin]} />}>
