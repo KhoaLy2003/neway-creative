@@ -1,22 +1,40 @@
 import React, { useContext, useState } from "react";
-import { NavLink, Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./Header.css";
 import AuthModal from "../Sections/AuthModal";
 import { UserContext } from "../../context/AuthContext";
 import logo from "../../assets/ideasy.png";
+import { Header } from "antd/es/layout/layout";
+import { Button, Dropdown, Flex, Menu } from "antd";
 
-const Header = () => {
+const CustomHeader = () => {
   const [modalOpen, setModalOpen] = useState(false);
-  const { name } = useContext(UserContext);
+  const navigate = useNavigate();
+  const { name, logout } = useContext(UserContext);
 
   const handleModalOpen = () => {
     setModalOpen(true);
   };
 
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
+
+  const menu = (
+    <Menu>
+      <Menu.Item key="1">
+        <Button type="link" onClick={handleLogout}>
+          Logout
+        </Button>
+      </Menu.Item>
+    </Menu>
+  );
+
   return (
-    <header className="">
-      <nav className="navbar navbar-expand-lg">
-        <div className="custom-container">
+    <Header className="header">
+      <div className="custom-container">
+        <Flex justify="space-between" align="center">
           <Link className="navbar-brand" to="/" style={{ padding: 0 }}>
             <img
               src={logo}
@@ -28,69 +46,48 @@ const Header = () => {
               }}
             />
           </Link>
-          <button
-            className="navbar-toggler"
-            type="button"
-            data-toggle="collapse"
-            data-target="#navbarResponsive"
-            aria-controls="navbarResponsive"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span className="navbar-toggler-icon"></span>
-          </button>
-          <div className="collapse navbar-collapse" id="navbarResponsive">
-            <ul className="navbar-nav ml-auto">
-              <li className="nav-item">
-                <NavLink className="nav-link" activeClassName="active" to="/">
-                  Home
-                </NavLink>
-              </li>
-              <li className="nav-item">
-                <NavLink
-                  className="nav-link"
-                  activeClassName="active"
-                  to="/calendars"
-                >
-                  Our Products
-                </NavLink>
-              </li>
-              <li className="nav-item">
-                <NavLink
-                  className="nav-link"
-                  activeClassName="active"
-                  to="/posts"
-                >
-                  Posts
-                </NavLink>
-              </li>
 
-              <li className="nav-item">
-                <NavLink
-                  className="nav-link"
-                  activeClassName="active"
-                  to="/about-us"
+          <Menu mode="horizontal" className="menu">
+            <Menu.Item key="1">
+              <Link to="/">Home</Link>
+            </Menu.Item>
+            <Menu.Item key="2">
+              <Link to="/calendars">Our Products</Link>
+            </Menu.Item>
+            <Menu.Item key="3">
+              <Link to="/posts">Posts</Link>
+            </Menu.Item>
+            <Menu.Item key="4">
+              <Link to="/about-us">About Us</Link>
+            </Menu.Item>
+            <Menu.Item key="5" style={{ width: 100 }}>
+              {!name && (
+                <Button
+                  type="link"
+                  onClick={handleModalOpen}
+                  style={{ padding: 0 }}
                 >
-                  About Us
-                </NavLink>
-              </li>
-              <li className="nav-item">
-                {!name && (
-                  <a className="nav-link" onClick={() => handleModalOpen()}>
-                    Login
-                  </a>
-                )}
-
-                {name && <a className="nav-link">{name}</a>}
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
-
-      <AuthModal modalOpen={modalOpen} setModalOpen={setModalOpen} />
-    </header>
+                  Login
+                </Button>
+              )}
+              {name && (
+                <Dropdown
+                  overlay={menu}
+                  trigger={["hover"]}
+                  placement="top"
+                >
+                  <Button type="link" style={{ padding: 0 }}>
+                    {name}
+                  </Button>
+                </Dropdown>
+              )}
+            </Menu.Item>
+          </Menu>
+          <AuthModal modalOpen={modalOpen} setModalOpen={setModalOpen} />
+        </Flex>
+      </div>
+    </Header>
   );
 };
 
-export default Header;
+export default CustomHeader;
