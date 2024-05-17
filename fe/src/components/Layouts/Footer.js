@@ -11,7 +11,7 @@ const Footer = () => {
             <div className="inner-content">
               <p>
                 IDEASY Calendar ©{new Date().getFullYear()}:{" "}
-                <a rel="nofollow noopener" href="#" target="_blank">
+                <a rel="nofollow noopener" href="#">
                   Neway Creative
                 </a>
               </p>
