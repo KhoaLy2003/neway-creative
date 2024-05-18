@@ -47,7 +47,7 @@ const AboutUsPage = () => {
                 </h1>
 
                 {/* <h5>What is our vision ?</h5> */}
-                <p style={{ fontSize: "20px" }}>
+                <p>
                   Our vision is ambitious yet straightforward: we envision a
                   world where everyone has the tools and resources to become a
                   content creator. By democratizing content creation, we empower
@@ -96,7 +96,7 @@ const AboutUsPage = () => {
                 </h1>
 
                 {/* <h3>What is our mission ?</h3> */}
-                <p style={{ fontSize: "20px" }}>
+                <p>
                   At Neway Creative, our mission is clear: to bridge the gap
                   between businesses and consumers through captivating content.
                   We understand the power of storytelling and strive to harness
