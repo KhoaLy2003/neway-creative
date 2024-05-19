@@ -6,7 +6,7 @@ import LatestCalendars from "../../components/Sections/LatestCalendars";
 const HomePage = () => {
   return (
     <React.Fragment>
-      <div className="page-heading"></div>;
+      <div className="page-heading"></div>
       <LatestCalendars />
       <About />
     </React.Fragment>

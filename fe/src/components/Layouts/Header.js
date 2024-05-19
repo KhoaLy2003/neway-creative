@@ -71,11 +71,7 @@ const CustomHeader = () => {
                 </Button>
               )}
               {name && (
-                <Dropdown
-                  overlay={menu}
-                  trigger={["hover"]}
-                  placement="top"
-                >
+                <Dropdown overlay={menu} trigger={["hover"]} placement="top">
                   <Button type="link" style={{ padding: 0 }}>
                     {name}
                   </Button>
