@@ -53,10 +53,8 @@ const LatestCalendars = () => {
         <div className="row">
           <div className="col-md-12">
             <div className="section-heading">
-              <h2>IDEASY Calendar</h2>
-              <Link href="/calendars">
-                View all products <i className="fa fa-angle-right"></i>
-              </Link>
+              <h2>IDEASY - Lịch ý tưởng</h2>
+              <Link href="/calendars">Xem tất cả bộ lịch</Link>
             </div>
           </div>
           <List

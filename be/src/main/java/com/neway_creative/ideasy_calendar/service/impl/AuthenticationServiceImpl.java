@@ -49,7 +49,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public void registerNewAccount(RegisterRequest request) {
         if (customerRepository.existsByEmailAddress(request.getEmail())) {
             throw new DuplicateEmailException(MessageFormat.format(
-                    messageLocalization.getLocalizedMessage(MessageConstant.REGISTER_FAILED), request.getEmail()));
+                    messageLocalization.getLocalizedMessage(MessageConstant.REGISTER_DUPLICATE_EMAIL), request.getEmail()));
         }
 
         String otp = otpGenerator.generateOTP();

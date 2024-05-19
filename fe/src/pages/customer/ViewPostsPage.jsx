@@ -4,7 +4,6 @@ import { getAllPosts } from "../../api/post";
 import { Link } from "react-router-dom";
 import aboutUs1 from "../../assets/about-us-1.jpg";
 import { List } from "antd";
-import { UserOutlined } from "@ant-design/icons";
 
 export default function ViewPostPage() {
   const [posts, setPosts] = useState([]);

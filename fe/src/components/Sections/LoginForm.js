@@ -35,7 +35,7 @@ const LoginForm = ({ onSuccess, setLoading }) => {
         onSuccess(response.data);
       }
 
-      if (response.status === 404) {
+      if (response.status === 404 || response.status === 400) {
         openNotificationWithIcon("error", response.message);
         setLoading(false);
       }
@@ -67,11 +67,7 @@ const LoginForm = ({ onSuccess, setLoading }) => {
           rules={[
             {
               required: true,
-              message: "Please input your email address!",
-            },
-            {
-              type: "email",
-              message: "Please enter a valid email address!",
+              message: "Vui lòng nhập địa chỉ email của bạn",
             },
           ]}
         >
@@ -79,12 +75,12 @@ const LoginForm = ({ onSuccess, setLoading }) => {
         </Form.Item>
 
         <Form.Item
-          label="Password"
+          label="Mật khẩu"
           name="password"
           rules={[
             {
               required: true,
-              message: "Please input your password!",
+              message: "Vui lòng nhập mật khẩu của bạn",
             },
           ]}
         >
@@ -93,6 +89,8 @@ const LoginForm = ({ onSuccess, setLoading }) => {
 
         <Form.Item>
           <Button
+            style={{ marginTop: 20 }}
+            size="large"
             key="submit"
             type="primary"
             onClick={() => {
@@ -106,7 +104,7 @@ const LoginForm = ({ onSuccess, setLoading }) => {
                 });
             }}
           >
-            Login
+            Đăng nhập
           </Button>
         </Form.Item>
       </Form>

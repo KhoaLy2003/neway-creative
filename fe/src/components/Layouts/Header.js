@@ -25,7 +25,7 @@ const CustomHeader = () => {
     <Menu>
       <Menu.Item key="1">
         <Button type="link" onClick={handleLogout}>
-          Logout
+          Đăng xuất
         </Button>
       </Menu.Item>
     </Menu>
@@ -49,16 +49,16 @@ const CustomHeader = () => {
 
           <Menu mode="horizontal" className="menu">
             <Menu.Item key="1">
-              <Link to="/">Home</Link>
+              <Link to="/">Trang chủ</Link>
             </Menu.Item>
             <Menu.Item key="2">
-              <Link to="/calendars">Our Products</Link>
+              <Link to="/calendars">Sản phẩm</Link>
             </Menu.Item>
             <Menu.Item key="3">
-              <Link to="/posts">Posts</Link>
+              <Link to="/posts">Bài đăng</Link>
             </Menu.Item>
             <Menu.Item key="4">
-              <Link to="/about-us">About Us</Link>
+              <Link to="/about-us">Về chúng tôi</Link>
             </Menu.Item>
             <Menu.Item key="5" style={{ width: 100 }}>
               {!name && (
@@ -67,7 +67,7 @@ const CustomHeader = () => {
                   onClick={handleModalOpen}
                   style={{ padding: 0 }}
                 >
-                  Login
+                  Đăng nhập
                 </Button>
               )}
               {name && (

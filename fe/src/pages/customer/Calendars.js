@@ -63,7 +63,7 @@ const CalendarsPage = () => {
                     className={selectedCategory === null ? "active" : ""}
                     onClick={() => handleCategoryClick(null)}
                   >
-                    All Products
+                    Tất cả
                   </li>
                   {categories.map((category) => (
                     <li
@@ -87,14 +87,14 @@ const CalendarsPage = () => {
                 <CalendarList calendars={loadedCalendars} />
               )}
             </Await>
-            <div className="col-md-12">
+            {/* <div className="col-md-12">
               <ul className="pages">
                 <li>
                   {currentPage > 0 && (
                     <button
                       onClick={() => setCurrentPage((prevPage) => prevPage - 1)}
                     >
-                      Previous
+                      Tiếp
                     </button>
                   )}
                 </li>
@@ -103,12 +103,12 @@ const CalendarsPage = () => {
                     <button
                       onClick={() => setCurrentPage((prevPage) => prevPage + 1)}
                     >
-                      Next
+                      Sau
                     </button>
                   </li>
                 )}
               </ul>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
