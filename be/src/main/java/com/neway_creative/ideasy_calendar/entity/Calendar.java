@@ -43,7 +43,7 @@ public class Calendar extends BaseEntity implements Serializable {
     @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "description", nullable = false)
+    @Column(name = "description", columnDefinition = "TEXT", nullable = false)
     private String description;
 
     @Column(name = "image", nullable = false)

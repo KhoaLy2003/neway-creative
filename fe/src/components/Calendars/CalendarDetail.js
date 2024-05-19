@@ -16,9 +16,9 @@ const CalendarDetail = ({ calendarDetail }) => {
   };
 
   return (
-    <div className="custom-container my-5">
+    <div className="custom-container my-4">
       {calendarDetail && (
-        <div className="row gx-4 gx-lg-5 align-items-center justify-content-center">
+        <div className="row gx-4 gx-lg-5 justify-content-around">
           <div className="col-md-12 my-5">
             <Breadcrumb calendarName={calendarDetail.title} />
           </div>

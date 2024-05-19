@@ -10,10 +10,10 @@ const Footer = () => {
           <div className="col-md-12">
             <div className="inner-content">
               <p>
-                IDEASY Calendar ©{new Date().getFullYear()}:{" "}
-                <a rel="nofollow noopener" href="#">
+                IDEASY - Lịch ý tưởng ©{new Date().getFullYear()}
+                {/* <a rel="nofollow noopener" href="#">
                   Neway Creative
-                </a>
+                </a> */}
               </p>
             </div>
           </div>

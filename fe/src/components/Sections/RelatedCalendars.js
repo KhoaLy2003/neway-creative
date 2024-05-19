@@ -41,7 +41,7 @@ const RelatedCalendars = ({ calendarId }) => {
       <div className="row">
         <div className="col-md-12">
           <div className="section-heading text-center">
-            <h2>Related Products</h2>
+            <h2>Bộ lịch cùng chủ đề</h2>
           </div>
         </div>
         <List

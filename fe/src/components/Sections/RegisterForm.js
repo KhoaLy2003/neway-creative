@@ -49,12 +49,12 @@ const RegisterForm = ({ onSuccess, setLoading }) => {
         autoComplete="off"
       >
         <Form.Item
-          label="Name"
+          label="Tên"
           name="name"
           rules={[
             {
               required: true,
-              message: "Please input your name!",
+              message: "Vui lòng nhập tên của bạn",
             },
           ]}
         >
@@ -67,7 +67,7 @@ const RegisterForm = ({ onSuccess, setLoading }) => {
           rules={[
             {
               required: true,
-              message: "Please input your email address!",
+              message: "Vui lòng nhập địa chỉ email của bạn",
             },
           ]}
         >
@@ -75,12 +75,12 @@ const RegisterForm = ({ onSuccess, setLoading }) => {
         </Form.Item>
 
         <Form.Item
-          label="Password"
+          label="Mật khẩu"
           name="password"
           rules={[
             {
               required: true,
-              message: "Please input your password!",
+              message: "Vui lòng nhập mật khẩu của bạn",
             },
           ]}
         >
@@ -89,6 +89,8 @@ const RegisterForm = ({ onSuccess, setLoading }) => {
 
         <Form.Item>
           <Button
+            style={{ marginTop: 20 }}
+            size="large"
             key="submit"
             type="primary"
             onClick={() => {
@@ -102,7 +104,7 @@ const RegisterForm = ({ onSuccess, setLoading }) => {
                 });
             }}
           >
-            Register
+            Đăng ký
           </Button>
         </Form.Item>
       </Form>

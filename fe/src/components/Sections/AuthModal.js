@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Modal, Space, Spin, Tabs } from "antd";
+import { Modal, Spin, Tabs } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import Title from "antd/es/typography/Title";
 import RegisterForm from "./RegisterForm";
@@ -27,6 +27,8 @@ const AuthModal = ({ modalOpen, setModalOpen }) => {
   };
 
   const handleCloseModal = () => {
+    setLoading(false);
+    setShowOTPForm(false);
     setModalOpen(false);
     setActiveTab("login");
   };
@@ -50,9 +52,14 @@ const AuthModal = ({ modalOpen, setModalOpen }) => {
     }
   };
 
+  const handleBackToRegister = () => {
+    setShowOTPForm(false);
+    setActiveTab("register");
+  };
+
   return (
     <Modal
-      title={<Title level={2}>Welcome to IDEASY</Title>}
+      title={<Title level={3}>Chào mừng đến với IDEASY</Title>}
       centered
       open={modalOpen}
       onOk={() => setModalOpen(false)}
@@ -60,6 +67,7 @@ const AuthModal = ({ modalOpen, setModalOpen }) => {
       style={{ textAlign: "center" }}
       footer={null}
       afterClose={() => {
+        // setShowOTPForm(false);
         setActiveTab("login");
       }}
     >
@@ -69,13 +77,13 @@ const AuthModal = ({ modalOpen, setModalOpen }) => {
           onChange={handleTabChange}
           tabBarStyle={{ margin: "0 auto" }}
         >
-          <TabPane tab="Register" key="register">
+          <TabPane tab="Đăng ký" key="register">
             <RegisterForm
               onSuccess={handleRegisterSuccess}
               setLoading={setLoading}
             />
           </TabPane>
-          <TabPane tab="Login" key="login">
+          <TabPane tab="Đăng nhập" key="login">
             <LoginForm onSuccess={handleLoginSuccess} setLoading={setLoading} />
           </TabPane>
         </Tabs>
@@ -88,6 +96,7 @@ const AuthModal = ({ modalOpen, setModalOpen }) => {
             setShowOTPForm(false);
             setLoading(false);
           }}
+          onBackToRegister={handleBackToRegister}
         />
       )}
 

@@ -47,10 +47,8 @@ public final class MessageConstant {
     public static final String ACCOUNT_NOT_VERIFIED = "customer.account_not_verified";
     public static final String NO_ACCOUNT_WITH_THIS_EMAIL = "customer.account_not_found";
     public static final String REGENERATE_OTP_SUCCESSFULLY = "customer.regenerate_otp_successfully";
-
     public static final String GET_POSTS_FAILED = "customer.get_posts_failed";
-
     public static final String GET_POST_FAILED = "customer.get_post_failed";
-
     public static final String CREATE_POST_FAILED = "customer.create_post_failed";
+    public static final String REGISTER_DUPLICATE_EMAIL = "customer.register_duplicate_email";
 }
