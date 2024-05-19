@@ -17,6 +17,7 @@ import AdminPostManagement from "./pages/admin/AdminPostManagement";
 import RequiredAuth from "./components/RequireAuth";
 import ViewPostPage from "./pages/customer/ViewPostsPage";
 import ViewPostDetail from "./pages/customer/ViewPostDetail";
+import ViewCart from "./pages/customer/ViewCart";
 
 const roles = {
   Admin: "ADMIN",
@@ -39,6 +40,7 @@ function App() {
           <Route element={<RequiredAuth allowedRoles={[roles.Customer]} />}>
             <Route path="payment" element={<PaymentPage />} />
           </Route>
+          <Route path="/cart" element={<ViewCart />} />
         </Route>
 
         <Route element={<RequiredAuth allowedRoles={[roles.Admin]} />}>
