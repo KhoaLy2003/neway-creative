@@ -1,10 +1,12 @@
-import React from "react";
+import { React, useEffect, useState } from "react";
 import "../../assets/root.css";
 import Breadcrumb from "../Layouts/Breadcrumb";
 import { Button, Table, Tag, Typography } from "antd";
 import Title from "antd/es/typography/Title";
 import { useNavigate } from "react-router-dom";
 import { getColorByPackageType } from "../../utils/GetColor";
+import { notification } from "antd";
+
 const { Column } = Table;
 const { Text } = Typography;
 
@@ -14,6 +16,69 @@ const CalendarDetail = ({ calendarDetail }) => {
   const handleOrderClick = () => {
     navigate("/payment", { state: { calendarDetail } });
   };
+
+  // const handleAddToCartClick = () => {
+  //   const item = {
+  //     calendarDetail: JSON.stringify(calendarDetail),
+  //     selectedRow: JSON.stringify(selectedRow),
+  //   };
+
+  //   let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  //   cart.push(item);
+  //   localStorage.setItem("cart", JSON.stringify(cart));
+  // };
+
+  const handleAddToCartClick = () => {
+    const item = {
+      calendarDetail: JSON.stringify(calendarDetail),
+      selectedRow: JSON.stringify(selectedRow),
+    };
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    // alert(
+    //   `${JSON.stringify(calendarDetail)}` +
+    //     `Selected Row:" + ${JSON.stringify(selectedRow)}`
+    // );
+    // Check for dup
+    const isItemInCart = cart.some(
+      (cartItem) =>
+        cartItem.calendarDetail === item.calendarDetail &&
+        cartItem.selectedRow === item.selectedRow
+    );
+
+    if (isItemInCart) {
+      notification.error({
+        message: "Item already in cart",
+        description: "This item is already in your cart.",
+      });
+    } else {
+      cart.push(item);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      notification.success({
+        message: "Item added to cart",
+        description: "The item has been successfully added to your cart.",
+      });
+    }
+  };
+
+  const [selectedRowKey, setSelectedRowKey] = useState(null);
+  const [selectedRow, setSelectedRow] = useState(null);
+
+  // useEffect(() => {
+  //   if (selectedRowKey !== null && calendarDetail) {
+  //     const selectedRow = calendarDetail.packages.find(
+  //       (pkg) => pkg.id === selectedRowKey
+  //     );
+  //   }
+  // }, [selectedRowKey, calendarDetail]);
+
+  useEffect(() => {
+    if (selectedRowKey !== null && calendarDetail) {
+      const foundRow = calendarDetail.packages.find(
+        (pkg) => pkg.id === selectedRowKey
+      );
+      setSelectedRow(foundRow);
+    }
+  }, [selectedRowKey, calendarDetail]);
 
   return (
     <div className="custom-container my-4">
@@ -33,9 +98,17 @@ const CalendarDetail = ({ calendarDetail }) => {
             <Title level={1}>{calendarDetail.title}</Title>
             <Text>{calendarDetail.description}</Text>
             <Table
-              dataSource={calendarDetail.packages.sort(customSort)}
+              dataSource={calendarDetail?.packages?.sort(customSort) || []}
               pagination={false}
               style={{ marginBottom: 20, marginTop: 20 }}
+              rowKey="id"
+              rowSelection={{
+                type: "radio",
+                selectedRowKeys: [selectedRowKey],
+                onChange: (selectedRowKeys) => {
+                  setSelectedRowKey(selectedRowKeys[0]);
+                },
+              }}
             >
               <Column
                 defaultSortOrder={"descend"}
@@ -66,6 +139,15 @@ const CalendarDetail = ({ calendarDetail }) => {
             <div className="d-flex">
               <Button type="primary" size="large" onClick={handleOrderClick}>
                 Order
+              </Button>
+              <Button
+                type="primary"
+                size="large"
+                onClick={handleAddToCartClick}
+                disabled={selectedRowKey === null}
+                style={{ marginLeft: "30px" }}
+              >
+                Add to cart
               </Button>
             </div>
           </div>

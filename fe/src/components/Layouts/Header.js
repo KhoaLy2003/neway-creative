@@ -1,16 +1,26 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./Header.css";
 import AuthModal from "../Sections/AuthModal";
 import { UserContext } from "../../context/AuthContext";
 import logo from "../../assets/ideasy.png";
 import { Header } from "antd/es/layout/layout";
-import { Button, Dropdown, Flex, Menu } from "antd";
+import { Button, Dropdown, Flex, Menu, Drawer } from "antd";
+import { ShoppingCartOutlined } from "@ant-design/icons";
 
 const CustomHeader = () => {
   const [modalOpen, setModalOpen] = useState(false);
+  const [drawerVisible, setDrawerVisible] = useState(false);
+  const [cart, setCart] = useState([]);
   const navigate = useNavigate();
   const { name, logout } = useContext(UserContext);
+
+  useEffect(() => {
+    if (drawerVisible) {
+      const cartData = JSON.parse(localStorage.getItem("cart")) || [];
+      setCart(cartData);
+    }
+  }, [drawerVisible]);
 
   const handleModalOpen = () => {
     setModalOpen(true);
@@ -21,12 +31,33 @@ const CustomHeader = () => {
     navigate("/");
   };
 
+  const handleViewCart = () => {
+    setDrawerVisible(true);
+  };
+
+  const handleDrawerClose = () => {
+    setDrawerVisible(false);
+  };
+
+  const handleDeleteItem = (index) => {
+    const updatedCart = [...cart];
+    updatedCart.splice(index, 1);
+    setCart(updatedCart);
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
+  };
+
+  const handleOrderPayment = () => {};
   const menu = (
     <Menu>
       <Menu.Item key="1">
-        <Button type="link" onClick={handleLogout}>
-          Đăng xuất
-        </Button>
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <Button type="link" onClick={handleLogout}>
+            Đăng xuất
+          </Button>
+          <Button type="link" onClick={handleViewCart}>
+            <ShoppingCartOutlined /> Giỏ hàng
+          </Button>
+        </div>
       </Menu.Item>
     </Menu>
   );
@@ -82,6 +113,93 @@ const CustomHeader = () => {
           <AuthModal modalOpen={modalOpen} setModalOpen={setModalOpen} />
         </Flex>
       </div>
+      <Drawer
+        title="My Cart"
+        placement="right"
+        onClose={handleDrawerClose}
+        visible={drawerVisible}
+        width={500}
+      >
+        <ul style={{ listStyle: "none", padding: 0 }}>
+          {cart.map((item, index) => {
+            const calendarDetail = JSON.parse(item.calendarDetail);
+            const packageDetail = JSON.parse(item.selectedRow);
+            return (
+              <li
+                key={index}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  marginBottom: "30px",
+                  borderBottom: "1px solid #e8e8e8",
+                  paddingBottom: "10px",
+                }}
+              >
+                {calendarDetail.image && (
+                  <img
+                    src={calendarDetail.image}
+                    alt={calendarDetail.title}
+                    style={{
+                      width: "120px",
+                      height: "120px",
+                      objectFit: "cover",
+                      marginRight: "20px",
+                    }}
+                  />
+                )}
+                <div style={{ flex: 1, overflow: "hidden" }}>
+                  <p
+                    style={{ margin: 0, fontWeight: "bold" }}
+                  >{`Product: ${calendarDetail.title}`}</p>
+                  <p
+                    style={{
+                      margin: 0,
+                      wordWrap: "break-word",
+                      whiteSpace: "normal",
+                    }}
+                  >
+                    {`${calendarDetail.description}`}
+                  </p>
+                  <p
+                    style={{ margin: 0 }}
+                  >{`Type: ${packageDetail.packageType}`}</p>
+                  <p
+                    style={{ margin: 0, fontWeight: "bold", marginTop: "10px" }}
+                  >{`Price: ${packageDetail.price}`}</p>
+                  <Button
+                    style={{
+                      backgroundColor: "red",
+                      borderColor: "red",
+                      color: "white",
+                    }}
+                    type="danger"
+                    onClick={() => handleDeleteItem(index)}
+                  >
+                    Remove
+                  </Button>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+        <div
+          style={{
+            position: "absolute",
+            bottom: 50,
+            left: "50%",
+            transform: "translateX(-50%)",
+          }}
+        >
+          <Button
+            type="primary"
+            onClick={handleOrderPayment}
+            block
+            style={{ fontSize: "16px", height: "60px", width: "250px" }}
+          >
+            Head to Payment
+          </Button>
+        </div>
+      </Drawer>
     </Header>
   );
 };
