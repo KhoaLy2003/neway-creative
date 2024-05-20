@@ -126,6 +126,7 @@ function PaymentPage() {
 
     if (current === 2) {
       const paymentDto = {
+        orderId: order.orderId,
         amount: order.price,
         orderInfo: `${order.packageType} ${calendarDetail.title}`,
       };

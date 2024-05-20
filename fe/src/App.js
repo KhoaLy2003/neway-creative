@@ -17,6 +17,8 @@ import AdminPostManagement from "./pages/admin/AdminPostManagement";
 import RequiredAuth from "./components/RequireAuth";
 import ViewPostPage from "./pages/customer/ViewPostsPage";
 import ViewPostDetail from "./pages/customer/ViewPostDetail";
+import PaymentSuccessPage from "./pages/customer/PaymentSuccessPage";
+import PaymentFailedPage from "./pages/customer/PaymentFailedPage";
 
 const roles = {
   Admin: "ADMIN",
@@ -35,6 +37,8 @@ function App() {
           <Route path="about-us" element={<AboutUsPage />} />
           <Route path="posts" element={<ViewPostPage />} />
           <Route path="posts/:postId" element={<ViewPostDetail />} />
+          <Route path="payment-success" element={<PaymentSuccessPage />} />
+          <Route path="payment-failed" element={<PaymentFailedPage />} />
 
           <Route element={<RequiredAuth allowedRoles={[roles.Customer]} />}>
             <Route path="payment" element={<PaymentPage />} />

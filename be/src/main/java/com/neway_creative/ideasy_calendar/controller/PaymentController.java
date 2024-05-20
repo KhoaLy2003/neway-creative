@@ -7,9 +7,11 @@ import com.neway_creative.ideasy_calendar.dto.request.SaveOrderRequest;
 import com.neway_creative.ideasy_calendar.dto.request.UpdateOrderRequest;
 import com.neway_creative.ideasy_calendar.dto.response.BaseResponse;
 import com.neway_creative.ideasy_calendar.dto.response.OrderDetailResponse;
+import com.neway_creative.ideasy_calendar.dto.response.PaymentResultResponse;
 import com.neway_creative.ideasy_calendar.entity.Customer;
 import com.neway_creative.ideasy_calendar.entity.Order;
 import com.neway_creative.ideasy_calendar.entity.Package;
+import com.neway_creative.ideasy_calendar.enumeration.OrderEnum;
 import com.neway_creative.ideasy_calendar.repository.CustomerRepository;
 import com.neway_creative.ideasy_calendar.repository.PackageRepository;
 import com.neway_creative.ideasy_calendar.service.PaymentService;
@@ -17,16 +19,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping(UriConstant.PAYMENT_BASE_URI)
 @RequiredArgsConstructor
 public class PaymentController {
@@ -99,5 +101,32 @@ public class PaymentController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new BaseResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), MessageConstant.UPDATE_ORDER_FAILED, null));
         }
+    }
+
+    @GetMapping(UriConstant.PAYMENT_RESULT)
+    public void getPaymentResult(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        int paymentStatus = paymentService.getPaymentResult(request);
+        int orderId = Integer.parseInt(request.getParameter("orderId"));
+
+        PaymentResultResponse paymentResultResponse = new PaymentResultResponse();
+
+        paymentResultResponse.setStatus(paymentStatus);
+        if (paymentStatus == MessageConstant.SUCCESSFUL_CODE) {
+
+            paymentResultResponse.setOrderId(request.getParameter("orderId"));
+            paymentResultResponse.setOrderInfo(request.getParameter("vnp_OrderInfo"));
+            paymentResultResponse.setTransDate(request.getParameter("vnp_PayDate"));
+            paymentResultResponse.setTransactionNo(request.getParameter("vnp_TransactionNo"));
+            paymentResultResponse.setAmount(request.getParameter("vnp_Amount"));
+
+            paymentService.updateOrder(new UpdateOrderRequest(orderId, OrderEnum.COMPLETED));
+
+            response.sendRedirect("http://localhost:3000/payment-success");
+        } else {
+            paymentService.updateOrder(new UpdateOrderRequest(orderId, OrderEnum.FAILED));
+
+            response.sendRedirect("http://localhost:3000/payment-failed");
+        }
+
     }
 }
