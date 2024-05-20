@@ -7,9 +7,7 @@ import com.neway_creative.ideasy_calendar.dto.request.SaveOrderRequest;
 import com.neway_creative.ideasy_calendar.dto.request.UpdateOrderRequest;
 import com.neway_creative.ideasy_calendar.dto.response.BaseResponse;
 import com.neway_creative.ideasy_calendar.dto.response.OrderDetailResponse;
-import com.neway_creative.ideasy_calendar.entity.Customer;
 import com.neway_creative.ideasy_calendar.entity.Order;
-import com.neway_creative.ideasy_calendar.entity.Package;
 import com.neway_creative.ideasy_calendar.repository.CustomerRepository;
 import com.neway_creative.ideasy_calendar.repository.PackageRepository;
 import com.neway_creative.ideasy_calendar.service.PaymentService;
@@ -54,20 +52,7 @@ public class PaymentController {
     @PostMapping(UriConstant.PAYMENT_SAVE)
     public ResponseEntity<BaseResponse> saveOrder(@RequestBody SaveOrderRequest orderRequest) {
         try {
-            Order order = paymentService.saveOrder(orderRequest);
-
-            Customer customer = customerRepository.findByEmailAddress(orderRequest.getEmail()).orElse(null);
-
-            Package calendarPackage = packageRepository.findById(orderRequest.getPackageId()).orElse(null);
-
-            OrderDetailResponse orderDetailResponse = OrderDetailResponse.builder()
-                    .orderId(order.getOrderId())
-                    .name(customer.getName())
-                    .email(orderRequest.getEmail())
-                    .orderDate(order.getOrderDate())
-                    .price(order.getPrice())
-                    .packageType(calendarPackage.getPackageType().toString())
-                    .build();
+            OrderDetailResponse orderDetailResponse = paymentService.saveOrder(orderRequest);
 
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new BaseResponse(HttpStatus.OK.value(), MessageConstant.SUCCESSFUL_MESSAGE, orderDetailResponse));
