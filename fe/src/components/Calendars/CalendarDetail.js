@@ -1,4 +1,4 @@
-import { React, useEffect, useState } from "react";
+import { React, useContext, useEffect, useState } from "react";
 import "../../assets/root.css";
 import Breadcrumb from "../Layouts/Breadcrumb";
 import { Button, Table, Tag, Typography } from "antd";
@@ -6,39 +6,33 @@ import Title from "antd/es/typography/Title";
 import { useNavigate } from "react-router-dom";
 import { getColorByPackageType } from "../../utils/GetColor";
 import { notification } from "antd";
-
+import { UserContext } from "../../context/AuthContext";
+import AuthModal from "../Sections/AuthModal";
 const { Column } = Table;
 const { Text } = Typography;
 
 const CalendarDetail = ({ calendarDetail }) => {
+  const [selectedRowKey, setSelectedRowKey] = useState(null);
+  const [selectedRow, setSelectedRow] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
   const navigate = useNavigate();
+  const { email } = useContext(UserContext);
 
   const handleOrderClick = () => {
     navigate("/payment", { state: { calendarDetail } });
   };
 
-  // const handleAddToCartClick = () => {
-  //   const item = {
-  //     calendarDetail: JSON.stringify(calendarDetail),
-  //     selectedRow: JSON.stringify(selectedRow),
-  //   };
-
-  //   let cart = JSON.parse(localStorage.getItem("cart")) || [];
-  //   cart.push(item);
-  //   localStorage.setItem("cart", JSON.stringify(cart));
-  // };
-
   const handleAddToCartClick = () => {
+    if (!email) {
+      setModalOpen(true);
+      return;
+    }
+
     const item = {
       calendarDetail: JSON.stringify(calendarDetail),
       selectedRow: JSON.stringify(selectedRow),
     };
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    // alert(
-    //   `${JSON.stringify(calendarDetail)}` +
-    //     `Selected Row:" + ${JSON.stringify(selectedRow)}`
-    // );
-    // Check for dup
     const isItemInCart = cart.some(
       (cartItem) =>
         cartItem.calendarDetail === item.calendarDetail &&
@@ -47,29 +41,18 @@ const CalendarDetail = ({ calendarDetail }) => {
 
     if (isItemInCart) {
       notification.error({
-        message: "Item already in cart",
-        description: "This item is already in your cart.",
+        message: "Bộ lịch đã có trong giỏ hàng",
+        duration: 3,
       });
     } else {
       cart.push(item);
       localStorage.setItem("cart", JSON.stringify(cart));
       notification.success({
-        message: "Item added to cart",
-        description: "The item has been successfully added to your cart.",
+        message: "Thêm vào giỏ hàng thành công",
+        duration: 3,
       });
     }
   };
-
-  const [selectedRowKey, setSelectedRowKey] = useState(null);
-  const [selectedRow, setSelectedRow] = useState(null);
-
-  // useEffect(() => {
-  //   if (selectedRowKey !== null && calendarDetail) {
-  //     const selectedRow = calendarDetail.packages.find(
-  //       (pkg) => pkg.id === selectedRowKey
-  //     );
-  //   }
-  // }, [selectedRowKey, calendarDetail]);
 
   useEffect(() => {
     if (selectedRowKey !== null && calendarDetail) {
@@ -112,7 +95,7 @@ const CalendarDetail = ({ calendarDetail }) => {
             >
               <Column
                 defaultSortOrder={"descend"}
-                title="Type"
+                title="Loại"
                 dataIndex="packageType"
                 key="packageType"
                 render={(packageType) => (
@@ -124,35 +107,36 @@ const CalendarDetail = ({ calendarDetail }) => {
                 )}
               />
               <Column
-                title="Unit"
+                title="Đơn vị"
                 dataIndex="packageDurationUnit"
                 key="packageDurationUnit"
               />
               <Column
-                title="Duration"
+                title="Thời gian"
                 dataIndex="durationValue"
                 key="durationValue"
               />
-              <Column title="Price" dataIndex="price" key="price" />
+              <Column title="Giá" dataIndex="price" key="price" />
             </Table>
 
             <div className="d-flex">
-              <Button type="primary" size="large" onClick={handleOrderClick}>
-                Order
-              </Button>
+              {/* <Button type="primary" size="large" onClick={handleOrderClick}>
+                Mua ngay
+              </Button> */}
               <Button
                 type="primary"
                 size="large"
                 onClick={handleAddToCartClick}
                 disabled={selectedRowKey === null}
-                style={{ marginLeft: "30px" }}
               >
-                Add to cart
+                Cho vào giỏ
               </Button>
             </div>
           </div>
         </div>
       )}
+
+      <AuthModal modalOpen={modalOpen} setModalOpen={setModalOpen} />
     </div>
   );
 };

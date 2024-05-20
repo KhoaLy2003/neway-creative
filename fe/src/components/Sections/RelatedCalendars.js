@@ -13,7 +13,6 @@ const RelatedCalendars = ({ calendarId }) => {
 
   useEffect(() => {
     const fetchCalendars = async () => {
-      console.log("ID", calendarId);
       try {
         const data = await getRelatedCalendars(calendarId);
 
