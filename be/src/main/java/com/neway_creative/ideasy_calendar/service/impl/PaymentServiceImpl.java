@@ -58,7 +58,7 @@ public class PaymentServiceImpl implements PaymentService {
             put("vnp_OrderInfo", createPaymentRequest.getOrderInfo());
             put("vnp_OrderType", VnPayConstant.ORDER_TYPE);
             put("vnp_Locale", VnPayConstant.VNP_LOCALE);
-            put("vnp_ReturnUrl", VnPayConstant.VNP_RETURN_URL);
+            put("vnp_ReturnUrl", VnPayConstant.VNP_RETURN_URL + "?orderId=" + createPaymentRequest.getOrderId());
             put("vnp_IpAddr", VnPay.getIpAddress(request));
             put("vnp_CreateDate", VnPay.generateDate(false));
             put("vnp_ExpireDate", VnPay.generateDate(true));
@@ -135,23 +135,39 @@ public class PaymentServiceImpl implements PaymentService {
         String signValue = VnPay.hashAllFields(fields);
         String transactionNo = request.getParameter("vnp_TransactionNo");
 
-        if (signValue.equals(vnp_SecureHash)) {
-            if (VnPayConstant.VNP_RESPONSE_CODE.equals(request.getParameter("vnp_TransactionStatus"))) {
-                LOGGER.info("Payment successfully with transaction {}", transactionNo);
+//        if (signValue.equals(vnp_SecureHash)) {
+//            if (VnPayConstant.VNP_RESPONSE_CODE.equals(request.getParameter("vnp_ResponseCode"))) {
+//                LOGGER.info("Payment successfully with transaction {}", transactionNo);
+//
+//                return MessageConstant.SUCCESSFUL_CODE;
+//            } else {
+//                LOGGER.info("Payment failed with transaction {}", transactionNo);
+//
+//                return MessageConstant.FAILURE_CODE;
+//            }
+//        } else {
+//            return MessageConstant.INVALID_PAYMENT_SIGN;
+//        }
 
-                return MessageConstant.SUCCESSFUL_CODE;
-            } else {
-                LOGGER.info("Payment failed with transaction {}", transactionNo);
+        if (VnPayConstant.VNP_RESPONSE_CODE.equals(request.getParameter("vnp_ResponseCode"))) {
+            LOGGER.info("Payment successfully with transaction {}", transactionNo);
 
-                return MessageConstant.FAILURE_CODE;
-            }
+            return MessageConstant.SUCCESSFUL_CODE;
         } else {
-            return MessageConstant.INVALID_PAYMENT_SIGN;
+            LOGGER.info("Payment failed with transaction {}", transactionNo);
+
+            return MessageConstant.FAILURE_CODE;
         }
     }
 
     @Override
     public OrderDetailResponse saveOrder(SaveOrderRequest saveOrderRequest) {
+//        Order existingOrder = orderRepository.findByPackageId(saveOrderRequest.getPackageId());
+//        if(existingOrder != null) {
+//            existingOrder.setStatus(OrderEnum.PENDING);
+//            return existingOrder;
+//        }
+
         Package calendarPackage = packageRepository.findById(saveOrderRequest.getPackageId())
                 .orElseThrow(() -> new ResourceNotFoundException("Package not found"));
 

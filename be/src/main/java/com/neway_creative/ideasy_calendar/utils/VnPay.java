@@ -103,7 +103,6 @@ public class VnPay {
         }
 
         return hmacSHA512(VnPayConstant.SECRET_KEY, sb.toString());
-
     }
 
     public static String hmacSHA512(final String key, final String data) {
