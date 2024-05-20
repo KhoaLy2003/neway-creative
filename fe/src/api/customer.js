@@ -1,5 +1,6 @@
 const baseUrl = process.env.REACT_APP_BACK_END_URL;
 const errMsg = "Failed to get response from server";
+const ACCEPT_LANGUAGE = "vi";
 
 export const login = async (loginRequest) => {
   let url = `${baseUrl}/customers/login`;
@@ -9,10 +10,11 @@ export const login = async (loginRequest) => {
       body: JSON.stringify(loginRequest),
       headers: {
         "Content-Type": "application/json",
+        "Accept-Language": ACCEPT_LANGUAGE,
       },
     });
 
-    if (response.ok || response.status === 404) {
+    if (response.ok || response.status === 404 || response.status === 400) {
       // throw new Error({ errMsg });
       const data = await response.json();
       return data;
@@ -31,6 +33,7 @@ export const register = async (registerRequest) => {
       body: JSON.stringify(registerRequest),
       headers: {
         "Content-Type": "application/json",
+        "Accept-Language": ACCEPT_LANGUAGE,
       },
     });
 
@@ -54,6 +57,7 @@ export const verify = async (verifyRequest) => {
       body: JSON.stringify(verifyRequest),
       headers: {
         "Content-Type": "application/json",
+        "Accept-Language": ACCEPT_LANGUAGE,
       },
     });
 
@@ -78,6 +82,9 @@ export const regenerateOtp = async (email) => {
     const response = await fetch(url, {
       method: "POST",
       body: formData,
+      headers: {
+        "Accept-Language": ACCEPT_LANGUAGE,
+      },
     });
 
     if (!response.ok) {

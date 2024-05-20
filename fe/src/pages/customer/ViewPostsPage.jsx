@@ -2,9 +2,7 @@ import React, { Fragment, useState, useEffect } from "react";
 import PageHeading from "../../components/Layouts/PageHeading";
 import { getAllPosts } from "../../api/post";
 import { Link } from "react-router-dom";
-import aboutUs1 from "../../assets/about-us-1.jpg";
 import { List } from "antd";
-import { UserOutlined } from "@ant-design/icons";
 
 export default function ViewPostPage() {
   const [posts, setPosts] = useState([]);
@@ -78,7 +76,7 @@ export default function ViewPostPage() {
                   <img
                     width={400}
                     alt="logo"
-                    src={aboutUs1}
+                    src={item.thumbnail}
                     style={{ borderRadius: "20px", marginBottom: "5px" }}
                   />
                 </div>

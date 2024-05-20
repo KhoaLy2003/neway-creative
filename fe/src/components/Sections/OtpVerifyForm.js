@@ -5,16 +5,21 @@ import { regenerateOtp, verify } from "../../api/customer";
 const { Text } = Typography;
 const { Countdown } = Statistic;
 
-const OtpVerifyForm = ({ email, onClose, onSuccess, setLoading }) => {
+const OtpVerifyForm = ({
+  email,
+  onClose,
+  onSuccess,
+  setLoading,
+  onBackToRegister,
+}) => {
   const [form] = Form.useForm();
   const [error, setError] = useState("");
   const deadline = Date.now() + 5 * 60 * 1000;
 
   const [api, contextHolder] = notification.useNotification();
-  const openNotificationWithIcon = (type, message, description) => {
+  const openNotificationWithIcon = (type, message) => {
     api[type]({
       message: message,
-      description: description,
       duration: 3,
     });
   };
@@ -32,7 +37,7 @@ const OtpVerifyForm = ({ email, onClose, onSuccess, setLoading }) => {
       return form.setFields([
         {
           name: "otp",
-          errors: ["OTP is invalid."],
+          errors: ["OTP không hợp lệ."],
         },
       ]);
     }
@@ -50,11 +55,7 @@ const OtpVerifyForm = ({ email, onClose, onSuccess, setLoading }) => {
 
       if (response.status === 200) {
         //console.log("DONE ", response);
-        openNotificationWithIcon(
-          "success",
-          "Register successfully",
-          "Welcome to IDEASY"
-        );
+        openNotificationWithIcon("success", response.message);
         form.resetFields();
         setLoading(false);
         onSuccess();
@@ -73,14 +74,18 @@ const OtpVerifyForm = ({ email, onClose, onSuccess, setLoading }) => {
   };
 
   const handleRegenerateOtp = async () => {
+    setError("");
     setLoading(true);
     try {
-      await regenerateOtp(email);
-      openNotificationWithIcon("success", "Regenerate otp successfully", "");
-      setLoading(false);
+      const response = await regenerateOtp(email);
+
+      if (response.status === 200) {
+        openNotificationWithIcon("success", response.message);
+        setLoading(false);
+      }
     } catch (error) {
       console.error("Error regenerating OTP:", error);
-      setError("Error regenerating OTP. Please try again.");
+      setError("Tạo mới OTP thất bại, vui lòng thử lại");
       setLoading(false);
     }
   };
@@ -105,12 +110,13 @@ const OtpVerifyForm = ({ email, onClose, onSuccess, setLoading }) => {
         </Form.Item>
 
         <Space direction="vertical" size={"large"}>
-          <Text underline>The OTP code had send to {email}</Text>
+          <Text underline>Mã OTP đã được gửi đến {email}</Text>
 
           <Form.Item>
             <Space size={"large"}>
+              <Button onClick={onBackToRegister}>Quay về đăng ký</Button>
               <Button key="regenerate" onClick={handleRegenerateOtp}>
-                Regenerate OTP
+                Tạo mới OTP
               </Button>
               <Button
                 key="submit"
@@ -127,7 +133,7 @@ const OtpVerifyForm = ({ email, onClose, onSuccess, setLoading }) => {
                     });
                 }}
               >
-                Verify
+                Xác nhận
               </Button>
             </Space>
           </Form.Item>

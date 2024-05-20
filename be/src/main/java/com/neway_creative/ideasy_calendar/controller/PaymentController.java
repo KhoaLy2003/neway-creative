@@ -56,20 +56,7 @@ public class PaymentController {
     @PostMapping(UriConstant.PAYMENT_SAVE)
     public ResponseEntity<BaseResponse> saveOrder(@RequestBody SaveOrderRequest orderRequest) {
         try {
-            Order order = paymentService.saveOrder(orderRequest);
-
-            Customer customer = customerRepository.findByEmailAddress(orderRequest.getEmail()).orElse(null);
-
-            Package calendarPackage = packageRepository.findById(orderRequest.getPackageId()).orElse(null);
-
-            OrderDetailResponse orderDetailResponse = OrderDetailResponse.builder()
-                    .orderId(order.getOrderId())
-                    .name(customer.getName())
-                    .email(orderRequest.getEmail())
-                    .orderDate(order.getOrderDate())
-                    .price(order.getPrice())
-                    .packageType(calendarPackage.getPackageType().toString())
-                    .build();
+            OrderDetailResponse orderDetailResponse = paymentService.saveOrder(orderRequest);
 
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new BaseResponse(HttpStatus.OK.value(), MessageConstant.SUCCESSFUL_MESSAGE, orderDetailResponse));
@@ -121,11 +108,11 @@ public class PaymentController {
 
             paymentService.updateOrder(new UpdateOrderRequest(orderId, OrderEnum.COMPLETED));
 
-            response.sendRedirect("http://localhost:3000/payment-success");
+            response.sendRedirect("http://localhost:3000/payment-result?status=success");
         } else {
             paymentService.updateOrder(new UpdateOrderRequest(orderId, OrderEnum.FAILED));
 
-            response.sendRedirect("http://localhost:3000/payment-failed");
+            response.sendRedirect("http://localhost:3000/payment-result?status=failed");
         }
 
     }

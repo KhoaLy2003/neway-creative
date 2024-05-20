@@ -17,56 +17,72 @@ import AdminPostManagement from "./pages/admin/AdminPostManagement";
 import RequiredAuth from "./components/RequireAuth";
 import ViewPostPage from "./pages/customer/ViewPostsPage";
 import ViewPostDetail from "./pages/customer/ViewPostDetail";
-import PaymentSuccessPage from "./pages/customer/PaymentSuccessPage";
-import PaymentFailedPage from "./pages/customer/PaymentFailedPage";
+import ViewCart from "./pages/customer/ViewCart";
+import PaymentResultPage from "./pages/customer/PaymentResultPage";
 
 const roles = {
-  Admin: "ADMIN",
-  Customer: "CUSTOMER",
+    Admin: "ADMIN",
+    Customer: "CUSTOMER",
 };
 
 function App() {
-  return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<RootLayout />}>
-          {/* public routes */}
-          <Route index element={<HomePage />} />
-          <Route path="calendars" element={<ProductsPage />} />
-          <Route path="calendars/:calendarId" element={<DetailPage />} />
-          <Route path="about-us" element={<AboutUsPage />} />
-          <Route path="posts" element={<ViewPostPage />} />
-          <Route path="posts/:postId" element={<ViewPostDetail />} />
-          <Route path="payment-success" element={<PaymentSuccessPage />} />
-          <Route path="payment-failed" element={<PaymentFailedPage />} />
+    return (
+        <Router>
+            <Routes>
+                <Route path="/" element={<RootLayout />}>
+                    {/* public routes */}
+                    <Route index element={<HomePage />} />
+                    <Route path="calendars" element={<ProductsPage />} />
+                    <Route
+                        path="calendars/:calendarId"
+                        element={<DetailPage />}
+                    />
+                    <Route path="about-us" element={<AboutUsPage />} />
+                    <Route path="posts" element={<ViewPostPage />} />
+                    <Route path="posts/:postId" element={<ViewPostDetail />} />
+                    <Route
+                        path="payment-result"
+                        element={<PaymentResultPage />}
+                    />
 
-          <Route element={<RequiredAuth allowedRoles={[roles.Customer]} />}>
-            <Route path="payment" element={<PaymentPage />} />
-          </Route>
-        </Route>
+                    <Route
+                        element={
+                            <RequiredAuth allowedRoles={[roles.Customer]} />
+                        }
+                    >
+                        <Route path="payment" element={<PaymentPage />} />
+                    </Route>
+                    <Route path="/cart" element={<ViewCart />} />
+                </Route>
 
-        <Route element={<RequiredAuth allowedRoles={[roles.Admin]} />}>
-          <Route path="/admin" element={<AdminLayout />}>
-            <Route index element={<AdminDashboard />} />
-            <Route path="calendars" element={<AdminCalendarManagement />} />
-            <Route path="customers" element={<AdminCustomerMangment />} />
-            <Route
-              path="transactions"
-              element={<AdminTransactionManagement />}
-            />
-            <Route path="post" element={<AdminPostManagement />} />
+                <Route element={<RequiredAuth allowedRoles={[roles.Admin]} />}>
+                    <Route path="/admin" element={<AdminLayout />}>
+                        <Route index element={<AdminDashboard />} />
+                        <Route
+                            path="calendars"
+                            element={<AdminCalendarManagement />}
+                        />
+                        <Route
+                            path="customers"
+                            element={<AdminCustomerMangment />}
+                        />
+                        <Route
+                            path="transactions"
+                            element={<AdminTransactionManagement />}
+                        />
+                        <Route path="post" element={<AdminPostManagement />} />
 
-            <Route path="result" element={<AdminResult />} />
-          </Route>
-        </Route>
+                        <Route path="result" element={<AdminResult />} />
+                    </Route>
+                </Route>
 
-        {/* catch all */}
-        <Route path="/unauthorized" element={<ErrorPage />} />
-        <Route path="/error" element={<ErrorPage />} />
-        <Route path="*" element={<ErrorPage />} />
-      </Routes>
-    </Router>
-  );
+                {/* catch all */}
+                <Route path="/unauthorized" element={<ErrorPage />} />
+                <Route path="/error" element={<ErrorPage />} />
+                <Route path="*" element={<ErrorPage />} />
+            </Routes>
+        </Router>
+    );
 }
 
 export default App;

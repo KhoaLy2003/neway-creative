@@ -6,10 +6,12 @@ import com.neway_creative.ideasy_calendar.dto.request.CreatePaymentRequest;
 import com.neway_creative.ideasy_calendar.dto.request.SaveOrderRequest;
 import com.neway_creative.ideasy_calendar.dto.request.UpdateOrderRequest;
 import com.neway_creative.ideasy_calendar.dto.response.OrderDetailResponse;
+import com.neway_creative.ideasy_calendar.entity.Calendar;
 import com.neway_creative.ideasy_calendar.entity.Customer;
 import com.neway_creative.ideasy_calendar.entity.Order;
 import com.neway_creative.ideasy_calendar.entity.Package;
 import com.neway_creative.ideasy_calendar.enumeration.OrderEnum;
+import com.neway_creative.ideasy_calendar.repository.CalendarRepository;
 import com.neway_creative.ideasy_calendar.repository.CustomerRepository;
 import com.neway_creative.ideasy_calendar.repository.OrderRepository;
 import com.neway_creative.ideasy_calendar.repository.PackageRepository;
@@ -41,6 +43,7 @@ public class PaymentServiceImpl implements PaymentService {
     private final OrderRepository orderRepository;
     private final PackageRepository packageRepository;
     private final CustomerRepository customerRepository;
+    private final CalendarRepository calendarRepository;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PaymentServiceImpl.class);
 
@@ -158,12 +161,12 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public Order saveOrder(SaveOrderRequest saveOrderRequest) {
-        Order existingOrder = orderRepository.findByPackageId(saveOrderRequest.getPackageId());
-        if(existingOrder != null) {
-            existingOrder.setStatus(OrderEnum.PENDING);
-            return existingOrder;
-        }
+    public OrderDetailResponse saveOrder(SaveOrderRequest saveOrderRequest) {
+//        Order existingOrder = orderRepository.findByPackageId(saveOrderRequest.getPackageId());
+//        if(existingOrder != null) {
+//            existingOrder.setStatus(OrderEnum.PENDING);
+//            return existingOrder;
+//        }
 
         Package calendarPackage = packageRepository.findById(saveOrderRequest.getPackageId())
                 .orElseThrow(() -> new ResourceNotFoundException("Package not found"));
@@ -171,9 +174,12 @@ public class PaymentServiceImpl implements PaymentService {
         Customer customer = customerRepository.findByEmailAddress(saveOrderRequest.getEmail())
                 .orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
 
+        Calendar calendar = calendarRepository.findById(calendarPackage.getCalendar().getCalendarId())
+                .orElseThrow(() -> new ResourceNotFoundException("Calendar not found"));
+
         Order order = new Order();
         order.setOrderDate(LocalDateTime.now());
-        order.setPrice(saveOrderRequest.getPrice());
+        order.setPrice(calendarPackage.getPrice());
         order.setStatus(OrderEnum.PENDING);
         order.setCalendarPackage(calendarPackage);
         order.setCustomer(customer);
@@ -182,7 +188,15 @@ public class PaymentServiceImpl implements PaymentService {
 
         orderRepository.save(order);
 
-        return order;
+        return OrderDetailResponse.builder()
+                .orderId(order.getOrderId())
+                .name(customer.getName())
+                .email(customer.getEmailAddress())
+                .orderDate(order.getOrderDate())
+                .price(order.getPrice())
+                .packageType(calendarPackage.getPackageType().toString())
+                .calendarTitle(calendar.getTitle())
+                .build();
     }
 
     @Override

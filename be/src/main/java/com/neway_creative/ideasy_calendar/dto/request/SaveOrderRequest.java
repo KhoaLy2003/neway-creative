@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class SaveOrderRequest {
-    private long price;
     private int packageId;
     private String email;
 }

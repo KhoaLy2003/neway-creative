@@ -15,7 +15,7 @@ const Breadcrumb = ({ calendarName }) => {
       <ol className="breadcrumb breadcrumb-container">
         <li>
           <Link to="/" activeClassName="active-link">
-            Home
+            Trang chủ
           </Link>
         </li>
         {isCalendarPage && (
@@ -23,7 +23,7 @@ const Breadcrumb = ({ calendarName }) => {
             <i className="bi bi-chevron-right"></i>
             <li className={isCalendarPage ? "active" : ""}>
               <Link to="/calendars" className={isCalendarPage ? "active" : ""}>
-                Calendars
+                Bộ lịch
               </Link>
             </li>
           </>
@@ -33,7 +33,7 @@ const Breadcrumb = ({ calendarName }) => {
             <i className="bi bi-chevron-right"></i>
             <li>
               <Link to="/calendars" className="">
-                Calendars
+                Bộ lịch
               </Link>
             </li>
             <i className="bi bi-chevron-right"></i>
