@@ -19,10 +19,7 @@ const steps = [
         title: "Xác nhận thông tin",
     },
     {
-        title: "Thanh toán",
-    },
-    {
-        title: "Hoàn tất",
+        title: "Thanh toán và Hoàn tất",
     },
 ];
 
@@ -83,6 +80,15 @@ function PaymentPage() {
                 const response = await updateOrder(orderDto);
 
                 if (response.status === 200) {
+                    const paymentDto = {
+                        orderId: orderDetail.orderId,
+                        amount: orderDetail.price,
+                        orderInfo: `${orderDetail.packageType} ${orderDetail.title}`,
+                    };
+                    const paymentResponse = await createPayment(paymentDto);
+                    const payload = paymentResponse.data;
+                    window.location.href = payload["redirect_url"];
+
                     setCurrent(current + 1);
                 }
             } catch (error) {
@@ -90,30 +96,16 @@ function PaymentPage() {
                 throw error;
             }
         }
-
-        if (current === 1) {
-            const paymentDto = {
-                orderId: orderDetail.orderId,
-                amount: orderDetail.price,
-                orderInfo: `${orderDetail.packageType} ${orderDetail.title}`,
-            };
-            const response = await createPayment(paymentDto);
-            const payload = response.data;
-            window.location.href = payload["redirect_url"];
-        }
-        setCurrent(current + 1);
     };
+
     const prev = () => {
         setCurrent(current - 1);
     };
+
     const items = steps.map((item) => ({
         key: item.title,
         title: item.title,
     }));
-
-    // if (isNavigating || !calendarDetail) {
-    //   return <div>Loading...</div>;
-    // }
 
     return (
         <div className="custom-container" style={{ marginTop: 50 }}>
@@ -142,6 +134,24 @@ function PaymentPage() {
                                     items={orderInfo}
                                     bordered
                                 />
+                            </Col>
+                            <Col span={3}></Col>
+                        </Row>
+                    </div>
+                )}
+
+                {current === 1 && (
+                    <div
+                        style={{
+                            lineHeight: 260,
+                            textAlign: "center",
+                            marginTop: 50,
+                        }}
+                    >
+                        <Row>
+                            <Col span={3}></Col>
+                            <Col span={18}>
+                                <p>Vui lòng chờ trong khi chúng tôi xử lý thanh toán...</p>
                             </Col>
                             <Col span={3}></Col>
                         </Row>
@@ -187,3 +197,4 @@ function PaymentPage() {
 }
 
 export default PaymentPage;
+    
