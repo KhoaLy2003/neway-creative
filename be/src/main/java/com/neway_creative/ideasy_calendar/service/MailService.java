@@ -7,4 +7,5 @@ package com.neway_creative.ideasy_calendar.service;
  */
 public interface MailService {
     void sendVerificationEmail(String recipientEmail, String otp);
+    void sendMailTest();
 }

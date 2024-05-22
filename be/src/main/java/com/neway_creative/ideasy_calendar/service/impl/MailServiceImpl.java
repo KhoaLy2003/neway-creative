@@ -22,8 +22,8 @@ public class MailServiceImpl implements MailService {
 
     @Override
     public void sendVerificationEmail(String recipientEmail, String otp) {
-        String subject = "Account Verification OTP";
-        String text = "Your OTP for account verification is: " + otp;
+        String subject = "Mã OTP xác thực tài khoản Ideasy";
+        String text = "Mã xác thực OTP của bạn: " + otp;
 
         try {
             MimeMessage message = mailSender.createMimeMessage();
@@ -35,6 +35,30 @@ public class MailServiceImpl implements MailService {
 
             helper.setFrom(email);
             helper.setTo(recipientEmail);
+            helper.setSubject(subject);
+            helper.setText(text, true);
+
+            mailSender.send(message);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void sendMailTest() {
+        String subject = "Test mail";
+        String text = "Test mail";
+
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(
+                    message,
+                    MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
+                    StandardCharsets.UTF_8.name()
+            );
+
+            helper.setFrom(email);
+            helper.setTo("Place your email here for testing");
             helper.setSubject(subject);
             helper.setText(text, true);
 

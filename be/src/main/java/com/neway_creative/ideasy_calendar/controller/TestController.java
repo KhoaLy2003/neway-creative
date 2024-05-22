@@ -8,6 +8,7 @@ import com.neway_creative.ideasy_calendar.dto.request.RegisterRequest;
 import com.neway_creative.ideasy_calendar.dto.response.BaseResponse;
 import com.neway_creative.ideasy_calendar.dto.response.PaymentResultResponse;
 import com.neway_creative.ideasy_calendar.service.AuthenticationService;
+import com.neway_creative.ideasy_calendar.service.MailService;
 import com.neway_creative.ideasy_calendar.service.PaymentService;
 import com.neway_creative.ideasy_calendar.utils.MessageLocalization;
 import io.swagger.v3.oas.annotations.Operation;
@@ -45,6 +46,7 @@ public class TestController {
     private final AuthenticationService authenticationService;
     private final MessageLocalization messageLocalization;
     private final RedisTemplate redisTemplate;
+    private final MailService mailService;
 
     @Operation(method = "POST", summary = "Register account", description = "Send a request via this API to register new account")
     @PostMapping("/register")
@@ -147,5 +149,10 @@ public class TestController {
             redisTemplate.delete(cacheKeys);
             LOGGER.info("Cache keys for all pages cleared");
         }
+    }
+
+    @PostMapping("/sendMail")
+    public void sendMailTest() {
+        mailService.sendMailTest();
     }
 }
