@@ -18,9 +18,9 @@ const CalendarDetail = ({ calendarDetail }) => {
     const navigate = useNavigate();
     const { email } = useContext(UserContext);
 
-    const handleOrderClick = () => {
-        navigate("/payment", { state: { calendarDetail } });
-    };
+    // const handleOrderClick = () => {
+    //     navigate("/payment", { state: { calendarDetail } });
+    // };
 
     const handleAddToCartClick = () => {
         if (!email) {

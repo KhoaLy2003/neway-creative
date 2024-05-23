@@ -226,6 +226,7 @@ const CustomHeader = () => {
               onClick={() => handleOrderPayment(cart)}
               block
               size="large"
+              disabled={cart.length === 0}
             >
               Thanh toán
             </Button>
