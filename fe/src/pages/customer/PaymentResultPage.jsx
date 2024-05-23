@@ -25,7 +25,7 @@ export default function PaymentResultPage() {
       status={status}
       title={title}
       subTitle={subTitle}
-      btnText="Trở về trang chủ"
+      btnText="Tiếp tục mua sắm"
       path="/"
     />
   );

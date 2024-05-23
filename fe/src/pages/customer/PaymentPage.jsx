@@ -110,7 +110,7 @@ function PaymentPage() {
       if (response.status === 200) {
         navigate("/");
         notification.success({
-          message: "Đơn hàng cuar bạn được hủy",
+          message: "Đơn hàng của bạn được hủy",
         });
       }
     } catch (error) {
