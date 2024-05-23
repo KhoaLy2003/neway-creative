@@ -7,6 +7,7 @@ import com.neway_creative.ideasy_calendar.dto.request.LoginRequest;
 import com.neway_creative.ideasy_calendar.dto.request.RegisterRequest;
 import com.neway_creative.ideasy_calendar.dto.response.BaseResponse;
 import com.neway_creative.ideasy_calendar.dto.response.PaymentResultResponse;
+import com.neway_creative.ideasy_calendar.repository.OrderRepository;
 import com.neway_creative.ideasy_calendar.service.AuthenticationService;
 import com.neway_creative.ideasy_calendar.service.MailService;
 import com.neway_creative.ideasy_calendar.service.PaymentService;
@@ -24,6 +25,7 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,6 +49,7 @@ public class TestController {
     private final MessageLocalization messageLocalization;
     private final RedisTemplate redisTemplate;
     private final MailService mailService;
+    private final OrderRepository orderRepository;
 
     @Operation(method = "POST", summary = "Register account", description = "Send a request via this API to register new account")
     @PostMapping("/register")
@@ -154,5 +157,10 @@ public class TestController {
     @PostMapping("/sendMail")
     public void sendMailTest() {
         mailService.sendMailTest();
+    }
+
+    @GetMapping("/packages/{orderId}")
+    public List<Integer> getPackagesByOrderId(@PathVariable int orderId) {
+        return  orderRepository.findPackageIdsByOrderId(orderId);
     }
 }
