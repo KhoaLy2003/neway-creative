@@ -2,7 +2,6 @@ import { React, useEffect, useState } from "react";
 import {
   Card,
   Button,
-  message,
   Steps,
   Flex,
   Row,
@@ -43,31 +42,49 @@ function PaymentPage() {
         key: "1",
         label: "Email",
         children: orderDetail.email,
-        span: 2,
+        span: 4,
       },
-      {
-        key: "2",
-        label: "Tên bộ lịch",
-        children: orderDetail.calendarTitle,
-      },
-      {
-        key: "3",
-        label: "Loại gói",
-        children: (
-          <Tag color={getColorByPackageType(orderDetail.packageType)}>
-            {orderDetail.packageType.toUpperCase()}
-          </Tag>
-        ),
-        span: 2,
-      },
+    ];
+
+    const packageInfoItems = orderDetail.packages
+      .map((pkg, index) => [
+        {
+          key: `package-${index + 1}-title`,
+          label: `Tên bộ lịch`,
+          children: pkg.calendarTitle,
+        },
+        {
+          key: `package-${index + 1}-type`,
+          label: `Loại gói`,
+          children: (
+            <Tag color={getColorByPackageType(pkg.packageType)}>
+              {pkg.packageType.toUpperCase()}
+            </Tag>
+          ),
+        },
+        {
+          key: `package-${index + 1}-price`,
+          label: `Giá gói`,
+          children: pkg.price.toLocaleString("de-DE") + " VNĐ",
+        },
+      ])
+      .flat();
+
+    const totalPrice = [
       {
         key: "4",
-        label: "Giá",
+        label: "Tổng",
         children: orderDetail.price.toLocaleString("de-DE") + " VNĐ",
       },
     ];
 
-    setOrderInfo(orderInfoItems);
+    const allInfoItems = [
+      ...orderInfoItems,
+      ...packageInfoItems,
+      ...totalPrice,
+    ];
+
+    setOrderInfo(allInfoItems);
   }, [orderDetail, navigate]);
 
   const next = async () => {
@@ -84,7 +101,7 @@ function PaymentPage() {
           const paymentDto = {
             orderId: orderDetail.orderId,
             amount: orderDetail.price,
-            orderInfo: `${orderDetail.packageType} ${orderDetail.title}`,
+            orderInfo: orderDetail.email,
           };
           const paymentResponse = await createPayment(paymentDto);
           const payload = paymentResponse.data;
