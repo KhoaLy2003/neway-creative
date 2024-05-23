@@ -6,11 +6,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 public class SaveOrderRequest implements Serializable {
-    private int packageId;
+    private Set<Integer> packageIds;
     private String email;
 }

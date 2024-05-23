@@ -8,6 +8,7 @@ import com.neway_creative.ideasy_calendar.dto.response.OrderDetailResponse;
 import com.neway_creative.ideasy_calendar.dto.response.PaymentResultResponse;
 import com.neway_creative.ideasy_calendar.entity.Order;
 import com.neway_creative.ideasy_calendar.enumeration.OrderEnum;
+import com.neway_creative.ideasy_calendar.exception.DuplicateCalendarException;
 import com.neway_creative.ideasy_calendar.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
@@ -55,6 +56,9 @@ public class PaymentController {
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new BaseResponse(HttpStatus.BAD_REQUEST.value(), MessageConstant.SAVE_ORDER_FAILED, null));
+        } catch (DuplicateCalendarException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new BaseResponse(HttpStatus.BAD_REQUEST.value(), MessageConstant.ORDER_DUPLICATE_CALENDAR, null));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new BaseResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), MessageConstant.SAVE_ORDER_FAILED, null));

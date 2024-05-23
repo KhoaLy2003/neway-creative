@@ -54,4 +54,6 @@ public final class MessageConstant {
     public static final String GET_POST_FAILED = "customer.get_post_failed";
     public static final String CREATE_POST_FAILED = "customer.create_post_failed";
     public static final String REGISTER_DUPLICATE_EMAIL = "customer.register_duplicate_email";
+
+    public static final String ORDER_DUPLICATE_CALENDAR = "customer.order_duplicate_calendar";
 }

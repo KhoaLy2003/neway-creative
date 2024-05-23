@@ -7,20 +7,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import net.minidev.json.annotate.JsonIgnore;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Package Entity
@@ -35,7 +27,7 @@ import javax.persistence.Table;
 @Table(name = "package")
 @Builder
 @EntityListeners(AuditingEntityListener.class)
-public class Package extends BaseEntity{
+public class Package extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "package_id")
@@ -62,7 +54,12 @@ public class Package extends BaseEntity{
     @JoinColumn(name = "calendar_id", nullable = false)
     private Calendar calendar;
 
-//    @OneToOne
-//    @JoinColumn(name = "order_id", referencedColumnName = "order_id", unique = true)
-//    private Order order;
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            },
+            mappedBy = "packages")
+    @JsonIgnore
+    private Set<Order> orders = new HashSet<>();
 }

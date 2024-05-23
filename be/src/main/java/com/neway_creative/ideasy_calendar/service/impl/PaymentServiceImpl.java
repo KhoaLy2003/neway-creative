@@ -5,11 +5,12 @@ import com.neway_creative.ideasy_calendar.constant.MessageConstant;
 import com.neway_creative.ideasy_calendar.constant.VnPayConstant;
 import com.neway_creative.ideasy_calendar.dto.request.*;
 import com.neway_creative.ideasy_calendar.dto.response.OrderDetailResponse;
-import com.neway_creative.ideasy_calendar.entity.Calendar;
+import com.neway_creative.ideasy_calendar.dto.response.PackageResponse;
 import com.neway_creative.ideasy_calendar.entity.Customer;
 import com.neway_creative.ideasy_calendar.entity.Order;
 import com.neway_creative.ideasy_calendar.entity.Package;
 import com.neway_creative.ideasy_calendar.enumeration.OrderEnum;
+import com.neway_creative.ideasy_calendar.exception.DuplicateCalendarException;
 import com.neway_creative.ideasy_calendar.repository.CalendarRepository;
 import com.neway_creative.ideasy_calendar.repository.CustomerRepository;
 import com.neway_creative.ideasy_calendar.repository.OrderRepository;
@@ -31,6 +32,7 @@ import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -158,26 +160,31 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public OrderDetailResponse saveOrder(SaveOrderRequest saveOrderRequest) {
-//        Order existingOrder = orderRepository.findByPackageId(saveOrderRequest.getPackageId());
-//        if(existingOrder != null) {
-//            existingOrder.setStatus(OrderEnum.PENDING);
-//            return existingOrder;
-//        }
-
-        Package calendarPackage = packageRepository.findById(saveOrderRequest.getPackageId())
-                .orElseThrow(() -> new ResourceNotFoundException("Package not found"));
-
         Customer customer = customerRepository.findByEmailAddress(saveOrderRequest.getEmail())
                 .orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
 
-        Calendar calendar = calendarRepository.findById(calendarPackage.getCalendar().getCalendarId())
-                .orElseThrow(() -> new ResourceNotFoundException("Calendar not found"));
+        Set<Package> packages = new HashSet<>(packageRepository.findAllById(saveOrderRequest.getPackageIds()));
+        Set<Integer> calendarIds = new HashSet<>();
+        if(packages.stream().anyMatch(p -> !calendarIds.add(p.getCalendar().getCalendarId()))) {
+          throw new DuplicateCalendarException(MessageConstant.ORDER_DUPLICATE_CALENDAR);
+        }
+
+        Set<PackageResponse> packageResponses = packages.stream()
+                .map(calendarPackage -> new PackageResponse(calendarPackage.getPackageId(),
+                        calendarPackage.getPrice(),
+                        calendarPackage.getDurationValue(),
+                        calendarPackage.getDurationUnit().toString(),
+                        calendarPackage.getPackageType().toString(),
+                        calendarPackage.getCalendar().getTitle()))
+                .collect(Collectors.toSet());
+
+        long orderPrice = packages.stream().mapToLong(calendarPackage -> calendarPackage.getPrice()).sum();
 
         Order order = new Order();
         order.setOrderDate(LocalDateTime.now());
-        order.setPrice(calendarPackage.getPrice());
+        order.setPrice(orderPrice);
         order.setStatus(OrderEnum.PENDING);
-        order.setCalendarPackage(calendarPackage);
+        order.setPackages(packages);
         order.setCustomer(customer);
         order.setCreatedAt(LocalDateTime.now());
         order.setUpdatedAt(LocalDateTime.now());
@@ -190,8 +197,7 @@ public class PaymentServiceImpl implements PaymentService {
                 .email(customer.getEmailAddress())
                 .orderDate(order.getOrderDate())
                 .price(order.getPrice())
-                .packageType(calendarPackage.getPackageType().toString())
-                .calendarTitle(calendar.getTitle())
+                .packages(packageResponses)
                 .build();
     }
 

@@ -13,6 +13,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Integer> {
-    @Query("SELECT o FROM Order o WHERE o.calendarPackage.packageId = ?1")
-    Order findByPackageId(int packageId);
+
 }
