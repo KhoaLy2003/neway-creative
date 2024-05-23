@@ -2,18 +2,13 @@ package com.neway_creative.ideasy_calendar.controller;
 
 import com.neway_creative.ideasy_calendar.constant.MessageConstant;
 import com.neway_creative.ideasy_calendar.constant.UriConstant;
-import com.neway_creative.ideasy_calendar.dto.request.CreatePaymentRequest;
-import com.neway_creative.ideasy_calendar.dto.request.SaveOrderRequest;
-import com.neway_creative.ideasy_calendar.dto.request.UpdateOrderRequest;
+import com.neway_creative.ideasy_calendar.dto.request.*;
 import com.neway_creative.ideasy_calendar.dto.response.BaseResponse;
 import com.neway_creative.ideasy_calendar.dto.response.OrderDetailResponse;
 import com.neway_creative.ideasy_calendar.dto.response.PaymentResultResponse;
-import com.neway_creative.ideasy_calendar.entity.Customer;
 import com.neway_creative.ideasy_calendar.entity.Order;
-import com.neway_creative.ideasy_calendar.entity.Package;
 import com.neway_creative.ideasy_calendar.enumeration.OrderEnum;
-import com.neway_creative.ideasy_calendar.repository.CustomerRepository;
-import com.neway_creative.ideasy_calendar.repository.PackageRepository;
+import com.neway_creative.ideasy_calendar.exception.DuplicateCalendarException;
 import com.neway_creative.ideasy_calendar.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
@@ -33,8 +28,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class PaymentController {
     private final PaymentService paymentService;
-    private final CustomerRepository customerRepository;
-    private final PackageRepository packageRepository;
 
     @PostMapping(UriConstant.PAYMENT_CREATE)
     public ResponseEntity<BaseResponse> createPayment(HttpServletRequest servletRequest, @RequestBody CreatePaymentRequest paymentRequest) {
@@ -63,6 +56,9 @@ public class PaymentController {
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new BaseResponse(HttpStatus.BAD_REQUEST.value(), MessageConstant.SAVE_ORDER_FAILED, null));
+        } catch (DuplicateCalendarException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new BaseResponse(HttpStatus.BAD_REQUEST.value(), MessageConstant.ORDER_DUPLICATE_CALENDAR, null));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new BaseResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), MessageConstant.SAVE_ORDER_FAILED, null));
@@ -116,4 +112,38 @@ public class PaymentController {
         }
 
     }
+
+    @PostMapping(UriConstant.PAYMENT_QUERY)
+    public ResponseEntity<BaseResponse> queryOrder(HttpServletRequest servletRequest, @RequestBody QueryDrRequest queryDrRequest) {
+        String response = "";
+        try {
+            response = paymentService.queryTransaction(servletRequest, queryDrRequest);
+
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new BaseResponse(HttpStatus.OK.value(), MessageConstant.SUCCESSFUL_MESSAGE, response));
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new BaseResponse(HttpStatus.BAD_REQUEST.value(), MessageConstant.QUERY_ORDER_FAILED, null));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new BaseResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), MessageConstant.QUERY_ORDER_FAILED, response));
+        }
+    }
+    @PostMapping(UriConstant.PAYMENT_REFUND)
+    public ResponseEntity<BaseResponse> refundOrder(HttpServletRequest servletRequest, @RequestBody RefundRequest refundRequest) {
+        String response = "";
+        try {
+            response = paymentService.refundTransaction(servletRequest, refundRequest);
+
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new BaseResponse(HttpStatus.OK.value(), MessageConstant.SUCCESSFUL_MESSAGE, response));
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new BaseResponse(HttpStatus.BAD_REQUEST.value(), MessageConstant.REFUND_ORDER_FAILED, null));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new BaseResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), MessageConstant.REFUND_ORDER_FAILED, response));
+        }
+    }
+
 }

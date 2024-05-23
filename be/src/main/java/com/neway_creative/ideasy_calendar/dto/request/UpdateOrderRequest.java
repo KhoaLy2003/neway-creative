@@ -5,10 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class UpdateOrderRequest {
+public class UpdateOrderRequest implements Serializable {
     private int orderId;
     private OrderEnum status;
 }

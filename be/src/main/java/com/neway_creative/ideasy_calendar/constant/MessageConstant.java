@@ -42,6 +42,9 @@ public final class MessageConstant {
     public static final String CREATE_PAYMENT_FAILED = "customer.create_payment_failed";
     public static final String SAVE_ORDER_FAILED = "customer.save_order_failed";
     public static final String UPDATE_ORDER_FAILED = "customer.update_order.failed";
+
+    public static final String QUERY_ORDER_FAILED = "customer.query_order.failed";
+    public static final String REFUND_ORDER_FAILED = "customer.refund_order.failed";
     public static final String VERIFY_ACCOUNT_SUCCESSFULLY = "customer.verify_account_successfully";
     public static final String VERIFY_ACCOUNT_FAILED = "customer.verify_account_failed";
     public static final String ACCOUNT_NOT_VERIFIED = "customer.account_not_verified";
@@ -51,4 +54,6 @@ public final class MessageConstant {
     public static final String GET_POST_FAILED = "customer.get_post_failed";
     public static final String CREATE_POST_FAILED = "customer.create_post_failed";
     public static final String REGISTER_DUPLICATE_EMAIL = "customer.register_duplicate_email";
+
+    public static final String ORDER_DUPLICATE_CALENDAR = "customer.order_duplicate_calendar";
 }

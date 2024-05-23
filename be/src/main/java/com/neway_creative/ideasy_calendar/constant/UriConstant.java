@@ -63,6 +63,14 @@ public final class UriConstant {
      */
     public static final String PAYMENT_RESULT = "/result";
     /**
+     * The constant PAYMENT_QUERY.
+     */
+    public static final String PAYMENT_QUERY = "/query";
+    /**
+     * The constant PAYMENT_REFUND.
+     */
+    public static final String PAYMENT_REFUND = "/refund";
+    /**
      * The constant POST_CREATE.
      */
     public static final String POST_CREATE = "/admin/create";
