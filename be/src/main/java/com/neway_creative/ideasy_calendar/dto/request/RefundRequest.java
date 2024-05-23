@@ -1,16 +1,18 @@
 package com.neway_creative.ideasy_calendar.dto.request;
 
-import com.neway_creative.ideasy_calendar.enumeration.OrderEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-public class UpdateOrderRequest implements Serializable {
-    private int orderId;
-    private OrderEnum status;
+public class RefundRequest implements Serializable {
+    private String orderId;
+    private long amount;
+    private String orderInfo;
+    private String transactionDate;
+    private String user;
 }

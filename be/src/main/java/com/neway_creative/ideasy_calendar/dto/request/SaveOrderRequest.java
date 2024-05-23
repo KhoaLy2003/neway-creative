@@ -5,10 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class SaveOrderRequest {
+public class SaveOrderRequest implements Serializable {
     private int packageId;
     private String email;
 }
