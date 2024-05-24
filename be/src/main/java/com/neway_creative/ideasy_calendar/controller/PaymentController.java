@@ -22,7 +22,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping(UriConstant.PAYMENT_BASE_URI)
 @RequiredArgsConstructor
 public class PaymentController {

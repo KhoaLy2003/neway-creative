@@ -14,6 +14,7 @@ import com.neway_creative.ideasy_calendar.repository.CalendarRepository;
 import com.neway_creative.ideasy_calendar.repository.CustomerRepository;
 import com.neway_creative.ideasy_calendar.repository.OrderRepository;
 import com.neway_creative.ideasy_calendar.repository.PackageRepository;
+import com.neway_creative.ideasy_calendar.service.MailService;
 import com.neway_creative.ideasy_calendar.service.PaymentService;
 import com.neway_creative.ideasy_calendar.utils.VnPay;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +42,7 @@ public class PaymentServiceImpl implements PaymentService {
     private final PackageRepository packageRepository;
     private final CustomerRepository customerRepository;
     private final CalendarRepository calendarRepository;
+    private final MailService mailService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PaymentServiceImpl.class);
 
@@ -204,6 +206,15 @@ public class PaymentServiceImpl implements PaymentService {
     public Order updateOrder(UpdateOrderRequest updateOrderRequest) {
         Order order = orderRepository.findById(updateOrderRequest.getOrderId())
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
+
+        if (updateOrderRequest.getStatus().equals(OrderEnum.COMPLETED)) {
+            List<Integer> packageIds = orderRepository.findPackageIdsByOrderId(updateOrderRequest.getOrderId());
+            List<Package> packages = packageRepository.findAllById(packageIds);
+
+            if (!packageIds.isEmpty()) {
+                mailService.sendMailLinkNotion(order.getCustomer().getEmailAddress(), packages);
+            }
+        }
 
         order.setStatus(updateOrderRequest.getStatus());
         order.setUpdatedAt(LocalDateTime.now());

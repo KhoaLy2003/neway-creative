@@ -55,10 +55,23 @@ const CustomHeader = () => {
   const handleOrderPayment = async (cart) => {
     setLoading(true);
     if (cart) {
-      const calendarPackage = cart[0];
-      const packageJSON = JSON.parse(calendarPackage?.selectedRow);
+      console.log("HERE", cart);
+
+      const ids = cart.map(item => {
+        try {
+          const selectedRow = JSON.parse(item.selectedRow);
+    
+          return selectedRow.id;
+        } catch (e) {
+          console.error("Error parsing item properties:", e);
+          return null;
+        }
+      }).filter(id => id !== null);
+    
+      console.log("Extracted IDs:", ids);
+
       const orderDto = {
-        packageId: packageJSON.id,
+        packageIds: ids,
         email: email,
       };
 
