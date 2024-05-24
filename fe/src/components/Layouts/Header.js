@@ -10,6 +10,7 @@ import {
   LoadingOutlined,
   LogoutOutlined,
   ShoppingCartOutlined,
+  FileSearchOutlined,
 } from "@ant-design/icons";
 import { saveOrder } from "../../api/payment";
 
@@ -92,6 +93,11 @@ const CustomHeader = () => {
     }
   };
 
+  const handleViewOrderHistory = () => {
+    navigate(`/order-history`);
+
+  }
+
   const menu = (
     <Menu>
       <Menu.Item key="1">
@@ -103,6 +109,9 @@ const CustomHeader = () => {
             </Button>
             <Button type="link" onClick={handleViewCart}>
               <ShoppingCartOutlined /> Giỏ hàng
+            </Button>
+            <Button type="link" onClick={handleViewOrderHistory}>
+              <FileSearchOutlined /> Lịch sử mua hàng
             </Button>
           </Space>
         </div>

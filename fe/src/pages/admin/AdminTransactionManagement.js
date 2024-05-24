@@ -97,6 +97,7 @@ const AdminTransactionManagement = () => {
             position: ["bottomCenter"],
             total: totalElements,
             showSizeChanger: false,
+            pageSize: 7,
           }}
           dataSource={data}
           // loading={isLoading}
