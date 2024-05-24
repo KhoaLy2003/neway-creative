@@ -6,8 +6,11 @@ import com.neway_creative.ideasy_calendar.dto.request.LoginRequest;
 import com.neway_creative.ideasy_calendar.dto.request.RegisterRequest;
 import com.neway_creative.ideasy_calendar.dto.request.VerifyAccountRequest;
 import com.neway_creative.ideasy_calendar.dto.response.BaseResponse;
+import com.neway_creative.ideasy_calendar.dto.response.CustomerOrderDetailResponse;
+import com.neway_creative.ideasy_calendar.dto.response.CustomerOrderHistoryResponse;
 import com.neway_creative.ideasy_calendar.dto.response.LoginResponse;
 import com.neway_creative.ideasy_calendar.service.AuthenticationService;
+import com.neway_creative.ideasy_calendar.service.PaymentService;
 import com.neway_creative.ideasy_calendar.utils.MessageLocalization;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -15,11 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -36,6 +35,7 @@ import java.util.List;
 public class CustomerController {
     private final AuthenticationService authenticationService;
     private final MessageLocalization messageLocalization;
+    private final PaymentService paymentService;
 
     @Operation(method = "POST", summary = "Register account", description = "Send a request via this API to register new account")
     @PostMapping(UriConstant.CUSTOMER_REGISTER_URI)
@@ -104,5 +104,31 @@ public class CustomerController {
         LoginResponse loginResponse = authenticationService.authenticateAccount(request);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponse(HttpStatus.OK.value(), messageLocalization.getLocalizedMessage(MessageConstant.LOGIN_SUCCESSFULLY), loginResponse));
+    }
+
+    @GetMapping(UriConstant.CUSTOMER_ORDER_HISTORY)
+    public ResponseEntity<BaseResponse> getCustomerOrderHistory(@PathVariable int customerId) {
+        try {
+            CustomerOrderHistoryResponse response = paymentService.getCustomerOrderHistory(customerId);
+
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new BaseResponse(HttpStatus.OK.value(), MessageConstant.SUCCESSFUL_MESSAGE, response));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new BaseResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), MessageConstant.GET_CUSTOMER_ORDER_HISTORY_FAILED, null));
+        }
+    }
+
+    @GetMapping(UriConstant.CUSTOMER_ORDER_DETAIL)
+    public ResponseEntity<BaseResponse> getCustomerOrderDetail(@PathVariable int customerId, @PathVariable int orderId) {
+        try {
+            CustomerOrderDetailResponse response = paymentService.getCustomerOrderDetail(customerId, orderId);
+
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new BaseResponse(HttpStatus.OK.value(), MessageConstant.SUCCESSFUL_MESSAGE, response));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new BaseResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), MessageConstant.GET_CUSTOMER_ORDER_DETAIL_FAILED, null));
+        }
     }
 }

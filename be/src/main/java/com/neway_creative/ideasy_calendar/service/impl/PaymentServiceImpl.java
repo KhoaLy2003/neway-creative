@@ -4,8 +4,7 @@ import com.google.gson.JsonObject;
 import com.neway_creative.ideasy_calendar.constant.MessageConstant;
 import com.neway_creative.ideasy_calendar.constant.VnPayConstant;
 import com.neway_creative.ideasy_calendar.dto.request.*;
-import com.neway_creative.ideasy_calendar.dto.response.OrderDetailResponse;
-import com.neway_creative.ideasy_calendar.dto.response.PackageResponse;
+import com.neway_creative.ideasy_calendar.dto.response.*;
 import com.neway_creative.ideasy_calendar.entity.Customer;
 import com.neway_creative.ideasy_calendar.entity.Order;
 import com.neway_creative.ideasy_calendar.entity.Package;
@@ -350,4 +349,45 @@ public class PaymentServiceImpl implements PaymentService {
 
         return response.toString();
         }
+
+    @Override
+    public CustomerOrderHistoryResponse getCustomerOrderHistory(int customerId) {
+        List<Order> orders = orderRepository.findByCustomerId(customerId);
+        List<OrderResponse> orderResponses = orders.stream()
+                .map(order -> new OrderResponse(
+                        order.getOrderId(),
+                        order.getOrderDate(),
+                        order.getPrice(),
+                        order.getPackages().size(),
+                        order.getStatus()))
+                .collect(Collectors.toList());
+
+        return CustomerOrderHistoryResponse.builder()
+                .orders(orderResponses)
+                .build();
     }
+
+    @Override
+    public CustomerOrderDetailResponse getCustomerOrderDetail(int customerId, int orderId) {
+        Order order = orderRepository.findByCustomerIdAndOrderId(customerId, orderId);
+        Set<PackageResponse> packageResponses = order.getPackages().stream()
+                .map(calendarPackage -> new PackageResponse(
+                        calendarPackage.getPackageId(),
+                        calendarPackage.getPrice(),
+                        calendarPackage.getDurationValue(),
+                        calendarPackage.getDurationUnit().toString(),
+                        calendarPackage.getPackageType().toString(),
+                        calendarPackage.getCalendar().getTitle()
+                ))
+                .collect(Collectors.toSet());
+
+        return CustomerOrderDetailResponse.builder()
+                .orderId(order.getOrderId())
+                .orderDate(order.getOrderDate())
+                .price(order.getPrice())
+                .numOfPackages(order.getPackages().size())
+                .status(order.getStatus())
+                .packages(packageResponses)
+                .build();
+    }
+}

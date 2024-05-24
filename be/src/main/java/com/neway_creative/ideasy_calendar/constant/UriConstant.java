@@ -71,6 +71,14 @@ public final class UriConstant {
      */
     public static final String PAYMENT_REFUND = "/refund";
     /**
+     * The constant ORDER_HISTORY.
+     */
+    public static final String CUSTOMER_ORDER_HISTORY = "/{customerId}/order-history";
+    /**
+     * The constant GET_ORDER_DETAIL.
+     */
+    public static final String CUSTOMER_ORDER_DETAIL = "/{customerId}/order-history/{orderId}";
+    /**
      * The constant POST_CREATE.
      */
     public static final String POST_CREATE = "/admin/create";
