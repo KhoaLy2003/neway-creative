@@ -114,8 +114,8 @@ public class CustomerController {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new BaseResponse(HttpStatus.OK.value(), MessageConstant.SUCCESSFUL_MESSAGE, response));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new BaseResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), MessageConstant.GET_CUSTOMER_ORDER_HISTORY_FAILED, null));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new BaseResponse(HttpStatus.BAD_REQUEST.value(), MessageConstant.GET_CUSTOMER_ORDER_HISTORY_FAILED, null));
         }
     }
 
@@ -127,8 +127,8 @@ public class CustomerController {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new BaseResponse(HttpStatus.OK.value(), MessageConstant.SUCCESSFUL_MESSAGE, response));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new BaseResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), MessageConstant.GET_CUSTOMER_ORDER_DETAIL_FAILED, null));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new BaseResponse(HttpStatus.BAD_REQUEST.value(), MessageConstant.GET_CUSTOMER_ORDER_DETAIL_FAILED, null));
         }
     }
 }
