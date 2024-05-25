@@ -120,7 +120,7 @@ function PaymentPage() {
   const prev = async () => {
     const orderDto = {
       orderId: orderDetail.orderId,
-      status: "CANCELED",
+      status: "CANCELLED",
     };
 
     try {
