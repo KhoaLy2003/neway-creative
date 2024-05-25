@@ -1,6 +1,8 @@
 package com.neway_creative.ideasy_calendar.service;
 
 import com.neway_creative.ideasy_calendar.dto.request.*;
+import com.neway_creative.ideasy_calendar.dto.response.CustomerOrderDetailResponse;
+import com.neway_creative.ideasy_calendar.dto.response.CustomerOrderHistoryResponse;
 import com.neway_creative.ideasy_calendar.dto.response.OrderDetailResponse;
 import com.neway_creative.ideasy_calendar.entity.Order;
 
@@ -25,4 +27,8 @@ public interface PaymentService {
     String queryTransaction(HttpServletRequest request, QueryDrRequest queryDrRequest) throws IOException;
 
    String refundTransaction(HttpServletRequest request, RefundRequest refundRequest) throws IOException;
+
+   CustomerOrderHistoryResponse getCustomerOrderHistory(int customerId);
+
+   CustomerOrderDetailResponse getCustomerOrderDetail(int customerId, int orderId);
 }
