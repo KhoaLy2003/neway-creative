@@ -1,6 +1,7 @@
 import React, { useState, createContext, useEffect } from "react";
 
 export const UserContext = createContext({
+  id: null,
   name: null,
   role: null,
   token: null,
@@ -11,6 +12,7 @@ export const UserContext = createContext({
 });
 
 const UserProvider = ({ children }) => {
+  const [id, setId] = useState(null);
   const [name, setName] = useState(null);
   const [role, setRole] = useState(null);
   const [email, setEmail] = useState(null);
@@ -32,6 +34,7 @@ const UserProvider = ({ children }) => {
           } else {
             if (storageToken && storageUser) {
               const parseStorageUser = JSON.parse(storageUser);
+              setId(parseStorageUser.id)
               setName(parseStorageUser.name);
               setEmail(parseStorageUser.email);
               setRole(parseStorageUser.role);
@@ -57,6 +60,7 @@ const UserProvider = ({ children }) => {
       "expiration",
       currentDate.setHours(currentDate.getHours() + 1).toString()
     );
+    setId(user.id);
     setName(user.name);
     setEmail(user.email);
     setRole(user.role);
@@ -64,6 +68,7 @@ const UserProvider = ({ children }) => {
   };
 
   const logout = () => {
+    setId(null);
     setName(null);
     setEmail(null);
     setRole(null);
@@ -84,6 +89,7 @@ const UserProvider = ({ children }) => {
   return (
     <UserContext.Provider
       value={{
+        id: id,
         name: name,
         email: email,
         role: role,

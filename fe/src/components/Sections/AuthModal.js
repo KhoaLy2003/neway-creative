@@ -37,6 +37,7 @@ const AuthModal = ({ modalOpen, setModalOpen }) => {
     setModalOpen(false);
 
     const user = {
+      id: customer?.id,
       name: customer?.name,
       email: customer?.email,
       role: customer?.role,

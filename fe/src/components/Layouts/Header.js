@@ -20,7 +20,8 @@ const CustomHeader = () => {
   const [loading, setLoading] = useState(false);
   const [cart, setCart] = useState([]);
   const navigate = useNavigate();
-  const { name, logout, email } = useContext(UserContext);
+  const { name, logout, email, id } = useContext(UserContext);
+  
 
   useEffect(() => {
     if (drawerVisible) {

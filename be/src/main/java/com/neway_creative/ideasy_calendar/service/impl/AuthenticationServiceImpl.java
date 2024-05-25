@@ -114,6 +114,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
             return LoginResponse
                     .builder()
+                    .id(currentCustomer.getCustomerId())
                     .name(currentCustomer.getName())
                     .email(request.getEmail())
                     .token(jwtService.generateToken(existingUser.get()))
