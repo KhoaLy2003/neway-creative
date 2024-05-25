@@ -13,6 +13,7 @@ import {
 import { getColorByPackageType } from "../../utils/GetColor";
 import { useLocation, useNavigate } from "react-router-dom";
 import { createPayment, updateOrder } from "../../api/payment";
+import QRImg from "../../assets/Example-QR-code.png";
 
 const steps = [
   {
@@ -103,9 +104,9 @@ function PaymentPage() {
             amount: orderDetail.price,
             orderInfo: orderDetail.email,
           };
-          const paymentResponse = await createPayment(paymentDto);
-          const payload = paymentResponse.data;
-          window.location.href = payload["redirect_url"];
+          // const paymentResponse = await createPayment(paymentDto);
+          // const payload = paymentResponse.data;
+          // window.location.href = payload["redirect_url"];
 
           setCurrent(current + 1);
         }
@@ -126,8 +127,9 @@ function PaymentPage() {
       const response = await updateOrder(orderDto);
       if (response.status === 200) {
         navigate("/");
-        notification.success({
+        notification.error({
           message: "Đơn hàng của bạn được hủy",
+          duration: 2,
         });
       }
     } catch (error) {
@@ -135,6 +137,14 @@ function PaymentPage() {
       throw error;
     }
   };
+
+  const complete = () => {
+    navigate("/");
+    notification.success({
+      message: "Cảm ơn bạn đã sử dụng sản phẩm của chúng tôi!",
+      duration: 3,
+    });
+  }
 
   const items = steps.map((item) => ({
     key: item.title,
@@ -177,17 +187,73 @@ function PaymentPage() {
         {current === 1 && (
           <div
             style={{
-              lineHeight: 260,
+              lineHeight: "1.5",
               textAlign: "center",
               marginTop: 50,
             }}
           >
-            <Row>
-              <Col span={3}></Col>
+            <Row justify="center">
               <Col span={18}>
-                <p>Vui lòng chờ trong khi chúng tôi xử lý thanh toán...</p>
+                <Row justify="center">
+                  <Col>
+                    <img
+                      style={{ width: "300px", height: "auto" }}
+                      src={QRImg}
+                      alt="QR"
+                    />
+                  </Col>
+                </Row>
+                <Row justify="center">
+                  <Col>
+                    <h4>
+                      <strong>Tên chủ tài khoản:</strong> Nguyễn Văn A
+                    </h4>
+                  </Col>
+                </Row>
+                <Row justify="center">
+                  <Col>
+                    <h4>
+                      <strong>Số tiền chuyển khoản:</strong>{" "}
+                      {orderDetail.price.toLocaleString("de-DE") + " VNĐ"}
+                    </h4>
+                  </Col>
+                </Row>
               </Col>
-              <Col span={3}></Col>
+            </Row>
+
+            <Row justify="center" style={{marginTop: "30px"}}>
+              <Col span={18}>
+                <h1 style={{ fontWeight: "bold", marginBottom: "20px" }}>
+                  Hướng dẫn thanh toán sản phẩm
+                </h1>
+                <div style={{ textAlign: "left", marginLeft: "70px" }}>
+                  <p>
+                    <strong>Bước 1:</strong> Mở ứng dụng hỗ trợ thanh toán sử
+                    dụng mã QR
+                    {"("}Momo, Bank, v.v{")"}
+                  </p>
+                  <p>
+                    <strong>Bước 2:</strong> Thực hiện nhập số tiền cần thanh
+                    toán
+                  </p>
+                  <p>
+                    <strong>Bước 3:</strong> Chụp hình xác nhận giao dịch thành
+                    công qua fanpage. {" "}
+                    <a
+                      href="https://www.facebook.com/ideasylichytuong"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <strong>Link fanpage IDEASY</strong>
+                    </a>
+                  </p>
+                
+                  <p>
+                    <strong>Bước 4:</strong> Admin xác nhận giao dịch thành công
+                    và bạn nhận bộ lịch IDEASY qua email!
+                  </p>
+                </div>
+              </Col>
             </Row>
           </div>
         )}
@@ -198,21 +264,28 @@ function PaymentPage() {
           }}
         >
           <Flex justify="center">
-            {current === 0 && (
-              <>
+            <>
+              {current === 0 && (
                 <Button type="primary" onClick={() => next()}>
                   Tiếp tục
                 </Button>
-                <Button
-                  style={{
-                    margin: "0 20px",
-                  }}
-                  onClick={() => prev()}
-                >
-                  Quay lại
-                </Button>
-              </>
-            )}
+              )}
+              {current === 1 && (
+                <Button type="primary" onClick={() => complete()}>
+                Hoàn tất
+              </Button>
+              )}
+              <Button 
+                type="primary"
+                danger
+                style={{
+                  margin: "0 20px",
+                }}
+                onClick={() => prev()}
+              >
+                Hủy thanh toán
+              </Button>
+            </>
           </Flex>
         </div>
       </Card>
