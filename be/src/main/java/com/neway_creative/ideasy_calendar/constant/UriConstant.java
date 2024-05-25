@@ -114,4 +114,6 @@ public final class UriConstant {
      * The constant CUSTOMER_LOGIN_URI.
      */
     public static final String CUSTOMER_LOGIN_URI = "/login";
+
+    public static final String ORDER_BASE_URI = "/api/orders";
 }

@@ -106,6 +106,7 @@ public class CustomerController {
                 .body(new BaseResponse(HttpStatus.OK.value(), messageLocalization.getLocalizedMessage(MessageConstant.LOGIN_SUCCESSFULLY), loginResponse));
     }
 
+    @CrossOrigin
     @GetMapping(UriConstant.CUSTOMER_ORDER_HISTORY)
     public ResponseEntity<BaseResponse> getCustomerOrderHistory(@PathVariable int customerId) {
         try {
@@ -119,6 +120,7 @@ public class CustomerController {
         }
     }
 
+    @CrossOrigin
     @GetMapping(UriConstant.CUSTOMER_ORDER_DETAIL)
     public ResponseEntity<BaseResponse> getCustomerOrderDetail(@PathVariable int customerId, @PathVariable int orderId) {
         try {

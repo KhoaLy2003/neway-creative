@@ -1,55 +1,72 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect, useContext } from "react";
 import PageHeading from "../../components/Layouts/PageHeading";
 import { Layout, Space, Table, Typography, Tag } from "antd";
 import { Footer } from "antd/es/layout/layout";
 import { getPost } from "../../api/post";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "antd";
+import { fetchOrderHistory } from "../../api/order";
+import { UserContext } from "../../context/AuthContext";
 
 export default function ViewOrderHistory() {
-  const fetchOrderHistory = async () => {
-    try {
-    } catch (error) {}
-  };
-
-  useEffect(() => {
-    fetchOrderHistory();
-  }, []);
-
   const [currentPage, setCurrentPage] = useState(0);
   const [totalElements, setTotalElements] = useState(0);
+  const [orderHistory, setOrderHistory] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const { id } = useContext(UserContext);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await fetchOrderHistory(id);
+
+        const ordersWithFormattedDate = data.data.orders.map(order => {
+          const [year, month, day] = order.orderDate;
+          const formattedDate = `${day}/${month}/${year}`;
+          return { ...order, formattedDate };
+        });
+
+        setOrderHistory(ordersWithFormattedDate);
+      } catch (error) {
+        setError(error.message);
+      }
+    };
   
+    fetchData();
+  }, [id]);
+  
+
   const columns = [
     {
-      title: "Order ID",
-      dataIndex: "orderId",
-      key: "orderId",
-      render: (text) => <a>{text}</a>,
+      title: "Ngày mua hàng",
+      dataIndex: "formattedDate",
+      key: "formattedDate",
     },
     {
-      title: "Order Date",
-      dataIndex: "orderDate",
-      key: "orderDate",
-    },
-    {
-      title: "Price",
+      title: "Giá trị đơn hàng",
       dataIndex: "price",
       key: "price",
     },
     {
-      title: "Status",
+      title: "Số lượng sản phẩm",
+      dataIndex: "numOfPackages",
+      key: "numOfPackage",
+    },
+    {
+      title: "Trạng thái",
       key: "status",
       dataIndex: "status",
       render: (status) => {
         let color;
-        switch (status) {
-          case "Completed":
+        switch (status.toLowerCase()) {
+          case "completed":
             color = "green";
             break;
-          case "Cancelled":
+          case "cancelled":
             color = "red";
             break;
-          case "Pending":
+          case "pending":
             color = "blue";
             break;
           default:
@@ -60,29 +77,6 @@ export default function ViewOrderHistory() {
       },
     },
   ];
-  const data = [
-    {
-      key: "1",
-      orderId: "1",
-      orderDate: "1/1/2024",
-      price: "300.000",
-      status: "Completed",
-    },
-    {
-      key: "2",
-      orderId: "2",
-      orderDate: "1/1/2024",
-      price: "500.000",
-      status: "Pending",
-    },
-    {
-      key: "3",
-      orderId: "3",
-      orderDate: "1/1/2024",
-      price: "800.0000",
-      status: "Cancelled",
-    },
-  ];
   return (
     <Fragment>
       <Layout>
@@ -91,21 +85,22 @@ export default function ViewOrderHistory() {
           direction="vertical"
           style={{
             margin: "24px 16px 0",
-            width: '80%',
-            margin: '0 auto',
-            
+            width: "80%",
+            margin: "0 auto",
           }}
         >
-          <Typography.Title level={2} style={{marginTop: '30px'}}>Transaction List</Typography.Title>
+          <Typography.Title level={2} style={{ marginTop: "30px" }}>
+            Lịch sử mua hàng
+          </Typography.Title>
           <Table
             columns={columns}
             pagination={{
               position: ["bottomCenter"],
               total: totalElements,
               showSizeChanger: false,
-              pageSize: 7,
+              pageSize: 8,
             }}
-            dataSource={data}
+            dataSource={orderHistory}
             // loading={isLoading}
             onChange={(pagination) => setCurrentPage(pagination.current - 1)}
           />
