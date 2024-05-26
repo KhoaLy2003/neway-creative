@@ -102,7 +102,7 @@ export default function ViewPostPage() {
                       marginTop: "20px",
                     }}
                   >
-                    <div>Posted on {formatDate(item.updatedAt)}</div>
+                    <div>Đăng vào {formatDate(item.updatedAt)}</div>
                   </div>
                 </div>
               </List.Item>

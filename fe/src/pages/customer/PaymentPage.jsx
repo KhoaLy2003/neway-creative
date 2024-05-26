@@ -12,7 +12,7 @@ import {
 } from "antd";
 import { getColorByPackageType } from "../../utils/GetColor";
 import { useLocation, useNavigate } from "react-router-dom";
-import { createPayment, updateOrder } from "../../api/payment";
+import { updateOrder } from "../../api/payment";
 import QRImg from "../../assets/Example-QR-code.png";
 
 const steps = [
@@ -34,8 +34,10 @@ function PaymentPage() {
 
   useEffect(() => {
     if (!orderDetail) {
+      console.log("ORDER", orderDetail);
       setIsNavigating(true);
       navigate("/calendars");
+      return;
     }
 
     const orderInfoItems = [
@@ -144,7 +146,7 @@ function PaymentPage() {
       message: "Cảm ơn bạn đã sử dụng sản phẩm của chúng tôi!",
       duration: 3,
     });
-  }
+  };
 
   const items = steps.map((item) => ({
     key: item.title,
@@ -203,7 +205,7 @@ function PaymentPage() {
                     />
                   </Col>
                 </Row>
-                <Row justify="center">
+                <Row justify="center" style={{ marginTop: 20 }}>
                   <Col>
                     <h4>
                       <strong>Tên chủ tài khoản:</strong> Nguyễn Văn A
@@ -221,7 +223,7 @@ function PaymentPage() {
               </Col>
             </Row>
 
-            <Row justify="center" style={{marginTop: "30px"}}>
+            <Row justify="center" style={{ marginTop: "30px" }}>
               <Col span={18}>
                 <h1 style={{ fontWeight: "bold", marginBottom: "20px" }}>
                   Hướng dẫn thanh toán sản phẩm
@@ -238,7 +240,7 @@ function PaymentPage() {
                   </p>
                   <p>
                     <strong>Bước 3:</strong> Chụp hình xác nhận giao dịch thành
-                    công qua fanpage. {" "}
+                    công qua fanpage.{" "}
                     <a
                       href="https://www.facebook.com/ideasylichytuong"
                       target="_blank"
@@ -247,7 +249,7 @@ function PaymentPage() {
                       <strong>Link fanpage IDEASY</strong>
                     </a>
                   </p>
-                
+
                   <p>
                     <strong>Bước 4:</strong> Admin xác nhận giao dịch thành công
                     và bạn nhận bộ lịch IDEASY qua email!
@@ -272,14 +274,14 @@ function PaymentPage() {
               )}
               {current === 1 && (
                 <Button type="primary" onClick={() => complete()}>
-                Hoàn tất
-              </Button>
+                  Hoàn tất
+                </Button>
               )}
-              <Button 
+              <Button
                 type="primary"
                 danger
                 style={{
-                  margin: "0 20px",
+                  marginLeft: 20,
                 }}
                 onClick={() => prev()}
               >

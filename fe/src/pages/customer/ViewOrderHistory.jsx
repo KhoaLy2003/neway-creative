@@ -1,10 +1,5 @@
 import React, { Fragment, useState, useEffect, useContext } from "react";
-import PageHeading from "../../components/Layouts/PageHeading";
 import { Layout, Space, Table, Typography, Tag } from "antd";
-import { Footer } from "antd/es/layout/layout";
-import { getPost } from "../../api/post";
-import { useNavigate, useParams } from "react-router-dom";
-import { Button } from "antd";
 import { fetchOrderHistory } from "../../api/order";
 import { UserContext } from "../../context/AuthContext";
 
@@ -21,7 +16,7 @@ export default function ViewOrderHistory() {
       try {
         const data = await fetchOrderHistory(id);
 
-        const ordersWithFormattedDate = data.data.orders.map(order => {
+        const ordersWithFormattedDate = data.data.orders.map((order) => {
           const [year, month, day] = order.orderDate;
           const formattedDate = `${day}/${month}/${year}`;
           return { ...order, formattedDate };
@@ -32,10 +27,9 @@ export default function ViewOrderHistory() {
         setError(error.message);
       }
     };
-  
+
     fetchData();
   }, [id]);
-  
 
   const columns = [
     {
@@ -47,9 +41,12 @@ export default function ViewOrderHistory() {
       title: "Giá trị đơn hàng",
       dataIndex: "price",
       key: "price",
+      render: (price) => {
+        return price.toLocaleString("de-DE") + " VNĐ";
+      },
     },
     {
-      title: "Số lượng sản phẩm",
+      title: "Số lượng",
       dataIndex: "numOfPackages",
       key: "numOfPackage",
     },
@@ -59,21 +56,30 @@ export default function ViewOrderHistory() {
       dataIndex: "status",
       render: (status) => {
         let color;
+        let vietnameseStatus;
         switch (status.toLowerCase()) {
           case "completed":
             color = "green";
+            vietnameseStatus = "Hoàn thành";
             break;
           case "cancelled":
             color = "red";
+            vietnameseStatus = "Đã hủy";
             break;
-          case "pending":
+          case "failed":
+            color = "red";
+            vietnameseStatus = "Thất bại";
+            break;
+          case "waiting":
             color = "blue";
+            vietnameseStatus = "Đang chờ";
             break;
           default:
             color = "default";
+            vietnameseStatus = "Không xác định";
         }
 
-        return <Tag color={color}>{status.toUpperCase()}</Tag>;
+        return <Tag color={color}>{vietnameseStatus.toUpperCase()}</Tag>;
       },
     },
   ];

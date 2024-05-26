@@ -22,7 +22,6 @@ const CustomHeader = () => {
   const navigate = useNavigate();
   const { name, logout, email, id } = useContext(UserContext);
   
-
   useEffect(() => {
     if (drawerVisible) {
       const cartData = JSON.parse(localStorage.getItem("cart")) || [];
@@ -96,7 +95,6 @@ const CustomHeader = () => {
 
   const handleViewOrderHistory = () => {
     navigate(`/order-history`);
-
   }
 
   const menu = (
