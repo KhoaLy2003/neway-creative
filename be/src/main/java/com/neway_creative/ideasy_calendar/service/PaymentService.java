@@ -1,6 +1,7 @@
 package com.neway_creative.ideasy_calendar.service;
 
 import com.neway_creative.ideasy_calendar.dto.request.*;
+import com.neway_creative.ideasy_calendar.dto.response.AdminViewOrderHistory;
 import com.neway_creative.ideasy_calendar.dto.response.CustomerOrderDetailResponse;
 import com.neway_creative.ideasy_calendar.dto.response.CustomerOrderHistoryResponse;
 import com.neway_creative.ideasy_calendar.dto.response.OrderDetailResponse;
@@ -31,4 +32,6 @@ public interface PaymentService {
    CustomerOrderHistoryResponse getCustomerOrderHistory(int customerId);
 
    CustomerOrderDetailResponse getCustomerOrderDetail(int customerId, int orderId);
+
+   AdminViewOrderHistory getCustomerOrderHistoryAdmin();
 }

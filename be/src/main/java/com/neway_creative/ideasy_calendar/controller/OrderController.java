@@ -2,9 +2,7 @@ package com.neway_creative.ideasy_calendar.controller;
 
 import com.neway_creative.ideasy_calendar.constant.MessageConstant;
 import com.neway_creative.ideasy_calendar.constant.UriConstant;
-import com.neway_creative.ideasy_calendar.dto.response.BaseResponse;
-import com.neway_creative.ideasy_calendar.dto.response.CustomerOrderDetailResponse;
-import com.neway_creative.ideasy_calendar.dto.response.CustomerOrderHistoryResponse;
+import com.neway_creative.ideasy_calendar.dto.response.*;
 import com.neway_creative.ideasy_calendar.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -42,6 +40,20 @@ public class OrderController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new BaseResponse(HttpStatus.BAD_REQUEST.value(), MessageConstant.GET_CUSTOMER_ORDER_DETAIL_FAILED, null));
+        }
+    }
+
+    @CrossOrigin
+    @GetMapping(UriConstant.ORDER_ADMIN_VIEW_URI)
+    public ResponseEntity<BaseResponse> getCustomerOrderDetailAdmin() {
+        try {
+            AdminViewOrderHistory response = paymentService.getCustomerOrderHistoryAdmin();
+
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new BaseResponse(HttpStatus.OK.value(), MessageConstant.SUCCESSFUL_MESSAGE, response));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new BaseResponse(HttpStatus.BAD_REQUEST.value(), MessageConstant.GET_CUSTOMER_ORDER_HISTORY_FAILED, null));
         }
     }
 }

@@ -401,4 +401,24 @@ public class PaymentServiceImpl implements PaymentService {
                 .packages(packageResponses)
                 .build();
     }
+
+    @Override
+    public AdminViewOrderHistory getCustomerOrderHistoryAdmin() {
+        List<Order> orders = orderRepository.findAll();
+
+        List<AdminOrderResponse> orderResponses = orders.stream()
+                .map(order -> AdminOrderResponse.builder()
+                        .orderId(order.getOrderId())
+                        .orderDate(order.getOrderDate())
+                        .price(order.getPrice())
+                        .numOfPackages(order.getPackages().size())
+                        .status(order.getStatus())
+                        .customerId(order.getCustomer().getCustomerId())
+                        .build())
+                .collect(Collectors.toList());
+
+        return AdminViewOrderHistory.builder()
+                .orderList(orderResponses)
+                .build();
+    }
 }
