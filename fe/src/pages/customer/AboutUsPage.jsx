@@ -116,7 +116,7 @@ const AboutUsPage = () => {
         <div className="team-members mb-5">
           <div style={{ display: "flex", justifyContent: "center" }}>
             <h1 style={{ fontWeight: "bold" }} className="mb-5">
-              Meet the team members !
+              Thành viên của IDEASY !
             </h1>
           </div>
 
