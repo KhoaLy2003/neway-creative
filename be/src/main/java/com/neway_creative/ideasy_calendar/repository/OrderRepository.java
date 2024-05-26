@@ -15,10 +15,11 @@ import java.util.List;
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Integer> {
 
-    @Query("SELECT o FROM Order o WHERE o.customer.customerId = ?1")
+    @Query("SELECT o FROM Order o WHERE o.customer.customerId = ?1 ORDER BY o.updatedAt desc")
     List<Order> findByCustomerId(int customerId);
     @Query("SELECT o FROM Order o WHERE o.customer.customerId = ?1 AND o.orderId = ?2")
     Order findByCustomerIdAndOrderId(int customerId, int orderId);
     @Query("SELECT p.packageId FROM Order o JOIN o.packages p WHERE o.orderId = :orderId")
     List<Integer> findPackageIdsByOrderId(int orderId);
+    List<Order> findAllByOrderByUpdatedAtDesc();
 }

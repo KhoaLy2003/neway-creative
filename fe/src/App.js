@@ -53,7 +53,7 @@ function App() {
             <Route path="calendars" element={<AdminCalendarManagement />} />
             <Route path="customers" element={<AdminCustomerMangment />} />
             <Route
-              path="transactions"
+              path="orders"
               element={<AdminTransactionManagement />}
             />
             <Route path="post" element={<AdminPostManagement />} />

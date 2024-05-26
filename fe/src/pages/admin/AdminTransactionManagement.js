@@ -3,7 +3,6 @@ import {
   Space,
   Table,
   Typography,
-  Tag,
   Select,
   Button,
   notification,
@@ -21,7 +20,6 @@ import { updateOrder } from "../../api/payment";
 const { Option } = Select;
 
 const AdminTransactionManagement = () => {
-  const [transactions, setTransactions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalElements, setTotalElements] = useState(0);
@@ -74,10 +72,20 @@ const AdminTransactionManagement = () => {
     }
   };
   const columns = [
+    // {
+    //   title: "Customer ID",
+    //   dataIndex: "customerId",
+    //   key: "customerId",
+    // },
     {
-      title: "Customer ID",
-      dataIndex: "customerId",
-      key: "customerId",
+      title: "Name",
+      dataIndex: "customerName",
+      key: "customerName",
+    },
+    {
+      title: "Email",
+      dataIndex: "customerEmail",
+      key: "customerEmail",
     },
     {
       title: "Order Date",
@@ -89,7 +97,9 @@ const AdminTransactionManagement = () => {
       dataIndex: "price",
       key: "price",
       render: (price) => (
-        <span style={{ color: "green", fontWeight: "bold" }}>{price}</span>
+        <span style={{ color: "green", fontWeight: "bold" }}>
+          {price.toLocaleString("de-DE") + " VNĐ"}
+        </span>
       ),
     },
     {
@@ -150,7 +160,7 @@ const AdminTransactionManagement = () => {
         }}
       >
         <Typography.Title level={2} style={{ marginTop: "30px" }}>
-          Lịch sử mua hàng
+          Order history
         </Typography.Title>
         <Table
           columns={columns}

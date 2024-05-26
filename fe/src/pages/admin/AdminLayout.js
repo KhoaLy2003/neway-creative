@@ -29,8 +29,8 @@ function getItem(label, key, icon, children, type) {
 const items = [
   getItem("Dashboard", "/admin", <AreaChartOutlined />),
   getItem("Calendar", "/admin/calendars", <AppstoreOutlined />),
-  getItem("Customer", "/admin/customers", <UserOutlined />),
-  getItem("Transaction", "/admin/transactions", <TransactionOutlined />),
+  // getItem("Customer", "/admin/customers", <UserOutlined />),
+  getItem("Order", "/admin/orders", <TransactionOutlined />),
   getItem("Post", "/admin/post", <EditOutlined />),
   getItem("Logout", "/logout", <LogoutOutlined />, null, "logout"),
 ];

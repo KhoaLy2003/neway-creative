@@ -404,7 +404,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public AdminViewOrderHistory getCustomerOrderHistoryAdmin() {
-        List<Order> orders = orderRepository.findAll();
+        List<Order> orders = orderRepository.findAllByOrderByUpdatedAtDesc();
 
         List<AdminOrderResponse> orderResponses = orders.stream()
                 .map(order -> AdminOrderResponse.builder()
@@ -414,6 +414,8 @@ public class PaymentServiceImpl implements PaymentService {
                         .numOfPackages(order.getPackages().size())
                         .status(order.getStatus())
                         .customerId(order.getCustomer().getCustomerId())
+                        .customerEmail(order.getCustomer().getEmailAddress())
+                        .customerName(order.getCustomer().getName())
                         .build())
                 .collect(Collectors.toList());
 
