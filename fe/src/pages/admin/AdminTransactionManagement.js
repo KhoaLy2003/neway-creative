@@ -1,12 +1,24 @@
-import { Layout, Space, Table, Typography, Tag } from "antd";
+import {
+  Layout,
+  Space,
+  Table,
+  Typography,
+  Tag,
+  Select,
+  Button,
+  notification,
+} from "antd";
 import { useState, useEffect } from "react";
 import { fetchOrderHistoryAdmin } from "../../api/order";
+import { updateOrder } from "../../api/payment";
 
 // TODO:
 // - Fetch api
 // - Set state list with fetched data
 // - Define column title
 // - Set datasource
+
+const { Option } = Select;
 
 const AdminTransactionManagement = () => {
   const [transactions, setTransactions] = useState([]);
@@ -15,6 +27,8 @@ const AdminTransactionManagement = () => {
   const [totalElements, setTotalElements] = useState(0);
   const [orderHistory, setOrderHistory] = useState([]);
   const [error, setError] = useState(null);
+  const [selectedStatus, setSelectedStatus] = useState(null);
+  const [selectedOrderId, setSelectedOrderId] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,7 +37,6 @@ const AdminTransactionManagement = () => {
         const data = await fetchOrderHistoryAdmin();
 
         const ordersWithFormattedDate = data.data.orderList.map((order) => {
-          // Assuming orderDate is in [year, month, day] format
           const [year, month, day] = order.orderDate;
           const formattedDate = `${day}/${month}/${year}`;
           return { ...order, formattedDate };
@@ -41,6 +54,25 @@ const AdminTransactionManagement = () => {
     fetchData();
   }, [currentPage]);
 
+  const handleStatusChange = (orderId, selectedStatus) => {
+    setSelectedOrderId(orderId);
+    setSelectedStatus(selectedStatus);
+  };
+
+  const handleConfirm = async () => {
+    const orderDto = {
+      orderId: selectedOrderId,
+      status: selectedStatus,
+    };
+
+    const response = await updateOrder(orderDto);
+    if (response.status === 200) {
+      notification.success({
+        message: "Status updated success",
+        duration: 2,
+      });
+    }
+  };
   const columns = [
     {
       title: "Customer ID",
@@ -56,44 +88,55 @@ const AdminTransactionManagement = () => {
       title: "Price",
       dataIndex: "price",
       key: "price",
+      render: (price) => (
+        <span style={{ color: "green", fontWeight: "bold" }}>{price}</span>
+      ),
     },
     {
       title: "Packages",
       dataIndex: "numOfPackages",
       key: "numOfPackages",
     },
+
     {
       title: "Status",
       key: "status",
-      dataIndex: "status",
-      render: (status) => {
-        let color;
-        switch (status.toLowerCase()) {
-          case "completed":
-            color = "green";
-            break;
-          case "cancelled":
-            color = "red";
-            break;
-          case "pending":
-            color = "blue";
-            break;
-          case "waiting":
-            color = "yellow";
-            break;
-          case "failed":
-            color = "red";
-            break;
-          default:
-            color = "default";
-        }
 
-        return <Tag color={color}>{status.toUpperCase()}</Tag>;
-      },
+      render: (_, record) => (
+        <Select
+          defaultValue={record.status}
+          style={{
+            width: 150,
+          }}
+          onChange={(selectedStatus) =>
+            handleStatusChange(record.orderId, selectedStatus)
+          }
+        >
+          <Option value="COMPLETED" style={{ color: "green" }}>
+            Completed
+          </Option>
+          <Option value="CANCELLED" style={{ color: "red" }}>
+            Cancelled
+          </Option>
+          <Option value="PENDING" style={{ color: "blue" }}>
+            Pending
+          </Option>
+          <Option value="WAITING" style={{ color: "black" }}>
+            Waiting
+          </Option>
+          <Option value="FAILED" style={{ color: "red" }}>
+            Failed
+          </Option>
+        </Select>
+      ),
     },
     {
       title: "Action",
-    
+      render: () => (
+        <Button type="primary" onClick={handleConfirm}>
+          Confirm
+        </Button>
+      ),
     },
   ];
   return (
