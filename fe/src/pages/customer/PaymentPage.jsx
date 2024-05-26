@@ -146,6 +146,7 @@ function PaymentPage() {
       message: "Cảm ơn bạn đã sử dụng sản phẩm của chúng tôi!",
       duration: 3,
     });
+    localStorage.removeItem("cart");
   };
 
   const items = steps.map((item) => ({
