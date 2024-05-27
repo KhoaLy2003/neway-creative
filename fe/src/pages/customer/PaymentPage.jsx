@@ -9,11 +9,13 @@ import {
   Tag,
   Descriptions,
   notification,
+  Spin,
 } from "antd";
 import { getColorByPackageType } from "../../utils/GetColor";
 import { useLocation, useNavigate } from "react-router-dom";
 import { updateOrder } from "../../api/payment";
 import QRImg from "../../assets/Example-QR-code.png";
+import { LoadingOutlined } from "@ant-design/icons";
 
 const steps = [
   {
@@ -31,6 +33,7 @@ function PaymentPage() {
   const [current, setCurrent] = useState(0);
   const [isNavigating, setIsNavigating] = useState(false);
   const [orderInfo, setOrderInfo] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!orderDetail) {
@@ -91,6 +94,7 @@ function PaymentPage() {
   }, [orderDetail, navigate]);
 
   const next = async () => {
+    setLoading(true);
     if (current === 0) {
       const orderDto = {
         orderId: orderDetail.orderId,
@@ -101,15 +105,16 @@ function PaymentPage() {
         const response = await updateOrder(orderDto);
 
         if (response.status === 200) {
-          const paymentDto = {
-            orderId: orderDetail.orderId,
-            amount: orderDetail.price,
-            orderInfo: orderDetail.email,
-          };
+          // const paymentDto = {
+          //   orderId: orderDetail.orderId,
+          //   amount: orderDetail.price,
+          //   orderInfo: orderDetail.email,
+          // };
           // const paymentResponse = await createPayment(paymentDto);
           // const payload = paymentResponse.data;
           // window.location.href = payload["redirect_url"];
 
+          setLoading(false);
           setCurrent(current + 1);
         }
       } catch (error) {
@@ -300,6 +305,20 @@ function PaymentPage() {
           </Flex>
         </div>
       </Card>
+
+      {loading && (
+        <Spin
+          fullscreen={true}
+          indicator={
+            <LoadingOutlined
+              style={{
+                fontSize: 40,
+              }}
+              spin
+            />
+          }
+        />
+      )}
     </div>
   );
 }

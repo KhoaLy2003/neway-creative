@@ -59,6 +59,7 @@ const AdminTransactionManagement = () => {
   };
 
   const handleConfirm = async () => {
+    setIsLoading(true);
     const orderDto = {
       orderId: selectedOrderId,
       status: selectedStatus,
@@ -70,6 +71,8 @@ const AdminTransactionManagement = () => {
         message: "Status updated success",
         duration: 2,
       });
+
+      setIsLoading(false);
     }
   };
   const columns = [
@@ -83,7 +86,6 @@ const AdminTransactionManagement = () => {
       dataIndex: "transactionCode",
       key: "transactionCode",
     },
-
     {
       title: "Name",
       dataIndex: "customerName",
