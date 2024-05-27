@@ -35,9 +35,10 @@ const AdminTransactionManagement = () => {
         const data = await fetchOrderHistoryAdmin();
 
         const ordersWithFormattedDate = data.data.orderList.map((order) => {
+          const transactionCode = "IDEASY(" + order.orderId + ")";
           const [year, month, day] = order.orderDate;
           const formattedDate = `${day}/${month}/${year}`;
-          return { ...order, formattedDate };
+          return { ...order, transactionCode, formattedDate };
         });
 
         setOrderHistory(ordersWithFormattedDate);
@@ -77,6 +78,12 @@ const AdminTransactionManagement = () => {
     //   dataIndex: "customerId",
     //   key: "customerId",
     // },
+    {
+      title: "Transaction Code",
+      dataIndex: "transactionCode",
+      key: "transactionCode",
+    },
+
     {
       title: "Name",
       dataIndex: "customerName",

@@ -404,7 +404,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public AdminViewOrderHistory getCustomerOrderHistoryAdmin() {
-        List<Order> orders = orderRepository.findAllByOrderByUpdatedAtDesc();
+        List<Order> orders = orderRepository.findAllByOrderByCreatedAtDesc();
 
         List<AdminOrderResponse> orderResponses = orders.stream()
                 .map(order -> AdminOrderResponse.builder()
