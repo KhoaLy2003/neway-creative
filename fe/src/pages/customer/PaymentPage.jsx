@@ -209,6 +209,14 @@ function PaymentPage() {
                 <Row justify="center" style={{ marginTop: 20 }}>
                   <Col>
                     <h4>
+                      <strong>Mã đơn hàng:</strong>{" "}
+                      {"IDEASY(" + orderDetail.orderId + ")"}
+                    </h4>
+                  </Col>
+                </Row>
+                <Row justify="center" style={{ marginTop: 20 }}>
+                  <Col>
+                    <h4>
                       <strong>Tên chủ tài khoản:</strong> Nguyễn Văn A
                     </h4>
                   </Col>
