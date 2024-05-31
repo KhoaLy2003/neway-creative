@@ -119,19 +119,19 @@ public class CustomerController {
         }
     }
 
-    @CrossOrigin
-    @GetMapping(UriConstant.CUSTOMER_ORDER_DETAIL)
-    public ResponseEntity<BaseResponse> getCustomerOrderDetail(@PathVariable int customerId, @PathVariable int orderId) {
-        try {
-            CustomerOrderDetailResponse response = paymentService.getCustomerOrderDetail(customerId, orderId);
-
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(new BaseResponse(HttpStatus.OK.value(), MessageConstant.SUCCESSFUL_MESSAGE, response));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new BaseResponse(HttpStatus.BAD_REQUEST.value(), MessageConstant.GET_CUSTOMER_ORDER_DETAIL_FAILED, null));
-        }
-    }
+//    @CrossOrigin
+//    @GetMapping(UriConstant.CUSTOMER_ORDER_DETAIL)
+//    public ResponseEntity<BaseResponse> getCustomerOrderDetail(@PathVariable int customerId, @PathVariable int orderId) {
+//        try {
+//            CustomerOrderDetailResponse response = paymentService.getCustomerOrderDetail(customerId, orderId);
+//
+//            return ResponseEntity.status(HttpStatus.OK)
+//                    .body(new BaseResponse(HttpStatus.OK.value(), MessageConstant.SUCCESSFUL_MESSAGE, response));
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+//                    .body(new BaseResponse(HttpStatus.BAD_REQUEST.value(), MessageConstant.GET_CUSTOMER_ORDER_DETAIL_FAILED, null));
+//        }
+//    }
 
     @CrossOrigin
     @GetMapping(UriConstant.ADMIN_VIEW_CUSTOMER)

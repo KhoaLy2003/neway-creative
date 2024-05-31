@@ -31,7 +31,7 @@ export const fetchOrderHistoryAdmin = async () => {
 export const fetchCustomerOrderDetail = async (customerId, orderId) => {
   try {
     const response = await fetch(
-      `${baseUrl}/customers/${customerId}/order-history/${orderId}`,
+      `${baseUrl}/orders/${customerId}/order-history/${orderId}`,
     );
     if (!response.ok) {
       throw new Error("Failed to fetch customer order detail");

@@ -14,7 +14,7 @@ const AdminCustomerMangment = () => {
       try {
         const data = await fetchCustomerForAdmin();
         console.log(data);
-        setCustomerData(data.data.customers);
+        setCustomerData(data.data);
       } catch (error) {
         setError(error.message);
       } finally {
