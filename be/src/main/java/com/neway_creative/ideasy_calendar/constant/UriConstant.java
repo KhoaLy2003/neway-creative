@@ -122,4 +122,9 @@ public final class UriConstant {
      * The constant ORDER_ADMIN_VIEW_URI.
      */
     public static final String ORDER_ADMIN_VIEW_URI = "/admin/orders";
+    /**
+     * The constant ADMIN_VIEW_CUSTOMER.
+     */
+    public static final String ADMIN_VIEW_CUSTOMER = "/admin/customers";
+
 }

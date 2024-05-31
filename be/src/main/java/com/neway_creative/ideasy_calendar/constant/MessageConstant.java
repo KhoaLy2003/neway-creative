@@ -59,4 +59,6 @@ public final class MessageConstant {
     public static final String REGISTER_DUPLICATE_EMAIL = "customer.register_duplicate_email";
 
     public static final String ORDER_DUPLICATE_CALENDAR = "customer.order_duplicate_calendar";
+    public static final String GET_CUSTOMERS_ADMIN_FAILED = "customer.get_customer.failed";
+
 }

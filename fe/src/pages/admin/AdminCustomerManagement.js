@@ -1,17 +1,29 @@
 import { Layout, Space, Table, Typography, Tag } from "antd";
-import { useState } from "react";
-
-// TODO:
-// - Fetch api
-// - Set state list with fetched data
-// - Define column title
-// - Set datasource
+import { useState, useEffect } from "react";
+import { fetchCustomerForAdmin } from "../../api/customer";
 
 const AdminCustomerMangment = () => {
-  const [customers, setCustomers] = useState([]);
+  const [customerData, setCustomerData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(0);
-  const [totalElements, setTotalElements] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const data = await fetchCustomerForAdmin();
+        console.log(data);
+        setCustomerData(data.data.customers);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [currentPage]);
 
   const columns = [
     {
@@ -21,13 +33,8 @@ const AdminCustomerMangment = () => {
       render: (text) => <a>{text}</a>,
     },
     {
-      title: 'First Join',
-      dataIndex: 'createdAt',
-      key: 'createdAt',
-    },
-    {
       title: 'Email',
-      dataIndex: 'email',
+      dataIndex: 'emailAddress',
       key: 'email',
     },
     {
@@ -41,17 +48,16 @@ const AdminCustomerMangment = () => {
       dataIndex: 'status',
       render: (status) => {
         let color;
-        switch (status) {
-          case 'Active':
+        switch (status.toUpperCase()) {
+          case 'ACTIVE':
             color = 'green';
             break;
-          case 'Inactive':
+          case 'INACTIVE':
             color = 'red';
             break;
           default:
             color = 'default';
         }
-    
         return (
           <Tag color={color}>
             {status.toUpperCase()}
@@ -60,32 +66,7 @@ const AdminCustomerMangment = () => {
       },
     }
   ];
-  const data = [
-    {
-      key: '1',
-      customerId: '1',
-      createdAt: '1/1/2024',
-      email: 'abc@gmail.com',
-      name: 'Nguyễn Văn A',
-      status: 'Active'
-    },
-    {
-      key: '2',
-      customerId: '2',
-      createdAt: '1/1/2024',
-      email: 'xyz@gmail.com',
-      name: 'Lê Văn B',
-      status: 'Inactive'
-    },
-    {
-      key: '3',
-      customerId: '3',
-      createdAt: '1/1/2024',
-      email: 'ggg@gmail.com',
-      name: 'Ronaldo',
-      status: 'Active'
-    }
-  ];
+
   return (
     <Layout>
       <Space
@@ -96,18 +77,20 @@ const AdminCustomerMangment = () => {
         }}
       >
         <Typography.Title level={4}>Customer List</Typography.Title>
-        <Table
-          columns={columns}
-          pagination={{
-            position: ["bottomCenter"],
-            total: totalElements,
-            showSizeChanger: false,
-            pageSize: 7, 
-          }}
-          dataSource={data}
-          // loading={isLoading}
-          onChange={(pagination) => setCurrentPage(pagination.current - 1)}
-        />
+        {customerData && (
+          <Table
+            columns={columns}
+            dataSource={customerData}
+            pagination={{
+              position: ["bottomCenter"],
+              showSizeChanger: false,
+              pageSize: 7, 
+              total: customerData.length,
+              onChange: (page) => setCurrentPage(page),
+            }}
+            loading={isLoading}
+          />
+        )}
       </Space>
     </Layout>
   );

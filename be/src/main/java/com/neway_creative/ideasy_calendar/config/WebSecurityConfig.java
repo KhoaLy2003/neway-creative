@@ -36,7 +36,7 @@ public class WebSecurityConfig {
                                 .antMatchers("/api/payment/**").permitAll()
                                 .antMatchers("/api/posts/**").permitAll()
                                 .antMatchers("/api/testing/**").permitAll()
-                                .antMatchers("/api/customers/register", "/api/customers/verify", "/api/customers/login", "/api/customers/regenerate-otp").permitAll()
+                                .antMatchers("/api/customers/register", "/api/customers/verify", "/api/customers/login", "/api/customers/regenerate-otp", "/api/customers/admin/customers").permitAll()
                                 .antMatchers("/api/orders/**").permitAll()
                                 .anyRequest().authenticated()
                 )

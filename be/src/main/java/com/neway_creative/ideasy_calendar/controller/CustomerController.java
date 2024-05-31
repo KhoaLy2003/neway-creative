@@ -5,11 +5,9 @@ import com.neway_creative.ideasy_calendar.constant.UriConstant;
 import com.neway_creative.ideasy_calendar.dto.request.LoginRequest;
 import com.neway_creative.ideasy_calendar.dto.request.RegisterRequest;
 import com.neway_creative.ideasy_calendar.dto.request.VerifyAccountRequest;
-import com.neway_creative.ideasy_calendar.dto.response.BaseResponse;
-import com.neway_creative.ideasy_calendar.dto.response.CustomerOrderDetailResponse;
-import com.neway_creative.ideasy_calendar.dto.response.CustomerOrderHistoryResponse;
-import com.neway_creative.ideasy_calendar.dto.response.LoginResponse;
+import com.neway_creative.ideasy_calendar.dto.response.*;
 import com.neway_creative.ideasy_calendar.service.AuthenticationService;
+import com.neway_creative.ideasy_calendar.service.CustomerService;
 import com.neway_creative.ideasy_calendar.service.PaymentService;
 import com.neway_creative.ideasy_calendar.utils.MessageLocalization;
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,6 +34,7 @@ public class CustomerController {
     private final AuthenticationService authenticationService;
     private final MessageLocalization messageLocalization;
     private final PaymentService paymentService;
+    private final CustomerService customerService;
 
     @Operation(method = "POST", summary = "Register account", description = "Send a request via this API to register new account")
     @PostMapping(UriConstant.CUSTOMER_REGISTER_URI)
@@ -133,4 +132,22 @@ public class CustomerController {
                     .body(new BaseResponse(HttpStatus.BAD_REQUEST.value(), MessageConstant.GET_CUSTOMER_ORDER_DETAIL_FAILED, null));
         }
     }
+
+    @CrossOrigin
+    @GetMapping(UriConstant.ADMIN_VIEW_CUSTOMER)
+    public ResponseEntity<BaseResponse> getCustomerForAdmin() {
+        try {
+            List<CustomerViewAdminResponse> response = customerService.findAllCustomerViewAdminResponse();
+
+            CustomerListResponse customerListResponse = new CustomerListResponse(response);
+
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new BaseResponse(HttpStatus.OK.value(), MessageConstant.SUCCESSFUL_MESSAGE, customerListResponse));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new BaseResponse(HttpStatus.BAD_REQUEST.value(), MessageConstant.GET_CUSTOMER_ORDER_DETAIL_FAILED, null));
+        }
+    }
+
+
 }
