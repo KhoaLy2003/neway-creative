@@ -1,9 +1,17 @@
 import React from "react";
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input, notification } from "antd";
 import { register } from "../../api/customer";
 
 const RegisterForm = ({ onSuccess, setLoading }) => {
   const [form] = Form.useForm();
+
+  const [api, contextHolder] = notification.useNotification();
+  const openNotificationWithIcon = (type, message) => {
+    api[type]({
+      message: message,
+      duration: 3,
+    });
+  };
 
   const handleRegister = async (values) => {
     setLoading(true);
@@ -19,6 +27,11 @@ const RegisterForm = ({ onSuccess, setLoading }) => {
     let response = null;
     try {
       response = await register(registerRequest);
+
+      if (response.status === 400) {
+        openNotificationWithIcon("error", response.message);
+        setLoading(false);
+      }
 
       if (response.status === 201) {
         //console.log("DONE ", response);
@@ -108,6 +121,8 @@ const RegisterForm = ({ onSuccess, setLoading }) => {
           </Button>
         </Form.Item>
       </Form>
+
+      {contextHolder}
     </>
   );
 };

@@ -26,6 +26,11 @@ const AuthModal = ({ modalOpen, setModalOpen }) => {
     setShowOTPForm(true);
   };
 
+  const handleShowOtpForm = (email) => {
+    setCreatedAccountEmail(email);
+    setShowOTPForm(true);
+  };
+
   const handleCloseModal = () => {
     setLoading(false);
     setShowOTPForm(false);
@@ -85,7 +90,11 @@ const AuthModal = ({ modalOpen, setModalOpen }) => {
             />
           </TabPane>
           <TabPane tab="Đăng nhập" key="login">
-            <LoginForm onSuccess={handleLoginSuccess} setLoading={setLoading} />
+            <LoginForm
+              onSuccess={handleLoginSuccess}
+              setLoading={setLoading}
+              showOtpForm={handleShowOtpForm}
+            />
           </TabPane>
         </Tabs>
       ) : (

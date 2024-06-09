@@ -65,4 +65,11 @@ public class BaseExceptionHandler {
                 request.getDescription(false));
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(AccountNotVerifiedException.class)
+    public ResponseEntity<BaseExceptionContent> handleAccountNotVerifiedException(AccountNotVerifiedException exception,WebRequest request) {
+        BaseExceptionContent error = new BaseExceptionContent(HttpStatus.FORBIDDEN.value(), exception.getMessage(),
+                request.getDescription(false));
+        return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
+    }
 }

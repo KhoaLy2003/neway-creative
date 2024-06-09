@@ -14,11 +14,13 @@ export const login = async (loginRequest) => {
       },
     });
 
-    if (response.ok || response.status === 404 || response.status === 400) {
-      // throw new Error({ errMsg });
-      const data = await response.json();
-      return data;
-    }
+    // if (response.ok || response.status === 404 || response.status === 400) {
+    //   throw new Error({ errMsg });
+    //   const data = await response.json();
+    //   return data;
+    // }
+    const data = await response.json();
+    return data;
   } catch (error) {
     console.log("Error: " + error);
     throw error;
@@ -37,9 +39,9 @@ export const register = async (registerRequest) => {
       },
     });
 
-    if (!response.ok) {
-      throw new Error({ errMsg });
-    }
+    // if (!response.ok) {
+    //   throw new Error({ errMsg });
+    // }
 
     const data = await response.json();
     return data;

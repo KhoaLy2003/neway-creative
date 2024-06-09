@@ -78,6 +78,22 @@ CREATE TABLE `calendar` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
+-- contentdigitalcalendar.`order` definition
+
+CREATE TABLE `order` (
+  `order_id` int NOT NULL AUTO_INCREMENT,
+  `created_at` datetime(6) NOT NULL,
+  `updated_at` datetime(6) DEFAULT NULL,
+  `order_date` datetime(6) NOT NULL,
+  `price` bigint NOT NULL,
+  `status` varchar(255) NOT NULL,
+  `customer_id` int NOT NULL,
+  PRIMARY KEY (`order_id`),
+  KEY `FK1oduxyuuo3n2g98l3j7754vym` (`customer_id`),
+  CONSTRAINT `FK1oduxyuuo3n2g98l3j7754vym` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
 -- contentdigitalcalendar.package definition
 
 CREATE TABLE `package` (
@@ -96,22 +112,15 @@ CREATE TABLE `package` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
--- contentdigitalcalendar.`order` definition
+-- contentdigitalcalendar.order_package definition
 
-CREATE TABLE `order` (
-  `order_id` int NOT NULL AUTO_INCREMENT,
-  `created_at` datetime(6) NOT NULL,
-  `updated_at` datetime(6) DEFAULT NULL,
-  `order_date` datetime(6) NOT NULL,
-  `price` bigint NOT NULL,
-  `status` varchar(255) NOT NULL,
-  `package_id` int DEFAULT NULL,
-  `customer_id` int NOT NULL,
-  PRIMARY KEY (`order_id`),
-  UNIQUE KEY `UK_ofpmou4judp0qicjy4mgyivay` (`package_id`),
-  KEY `FK1oduxyuuo3n2g98l3j7754vym` (`customer_id`),
-  CONSTRAINT `FK1oduxyuuo3n2g98l3j7754vym` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`),
-  CONSTRAINT `FKfcn64b3h3iaj5jxf24w1ms9nh` FOREIGN KEY (`package_id`) REFERENCES `package` (`package_id`)
+CREATE TABLE `order_package` (
+  `order_id` int NOT NULL,
+  `package_id` int NOT NULL,
+  PRIMARY KEY (`order_id`,`package_id`),
+  KEY `FK6xkhpw0bjh9w3wubhwjjg40v4` (`package_id`),
+  CONSTRAINT `FK6xkhpw0bjh9w3wubhwjjg40v4` FOREIGN KEY (`package_id`) REFERENCES `package` (`package_id`),
+  CONSTRAINT `FKpt6age72ikn4b77xrv5wgh0qk` FOREIGN KEY (`order_id`) REFERENCES `order` (`order_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 INSERT INTO `customer`
@@ -119,11 +128,11 @@ INSERT INTO `customer`
 VALUES(CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'test@gmail.com', 'test', '1234', CURRENT_TIMESTAMP, '$2a$10$HzHsp4I1MQ6da5FG7S8QK.arBeQv2Xwk7CHlz1clRb.PAV3Q//mXq', 
 'CUSTOMER', 'ACTIVE');
 
-INSERT INTO `category` (is_delete, name) VALUES
-    (0, 'Cơ bản'),
-    (0, 'Đồ uống'),
-    (0, 'Sức khỏe'),
-    (0, 'Thú cưng');
+INSERT INTO `category` (is_delete,name) VALUES
+	 (0,'Cơ bản'),
+	 (0,'Đồ uống'),
+	 (0,'Sức khỏe'),
+	 (0,'Thú cưng');
 
 -- Lịch ý tưởng cho mọi ngành nghề --
 INSERT INTO `calendar`
@@ -134,7 +143,8 @@ Gói basic không bao gồm các bài viết có sẵn như gói Advanced và Pr
 
 INSERT INTO `package`
 (created_at, updated_at, duration_unit, duration_value, link_notion, package_type, price, calendar_id)
-VALUES(CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'MONTHS', 3, 'https://example.com/package-basic', 'BASIC', 500000, 1);
+VALUES(CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'MONTHS', 3, 'https://valiant-fork-3c7.notion.site/Basic-L-ch-Content-Ideasy-b88d3a83360a4f2ca3b1c7d6d2e2fdae?pvs=4', 'BASIC', 500000, 1);
+
 
 -- Cà phê và Đồ uống --
 INSERT INTO `calendar`
@@ -145,11 +155,12 @@ Mỗi ý tưởng đều được tinh chỉnh để phù hợp với xu hướn
 
 INSERT INTO `package`
 (created_at, updated_at, duration_unit, duration_value, link_notion, package_type, price, calendar_id)
-VALUES(CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'MONTHS', 3, 'https://example.com/package-basic', 'ADVANCED', 800000, 2);
+VALUES(CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'MONTHS', 3, 'https://valiant-fork-3c7.notion.site/Advanced-L-ch-C-ph-Ideasy-ede0c6aa2a3a494688ed62ee8abed132?pvs=4', 'ADVANCED', 800000, 2);
 
 INSERT INTO `package`
 (created_at, updated_at, duration_unit, duration_value, link_notion, package_type, price, calendar_id)
 VALUES(CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'MONTHS', 3, 'https://example.com/package-basic', 'PREMIUM', 1500000, 2);
+
 
 -- Sức khỏe và Yoga --
 INSERT INTO `calendar`
@@ -160,11 +171,12 @@ Từ các bài đăng về lợi ích của từng động tác, hướng dẫn 
 
 INSERT INTO `package`
 (created_at, updated_at, duration_unit, duration_value, link_notion, package_type, price, calendar_id)
-VALUES(CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'MONTHS', 3, 'https://example.com/package-basic', 'ADVANCED', 800000, 3);
+VALUES(CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'MONTHS', 3, 'https://valiant-fork-3c7.notion.site/Advanced-L-ch-Yoga-Ideasy-081b80acd1d4481caeec93f9bd7f7efa?pvs=4', 'ADVANCED', 800000, 3);
 
 INSERT INTO `package`
 (created_at, updated_at, duration_unit, duration_value, link_notion, package_type, price, calendar_id)
 VALUES(CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'MONTHS', 3, 'https://example.com/package-basic', 'PREMIUM', 1500000, 3);
+
 
 -- Thú cưng và thú y --
 INSERT INTO `calendar`
@@ -175,7 +187,7 @@ Bộ lịch giúp bạn dễ dàng chia sẻ kiến thức và tương tác vớ
 
 INSERT INTO `package`
 (created_at, updated_at, duration_unit, duration_value, link_notion, package_type, price, calendar_id)
-VALUES(CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'MONTHS', 3, 'https://example.com/package-basic', 'ADVANCED', 800000, 4);
+VALUES(CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'MONTHS', 3, 'https://valiant-fork-3c7.notion.site/Advanced-L-ch-Th-Y-Ideasy-e2a80a05640c459ca737d501b4cd5710?pvs=4', 'ADVANCED', 800000, 4);
 
 INSERT INTO `package`
 (created_at, updated_at, duration_unit, duration_value, link_notion, package_type, price, calendar_id)

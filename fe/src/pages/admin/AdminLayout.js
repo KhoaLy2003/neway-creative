@@ -71,10 +71,12 @@ const AdminLayout = () => {
         onCollapse={(collapsed, type) => {
           console.log(collapsed, type);
         }}
+        style={{ background: colorBgContainer }}
       >
         <div className="demo-logo-vertical" />
         <Menu
-          theme="dark"
+          // theme="dark"
+          style={{ background: colorBgContainer }}
           mode="inline"
           selectedKeys={[selectedKeys]}
           items={items}
