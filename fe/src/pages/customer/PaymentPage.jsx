@@ -14,7 +14,7 @@ import {
 import { getColorByPackageType } from "../../utils/GetColor";
 import { useLocation, useNavigate } from "react-router-dom";
 import { updateOrder } from "../../api/payment";
-import QRImg from "../../assets/Example-QR-code.png";
+import QRImg from "../../assets/qr.png";
 import { LoadingOutlined } from "@ant-design/icons";
 
 const steps = [
@@ -219,21 +219,6 @@ function PaymentPage() {
                     </h4>
                   </Col>
                 </Row>
-                <Row justify="center" style={{ marginTop: 20 }}>
-                  <Col>
-                    <h4>
-                      <strong>Tên chủ tài khoản:</strong> Nguyễn Văn A
-                    </h4>
-                  </Col>
-                </Row>
-                <Row justify="center">
-                  <Col>
-                    <h4>
-                      <strong>Số tiền chuyển khoản:</strong>{" "}
-                      {orderDetail.price.toLocaleString("de-DE") + " VNĐ"}
-                    </h4>
-                  </Col>
-                </Row>
               </Col>
             </Row>
 
@@ -254,13 +239,13 @@ function PaymentPage() {
                   </p>
                   <p>
                     <strong>Bước 3:</strong> Chụp hình xác nhận giao dịch thành
-                    công qua fanpage.{" "}
+                    công qua fanpage{" "}
                     <a
                       href="https://www.facebook.com/ideasylichytuong"
                       target="_blank"
                       rel="noreferrer"
                     >
-                      <strong>Link fanpage IDEASY</strong>
+                      <strong>IDEASY</strong>
                     </a>
                   </p>
 

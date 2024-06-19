@@ -13,4 +13,5 @@ public interface MailService {
     void sendVerificationEmail(String recipientEmail, String otp);
     void sendMailTest();
     void sendMailLinkNotion(String recipientEmail, List<Package> packages);
+    void sendMailNewOrderNotice(String customerEmail, String customerName);
 }

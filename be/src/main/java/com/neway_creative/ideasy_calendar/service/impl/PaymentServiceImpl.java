@@ -192,6 +192,8 @@ public class PaymentServiceImpl implements PaymentService {
 
         orderRepository.save(order);
 
+        mailService.sendMailNewOrderNotice(customer.getEmailAddress(), customer.getName());
+
         return OrderDetailResponse.builder()
                 .orderId(order.getOrderId())
                 .name(customer.getName())

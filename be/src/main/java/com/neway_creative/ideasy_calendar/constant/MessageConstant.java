@@ -30,10 +30,10 @@ public final class MessageConstant {
      * The constant INVALID_PAYMENT_SIGN.
      */
     public static final int INVALID_PAYMENT_SIGN = -1;
-    public static final String LOGIN_SUCCESSFULLY =  "customer.login_successfully";
-    public static final String LOGIN_FAILED =  "customer.login_failed";
-    public static final String REGISTER_SUCCESSFULLY =  "customer.register_successfully";
-    public static final String REGISTER_FAILED =  "customer.register_failed";
+    public static final String LOGIN_SUCCESSFULLY = "customer.login_successfully";
+    public static final String LOGIN_FAILED = "customer.login_failed";
+    public static final String REGISTER_SUCCESSFULLY = "customer.register_successfully";
+    public static final String REGISTER_FAILED = "customer.register_failed";
     public static final String CREATE_CALENDAR_SUCCESSFULLY = "admin.calendar.create_successfully";
     public static final String CREATE_CALENDAR_FAILED = "admin.calendar.create_failed";
     public static final String ACCESS_DENIED = "access_denied";
@@ -60,5 +60,5 @@ public final class MessageConstant {
 
     public static final String ORDER_DUPLICATE_CALENDAR = "customer.order_duplicate_calendar";
     public static final String GET_CUSTOMERS_ADMIN_FAILED = "customer.get_customer.failed";
-
+    public static final String UPLOAD_POST_IMAGE_SUCCESSFULLY = "admin.post.upload_image_successfully";
 }

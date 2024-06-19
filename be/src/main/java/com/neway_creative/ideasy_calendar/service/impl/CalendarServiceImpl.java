@@ -53,7 +53,6 @@ public class CalendarServiceImpl implements CalendarService {
     private static final Logger LOGGER = LoggerFactory.getLogger(CalendarServiceImpl.class);
     private final CalendarRepository calendarRepository;
     private final CategoryRepository categoryRepository;
-    private final ModelMapper modelMapper;
     private final RedisTemplate redisTemplate;
     private final Cloudinary cloudinary;
     private static final String REDIS_KEY = "CALENDAR";

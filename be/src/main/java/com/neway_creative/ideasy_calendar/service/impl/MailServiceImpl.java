@@ -101,4 +101,28 @@ public class MailServiceImpl implements MailService {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void sendMailNewOrderNotice(String customerEmail, String customerName) {
+        String subject = "Đơn hàng mới tại IDEASY";
+        String text = "Một đơn hàng mới đã được đặt của khách hàng tên: " + customerName + ", email: " + customerEmail;
+
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(
+                    message,
+                    MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
+                    StandardCharsets.UTF_8.name()
+            );
+
+            helper.setFrom(email);
+            helper.setTo(email);
+            helper.setSubject(subject);
+            helper.setText(text, true);
+
+            mailSender.send(message);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
 }
