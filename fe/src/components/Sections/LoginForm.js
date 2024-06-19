@@ -2,7 +2,7 @@ import React from "react";
 import { Button, Form, Input, notification } from "antd";
 import { login } from "../../api/customer";
 
-const LoginForm = ({ onSuccess, setLoading }) => {
+const LoginForm = ({ onSuccess, setLoading, showOtpForm }) => {
   const [form] = Form.useForm();
 
   const [api, contextHolder] = notification.useNotification();
@@ -33,6 +33,12 @@ const LoginForm = ({ onSuccess, setLoading }) => {
         form.resetFields();
         setLoading(false);
         onSuccess(response.data);
+      } else if (response.status === 403) {
+        openNotificationWithIcon("warning", response.message);
+        setTimeout(() => {
+          showOtpForm(email);
+          setLoading(false);
+        }, 1000);
       }
 
       if (response.status === 404 || response.status === 400) {

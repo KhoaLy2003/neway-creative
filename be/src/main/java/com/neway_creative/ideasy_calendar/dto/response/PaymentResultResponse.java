@@ -5,11 +5,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PaymentResultResponse {
+public class PaymentResultResponse implements Serializable {
     private int status;
     private String orderId;
     private String orderInfo;

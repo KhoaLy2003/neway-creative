@@ -1,163 +1,163 @@
-import { React, useContext, useEffect, useState } from "react";
+import { React, useEffect, useState } from "react";
 import {
   Card,
   Button,
-  message,
   Steps,
-  Form,
-  Input,
   Flex,
   Row,
   Col,
-  Table,
   Tag,
   Descriptions,
+  notification,
+  Spin,
 } from "antd";
-import Meta from "antd/es/card/Meta";
-import Column from "antd/es/table/Column";
 import { getColorByPackageType } from "../../utils/GetColor";
 import { useLocation, useNavigate } from "react-router-dom";
-import { UserContext } from "../../context/AuthContext";
-import { createPayment, saveOrder, updateOrder } from "../../api/payment";
+import { updateOrder } from "../../api/payment";
+import QRImg from "../../assets/qr.png";
+import { LoadingOutlined } from "@ant-design/icons";
 
 const steps = [
   {
-    title: "Information",
-    content: "First-content",
+    title: "Xác nhận thông tin",
   },
   {
-    title: "Verification",
-    content: "First-content",
-  },
-  {
-    title: "Payment",
-    content: "First-content",
-  },
-  {
-    title: "Done",
-    content: "First-content",
+    title: "Thanh toán và Hoàn tất",
   },
 ];
 
 function PaymentPage() {
-  const [form] = Form.useForm();
   const location = useLocation();
   const navigate = useNavigate();
-  const { calendarDetail } = location.state || {};
-  const [selectedRowKey, setSelectedRowKey] = useState(null);
+  const { orderDetail } = location.state || {};
   const [current, setCurrent] = useState(0);
   const [isNavigating, setIsNavigating] = useState(false);
-  const { name, email } = useContext(UserContext);
-  const [order, setOrder] = useState(null);
   const [orderInfo, setOrderInfo] = useState([]);
-
-  console.log("Calendar", calendarDetail);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!calendarDetail) {
-      console.log("HERE");
+    if (!orderDetail) {
+      console.log("ORDER", orderDetail);
       setIsNavigating(true);
       navigate("/calendars");
+      return;
     }
-  }, [calendarDetail, navigate]);
+
+    const orderInfoItems = [
+      {
+        key: "1",
+        label: "Email",
+        children: orderDetail.email,
+        span: 4,
+      },
+    ];
+
+    const packageInfoItems = orderDetail.packages
+      .map((pkg, index) => [
+        {
+          key: `package-${index + 1}-title`,
+          label: `Tên bộ lịch`,
+          children: pkg.calendarTitle,
+        },
+        {
+          key: `package-${index + 1}-type`,
+          label: `Loại gói`,
+          children: (
+            <Tag color={getColorByPackageType(pkg.packageType)}>
+              {pkg.packageType.toUpperCase()}
+            </Tag>
+          ),
+        },
+        {
+          key: `package-${index + 1}-price`,
+          label: `Giá gói`,
+          children: pkg.price.toLocaleString("de-DE") + " VNĐ",
+        },
+      ])
+      .flat();
+
+    const totalPrice = [
+      {
+        key: "4",
+        label: "Tổng",
+        children: orderDetail.price.toLocaleString("de-DE") + " VNĐ",
+      },
+    ];
+
+    const allInfoItems = [
+      ...orderInfoItems,
+      ...packageInfoItems,
+      ...totalPrice,
+    ];
+
+    setOrderInfo(allInfoItems);
+  }, [orderDetail, navigate]);
 
   const next = async () => {
+    setLoading(true);
     if (current === 0) {
       const orderDto = {
-        price: calendarDetail.packages.find((pkg) => {
-          return pkg.id === selectedRowKey;
-        }).price,
-        packageId: selectedRowKey,
-        email: email,
+        orderId: orderDetail.orderId,
+        status: "WAITING",
       };
 
-      console.log(orderDto);
-
       try {
-        const response = await saveOrder(orderDto);
-        const data = response.data;
-        const orderInfoItems = [
-          {
-            key: "1",
-            label: "Name",
-            children: <p>{data.name}</p>,
-          },
-          {
-            key: "2",
-            label: "Email",
-            children: <p>{data.email}</p>,
-          },
-          {
-            key: "3",
-            label: "Calendar Title",
-            children: <p>{calendarDetail.title}</p>,
-          },
-          {
-            key: "4",
-            label: "Package Type",
-            children: <p>{data.packageType}</p>,
-          },
-          {
-            key: "5",
-            label: "Price",
-            children: <p>{data.price}</p>,
-          },
-        ];
+        const response = await updateOrder(orderDto);
 
-        setOrder(data);
-        setOrderInfo(orderInfoItems);
+        if (response.status === 200) {
+          // const paymentDto = {
+          //   orderId: orderDetail.orderId,
+          //   amount: orderDetail.price,
+          //   orderInfo: orderDetail.email,
+          // };
+          // const paymentResponse = await createPayment(paymentDto);
+          // const payload = paymentResponse.data;
+          // window.location.href = payload["redirect_url"];
+
+          setLoading(false);
+          setCurrent(current + 1);
+        }
       } catch (error) {
         console.log(error);
         throw error;
       }
     }
+  };
 
-    if (current === 1) {
-      const orderDto = {
-        orderId: order.orderId,
-        status: "WAITING",
-      };
+  const prev = async () => {
+    const orderDto = {
+      orderId: orderDetail.orderId,
+      status: "CANCELLED",
+    };
 
+    try {
       const response = await updateOrder(orderDto);
-      const data = response.data;
-
-      console.log(data);
+      if (response.status === 200) {
+        navigate("/");
+        notification.error({
+          message: "Đơn hàng của bạn được hủy",
+          duration: 2,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      throw error;
     }
-
-    if (current === 2) {
-      const paymentDto = {
-        amount: order.price,
-        orderInfo: `${order.packageType} ${calendarDetail.title}`,
-      };
-
-      const response = await createPayment(paymentDto);
-      const payload = response.data;
-
-      window.location.href = payload["redirect_url"];
-    }
-
-    setCurrent(current + 1);
   };
-  const prev = () => {
-    setCurrent(current - 1);
+
+  const complete = () => {
+    navigate("/");
+    notification.success({
+      message: "Cảm ơn bạn đã sử dụng sản phẩm của chúng tôi!",
+      duration: 3,
+    });
+    localStorage.removeItem("cart");
   };
+
   const items = steps.map((item) => ({
     key: item.title,
     title: item.title,
   }));
-
-  useEffect(() => {
-    if (selectedRowKey !== null && calendarDetail) {
-      const selectedRow = calendarDetail.packages.find(
-        (pkg) => pkg.id === selectedRowKey,
-      );
-      console.log("Selected Row:", selectedRow);
-    }
-  }, [selectedRowKey, calendarDetail]);
-
-  if (isNavigating || !calendarDetail) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <div className="custom-container" style={{ marginTop: 50 }}>
@@ -171,173 +171,139 @@ function PaymentPage() {
         </Row>
 
         {current === 0 && (
-          <div style={{ lineHeight: 260, textAlign: "center", marginTop: 50 }}>
-            {
-              <>
-                <Row gutter={40}>
-                  <Col span={3}></Col>
-                  <Col span={8}>
-                    <Form
-                      layout="vertical"
-                      form={form}
-                      name=""
-                      labelCol={{
-                        span: 5,
-                      }}
-                      style={{
-                        maxWidth: 600,
-                        marginTop: 20,
-                      }}
-                      initialValues={{
-                        name: name,
-                        email: email,
-                      }}
-                      autoComplete="off"
-                    >
-                      <Form.Item
-                        label="Name"
-                        name="name"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please input your name!",
-                          },
-                        ]}
-                      >
-                        <Input disabled />
-                      </Form.Item>
-
-                      <Form.Item
-                        label="Email"
-                        name="email"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please input your email address!",
-                          },
-                        ]}
-                      >
-                        <Input disabled />
-                      </Form.Item>
-                    </Form>
-                  </Col>
-                  <Col span={4}></Col>
-                  <Col span={6}>
-                    <Card
-                      cover={
-                        <div style={{ overflow: "hidden", height: "200px" }}>
-                          <img
-                            alt="example"
-                            style={{ height: "100%", width: "100%" }}
-                            src={calendarDetail.image}
-                          />
-                        </div>
-                      }
-                    >
-                      <Meta
-                        title={calendarDetail.title}
-                        style={{ textAlign: "center" }}
-                      />
-                    </Card>
-                  </Col>
-                  <Col span={3}></Col>
-                </Row>
-
-                <Row style={{ marginTop: 40 }}>
-                  <Col span={3}></Col>
-                  <Col span={18}>
-                    <Table
-                      dataSource={calendarDetail.packages}
-                      pagination={false}
-                      style={{ marginBottom: 20, marginTop: 20 }}
-                      rowKey="id"
-                      rowSelection={{
-                        type: "radio",
-                        selectedRowKeys: [selectedRowKey],
-                        onChange: (selectedRowKeys) => {
-                          setSelectedRowKey(selectedRowKeys[0]);
-                        },
-                      }}
-                    >
-                      <Column
-                        defaultSortOrder={"descend"}
-                        title="Type"
-                        dataIndex="packageType"
-                        key="packageType"
-                        render={(packageType) => (
-                          <>
-                            <Tag color={getColorByPackageType(packageType)}>
-                              {packageType.toUpperCase()}
-                            </Tag>
-                          </>
-                        )}
-                      />
-                      <Column
-                        title="Unit"
-                        dataIndex="packageDurationUnit"
-                        key="packageDurationUnit"
-                      />
-                      <Column
-                        title="Duration"
-                        dataIndex="durationValue"
-                        key="durationValue"
-                      />
-                      <Column title="Price" dataIndex="price" key="price" />
-                    </Table>
-                  </Col>
-                  <Col span={3}></Col>
-                </Row>
-              </>
-            }
-          </div>
-        )}
-        {current === 1 && (
-          <div style={{ lineHeight: 260, textAlign: "center", marginTop: 50 }}>
+          <div
+            style={{
+              lineHeight: 260,
+              textAlign: "center",
+              marginTop: 50,
+            }}
+          >
             <Row>
               <Col span={3}></Col>
               <Col span={18}>
-                <Descriptions title="Order Info" items={orderInfo} bordered />
+                <Descriptions
+                  title="Thông tin đơn hàng"
+                  items={orderInfo}
+                  bordered
+                />
               </Col>
               <Col span={3}></Col>
             </Row>
           </div>
         )}
+
+        {current === 1 && (
+          <div
+            style={{
+              lineHeight: "1.5",
+              textAlign: "center",
+              marginTop: 50,
+            }}
+          >
+            <Row justify="center">
+              <Col span={18}>
+                <Row justify="center">
+                  <Col>
+                    <img
+                      style={{ width: "300px", height: "auto" }}
+                      src={QRImg}
+                      alt="QR"
+                    />
+                  </Col>
+                </Row>
+                <Row justify="center" style={{ marginTop: 20 }}>
+                  <Col>
+                    <h4>
+                      <strong>Mã đơn hàng:</strong>{" "}
+                      {"IDEASY(" + orderDetail.orderId + ")"}
+                    </h4>
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
+
+            <Row justify="center" style={{ marginTop: "30px" }}>
+              <Col span={18}>
+                <h1 style={{ fontWeight: "bold", marginBottom: "20px" }}>
+                  Hướng dẫn thanh toán sản phẩm
+                </h1>
+                <div style={{ textAlign: "left", marginLeft: "70px" }}>
+                  <p>
+                    <strong>Bước 1:</strong> Mở ứng dụng hỗ trợ thanh toán sử
+                    dụng mã QR
+                    {"("}Momo, Bank, v.v{")"}
+                  </p>
+                  <p>
+                    <strong>Bước 2:</strong> Thực hiện nhập số tiền cần thanh
+                    toán
+                  </p>
+                  <p>
+                    <strong>Bước 3:</strong> Chụp hình xác nhận giao dịch thành
+                    công qua fanpage{" "}
+                    <a
+                      href="https://www.facebook.com/ideasylichytuong"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <strong>IDEASY</strong>
+                    </a>
+                  </p>
+
+                  <p>
+                    <strong>Bước 4:</strong> Admin xác nhận giao dịch thành công
+                    và bạn nhận bộ lịch IDEASY qua email!
+                  </p>
+                </div>
+              </Col>
+            </Row>
+          </div>
+        )}
+
         <div
           style={{
             marginTop: 24,
           }}
         >
           <Flex justify="center">
-            {current < steps.length - 1 && (
+            <>
+              {current === 0 && (
+                <Button type="primary" onClick={() => next()}>
+                  Tiếp tục
+                </Button>
+              )}
+              {current === 1 && (
+                <Button type="primary" onClick={() => complete()}>
+                  Hoàn tất
+                </Button>
+              )}
               <Button
                 type="primary"
-                onClick={() => next()}
-                disabled={!selectedRowKey}
-              >
-                Next
-              </Button>
-            )}
-            {current === steps.length - 1 && (
-              <Button
-                type="primary"
-                onClick={() => message.success("Processing complete!")}
-              >
-                Done
-              </Button>
-            )}
-            {current > 0 && (
-              <Button
+                danger
                 style={{
-                  margin: "0 8px",
+                  marginLeft: 20,
                 }}
                 onClick={() => prev()}
               >
-                Previous
+                Hủy thanh toán
               </Button>
-            )}
+            </>
           </Flex>
         </div>
       </Card>
+
+      {loading && (
+        <Spin
+          fullscreen={true}
+          indicator={
+            <LoadingOutlined
+              style={{
+                fontSize: 40,
+              }}
+              spin
+            />
+          }
+        />
+      )}
     </div>
   );
 }

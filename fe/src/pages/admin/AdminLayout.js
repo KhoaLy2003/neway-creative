@@ -30,7 +30,7 @@ const items = [
   getItem("Dashboard", "/admin", <AreaChartOutlined />),
   getItem("Calendar", "/admin/calendars", <AppstoreOutlined />),
   getItem("Customer", "/admin/customers", <UserOutlined />),
-  getItem("Transaction", "/admin/transactions", <TransactionOutlined />),
+  getItem("Order", "/admin/orders", <TransactionOutlined />),
   getItem("Post", "/admin/post", <EditOutlined />),
   getItem("Logout", "/logout", <LogoutOutlined />, null, "logout"),
 ];
@@ -71,10 +71,12 @@ const AdminLayout = () => {
         onCollapse={(collapsed, type) => {
           console.log(collapsed, type);
         }}
+        style={{ background: colorBgContainer }}
       >
         <div className="demo-logo-vertical" />
         <Menu
-          theme="dark"
+          // theme="dark"
+          style={{ background: colorBgContainer }}
           mode="inline"
           selectedKeys={[selectedKeys]}
           items={items}

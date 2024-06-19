@@ -6,7 +6,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class VnPayConstant {
     public static final String VNP_PAY_URL = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-    public static final String VNP_RETURN_URL = "http://localhost:8080/api/testing/result";
+    public static final String VNP_REFUND_URL = "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction";
+
+    public static final String VNP_QUERYDR_URL = "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction";
+    public static final String VNP_RETURN_URL = "http://localhost:8080/api/payment/result";
 
 //    public static final String VNP_TMN_CODE = "I5KQIAXB";
 //    public static final String SECRET_KEY = "TBBRHMODHEETYDDLMFQFGIJHDZGXQTZF";
@@ -16,7 +19,13 @@ public class VnPayConstant {
     public static final String VNP_VERSION = "2.1.0";
     public static final String VNP_COMMAND_ORDER = "pay";
     public static final String VNP_COMMAND_STATUS = "querydr";
+
+    public static final String VNP_COMMAND_REFUND = "refund";
     public static final String ORDER_TYPE = "other";
+
+    public static final String FULL_REFUND_TRANSACTION_TYPE = "02";
+
+    public static final String PARTIAL_REFUND_TRANSACTION_TYPE = "03";
     public static final String VNP_CURRENCY_CODE = "VND";
     public static final String VNP_LOCALE = "vn";
     public static final String VNP_IP_ADDR = "192.168.1.252";

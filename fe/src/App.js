@@ -17,6 +17,9 @@ import AdminPostManagement from "./pages/admin/AdminPostManagement";
 import RequiredAuth from "./components/RequireAuth";
 import ViewPostPage from "./pages/customer/ViewPostsPage";
 import ViewPostDetail from "./pages/customer/ViewPostDetail";
+import ViewCart from "./pages/customer/ViewCart";
+import PaymentResultPage from "./pages/customer/PaymentResultPage";
+import ViewOrderHistory from "./pages/customer/ViewOrderHistory";
 
 const roles = {
   Admin: "ADMIN",
@@ -35,10 +38,13 @@ function App() {
           <Route path="about-us" element={<AboutUsPage />} />
           <Route path="posts" element={<ViewPostPage />} />
           <Route path="posts/:postId" element={<ViewPostDetail />} />
+          <Route path="payment-result" element={<PaymentResultPage />} />
+          <Route path="/order-history" element={<ViewOrderHistory />} />
 
           <Route element={<RequiredAuth allowedRoles={[roles.Customer]} />}>
             <Route path="payment" element={<PaymentPage />} />
           </Route>
+          <Route path="/cart" element={<ViewCart />} />
         </Route>
 
         <Route element={<RequiredAuth allowedRoles={[roles.Admin]} />}>
@@ -47,7 +53,7 @@ function App() {
             <Route path="calendars" element={<AdminCalendarManagement />} />
             <Route path="customers" element={<AdminCustomerMangment />} />
             <Route
-              path="transactions"
+              path="orders"
               element={<AdminTransactionManagement />}
             />
             <Route path="post" element={<AdminPostManagement />} />

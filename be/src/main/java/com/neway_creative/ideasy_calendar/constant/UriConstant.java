@@ -59,6 +59,26 @@ public final class UriConstant {
      */
     public static final String PAYMENT_UPDATE = "/update";
     /**
+     * The constant PAYMENT_RESULT.
+     */
+    public static final String PAYMENT_RESULT = "/result";
+    /**
+     * The constant PAYMENT_QUERY.
+     */
+    public static final String PAYMENT_QUERY = "/query";
+    /**
+     * The constant PAYMENT_REFUND.
+     */
+    public static final String PAYMENT_REFUND = "/refund";
+    /**
+     * The constant ORDER_HISTORY.
+     */
+    public static final String CUSTOMER_ORDER_HISTORY = "/{customerId}/order-history";
+    /**
+     * The constant GET_ORDER_DETAIL.
+     */
+    public static final String CUSTOMER_ORDER_DETAIL = "/{customerId}/order-history/{orderId}";
+    /**
      * The constant POST_CREATE.
      */
     public static final String POST_CREATE = "/admin/create";
@@ -94,4 +114,17 @@ public final class UriConstant {
      * The constant CUSTOMER_LOGIN_URI.
      */
     public static final String CUSTOMER_LOGIN_URI = "/login";
+    /**
+     * The constant ORDER_BASE_URI.
+     */
+    public static final String ORDER_BASE_URI = "/api/orders";
+    /**
+     * The constant ORDER_ADMIN_VIEW_URI.
+     */
+    public static final String ORDER_ADMIN_VIEW_URI = "/admin/orders";
+    /**
+     * The constant ADMIN_VIEW_CUSTOMER.
+     */
+    public static final String ADMIN_VIEW_CUSTOMER = "/admin/customers";
+
 }

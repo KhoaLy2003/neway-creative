@@ -84,7 +84,6 @@ export default function ViewPostDetail() {
                 alignItems: "center",
               }}
             >
-              {/* <h5 style={{ marginLeft: 'auto', marginBottom: '20px' }}><UserOutlined />   Admin</h5> */}
               <div style={{ marginBottom: "35px" }}>
                 <h3>{post.description}</h3>
               </div>

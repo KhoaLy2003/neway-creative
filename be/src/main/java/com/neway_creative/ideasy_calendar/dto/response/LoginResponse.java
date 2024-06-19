@@ -10,6 +10,7 @@ import java.io.Serializable;
 @Setter
 @Builder
 public class LoginResponse implements Serializable {
+    private int id;
     private String name;
     private String email;
     private String token;

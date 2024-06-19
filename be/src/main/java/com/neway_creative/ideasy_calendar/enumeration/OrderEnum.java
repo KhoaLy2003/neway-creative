@@ -13,5 +13,5 @@ public enum OrderEnum {
     WAITING,
     FAILED,
     COMPLETED,
-    CANCELED
+    CANCELLED
 }

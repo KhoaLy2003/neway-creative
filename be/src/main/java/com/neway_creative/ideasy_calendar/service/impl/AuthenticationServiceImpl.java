@@ -9,6 +9,7 @@ import com.neway_creative.ideasy_calendar.entity.Admin;
 import com.neway_creative.ideasy_calendar.entity.Customer;
 import com.neway_creative.ideasy_calendar.enumeration.RoleEnum;
 import com.neway_creative.ideasy_calendar.enumeration.StatusEnum;
+import com.neway_creative.ideasy_calendar.exception.AccountNotVerifiedException;
 import com.neway_creative.ideasy_calendar.exception.DuplicateEmailException;
 import com.neway_creative.ideasy_calendar.repository.CustomerRepository;
 import com.neway_creative.ideasy_calendar.service.AuthenticationService;
@@ -96,7 +97,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             Customer currentCustomer = existingUser.get();
 
             if (currentCustomer.getStatus().equals(StatusEnum.INACTIVE)) {
-                throw new ResourceNotFoundException(MessageFormat.format(
+                String otp = otpGenerator.generateOTP();
+                mailService.sendVerificationEmail(request.getEmail(), otp);
+                LOGGER.info("Send verification email successfully to account with email {}", request.getEmail());
+
+                currentCustomer.setOtp(otp);
+                currentCustomer.setOtpGeneratedTime(LocalDateTime.now());
+                customerRepository.save(currentCustomer);
+
+                throw new AccountNotVerifiedException(MessageFormat.format(
                         messageLocalization.getLocalizedMessage(MessageConstant.ACCOUNT_NOT_VERIFIED), request.getEmail()));
             }
 
@@ -114,6 +123,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
             return LoginResponse
                     .builder()
+                    .id(currentCustomer.getCustomerId())
                     .name(currentCustomer.getName())
                     .email(request.getEmail())
                     .token(jwtService.generateToken(existingUser.get()))

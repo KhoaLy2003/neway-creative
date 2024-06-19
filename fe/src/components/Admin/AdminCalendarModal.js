@@ -117,7 +117,7 @@ const AdminCalendarModal = ({ modalOpen, setModalOpen, calendarId }) => {
   return (
     <>
       <Modal
-        width={"auto"}
+        width={"60%"}
         title={calendarData?.title}
         centered
         open={modalOpen}
@@ -127,15 +127,15 @@ const AdminCalendarModal = ({ modalOpen, setModalOpen, calendarId }) => {
           <Button key="back" onClick={handleCancel}>
             Return
           </Button>,
-          <Button
-            key="submit"
-            type="primary"
-            loading={loading}
-            // onClick={handleOk}
-            onClick={() => handleOpenCalendarForm()}
-          >
-            Update
-          </Button>,
+          // <Button
+          //   key="submit"
+          //   type="primary"
+          //   loading={loading}
+          //   // onClick={handleOk}
+          //   onClick={() => handleOpenCalendarForm()}
+          // >
+          //   Update
+          // </Button>,
         ]}
       >
         <Carousel autoplay style={{ textAlign: "center" }}>
@@ -178,89 +178,5 @@ const AdminCalendarModal = ({ modalOpen, setModalOpen, calendarId }) => {
     </>
   );
 };
-
-// const getColorByPackageType = (packageType) => {
-//   switch (packageType) {
-//     case "BASIC":
-//       return "green";
-//     case "ADVANCED":
-//       return "geekblue";
-//     case "PREMIUM":
-//       return "gold";
-//     default:
-//       return "gray";
-//   }
-// };
-
-// const getColorByDurationUnit = (durationUnit) => {
-//   switch (durationUnit) {
-//     case "DAYS":
-//       return "green";
-//     case "WEEKS":
-//       return "cyan";
-//     case "MONTHS":
-//       return "magenta";
-//     case "YEARS":
-//       return "purple";
-//     default:
-//       return "gray";
-//   }
-// };
-
-// const packages = [
-//   {
-//     key: "1",
-//     label: "Price",
-//     children: 100,
-//   },
-//   {
-//     key: "2",
-//     label: "Type",
-//     children: "BASIC",
-//   },
-//   {
-//     key: "3",
-//     label: "Duration unit",
-//     children: "DAYS",
-//   },
-//   {
-//     key: "4",
-//     label: "Duration value",
-//     children: 7,
-//   },
-//   {
-//     key: "5",
-//     label: "Notion",
-//     children: (
-//       <Link href="https://ant.design" target="_blank">
-//         Ant Design (Link)
-//       </Link>
-//     ),
-//   },
-// ];
-
-// const packageLayout = [
-//   {
-//     key: "1",
-//     label: "This is panel header 1",
-//     children: (
-//       <Descriptions title="Package Infomation" bordered items={packages} />
-//     ),
-//   },
-//   {
-//     key: "2",
-//     label: "This is panel header 2",
-//     children: (
-//       <Descriptions title="Package Infomation" bordered items={packages} />
-//     ),
-//   },
-//   {
-//     key: "3",
-//     label: "This is panel header 3",
-//     children: (
-//       <Descriptions title="Package Infomation" bordered items={packages} />
-//     ),
-//   },
-// ];
 
 export default AdminCalendarModal;

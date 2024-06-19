@@ -1,13 +1,17 @@
 package com.neway_creative.ideasy_calendar.controller;
 
 import com.neway_creative.ideasy_calendar.constant.MessageConstant;
+import com.neway_creative.ideasy_calendar.constant.UriConstant;
 import com.neway_creative.ideasy_calendar.dto.LoginGoogleInfoDto;
 import com.neway_creative.ideasy_calendar.dto.request.CreatePaymentRequest;
 import com.neway_creative.ideasy_calendar.dto.request.LoginRequest;
 import com.neway_creative.ideasy_calendar.dto.request.RegisterRequest;
 import com.neway_creative.ideasy_calendar.dto.response.BaseResponse;
+import com.neway_creative.ideasy_calendar.dto.response.CustomerOrderHistoryResponse;
 import com.neway_creative.ideasy_calendar.dto.response.PaymentResultResponse;
+import com.neway_creative.ideasy_calendar.repository.OrderRepository;
 import com.neway_creative.ideasy_calendar.service.AuthenticationService;
+import com.neway_creative.ideasy_calendar.service.MailService;
 import com.neway_creative.ideasy_calendar.service.PaymentService;
 import com.neway_creative.ideasy_calendar.utils.MessageLocalization;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,11 +26,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -45,6 +45,8 @@ public class TestController {
     private final AuthenticationService authenticationService;
     private final MessageLocalization messageLocalization;
     private final RedisTemplate redisTemplate;
+    private final MailService mailService;
+    private final OrderRepository orderRepository;
 
     @Operation(method = "POST", summary = "Register account", description = "Send a request via this API to register new account")
     @PostMapping("/register")
@@ -146,6 +148,30 @@ public class TestController {
         if (cacheKeys != null && !cacheKeys.isEmpty()) {
             redisTemplate.delete(cacheKeys);
             LOGGER.info("Cache keys for all pages cleared");
+        }
+    }
+
+    @PostMapping("/sendMail")
+    public void sendMailTest() {
+        mailService.sendMailTest();
+    }
+
+    @GetMapping("/packages/{orderId}")
+    public List<Integer> getPackagesByOrderId(@PathVariable int orderId) {
+        return  orderRepository.findPackageIdsByOrderId(orderId);
+    }
+
+    @CrossOrigin
+    @GetMapping("/order-history /{customerId}")
+    public ResponseEntity<BaseResponse> getCustomerOrderHistory(@PathVariable int customerId) {
+        try {
+            CustomerOrderHistoryResponse response = paymentService.getCustomerOrderHistory(customerId);
+
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new BaseResponse(HttpStatus.OK.value(), MessageConstant.SUCCESSFUL_MESSAGE, response));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new BaseResponse(HttpStatus.BAD_REQUEST.value(), MessageConstant.GET_CUSTOMER_ORDER_HISTORY_FAILED, null));
         }
     }
 }
