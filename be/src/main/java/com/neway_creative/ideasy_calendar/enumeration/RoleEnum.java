@@ -9,12 +9,6 @@ import lombok.Getter;
  */
 @Getter
 public enum RoleEnum {
-    ADMIN(1L),
-    MEMBER(2L);
-
-    private final Long value;
-
-    RoleEnum(Long value) {
-        this.value = value;
-    }
+    ADMIN,
+    CUSTOMER;
 }

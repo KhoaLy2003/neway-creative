@@ -3,6 +3,7 @@ package com.neway_creative.ideasy_calendar.entity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -15,9 +16,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.util.List;
+import java.util.TimeZone;
 
 /**
  * Calendar Entity
@@ -26,6 +29,7 @@ import java.io.Serializable;
  */
 @Getter
 @Setter
+@NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "calendar")
@@ -40,14 +44,8 @@ public class Calendar extends BaseEntity implements Serializable {
     @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "description", nullable = false)
+    @Column(name = "description", columnDefinition = "TEXT", nullable = false)
     private String description;
-
-    @Column(name = "price", nullable = false)
-    private long price;
-
-    @Column(name = "link_notion", nullable = false)
-    private String linkNotion;
 
     @Column(name = "image", nullable = false)
     private String image;
@@ -59,10 +57,6 @@ public class Calendar extends BaseEntity implements Serializable {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-    @OneToOne(mappedBy = "calendar", cascade = CascadeType.ALL)
-    private OrderDetail orderDetail;
-
-    public Calendar() {
-        this.isDelete = false;
-    }
+    @OneToMany(mappedBy = "calendar", cascade = CascadeType.ALL)
+    private List<Package> packages;
 }

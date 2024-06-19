@@ -1,23 +1,15 @@
 package com.neway_creative.ideasy_calendar.entity;
 
+import com.neway_creative.ideasy_calendar.enumeration.OrderEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Order Entity
@@ -39,22 +31,25 @@ public class Order extends BaseEntity {
     @Column(name = "order_date", nullable = false)
     private LocalDateTime orderDate;
 
-    @Column(name = "total_price", nullable = false)
-    private long totalPrice;
+    @Column(name = "price", nullable = false)
+    private long price;
 
-    @Column(name = "quantity", nullable = false)
-    private int quantity;
-
+    @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private int status;
+    private OrderEnum status;
 
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private List<OrderDetail> orderDetails;
-
-    @OneToOne(mappedBy = "order")
-    private Payment payment;
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    })
+    @JoinTable(name = "order_package",
+            joinColumns = @JoinColumn(name = "order_id"),
+            inverseJoinColumns = @JoinColumn(name = "package_id")
+    )
+    private Set<Package> packages = new HashSet<>();
 }

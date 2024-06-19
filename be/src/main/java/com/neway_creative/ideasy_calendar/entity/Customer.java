@@ -1,9 +1,11 @@
 package com.neway_creative.ideasy_calendar.entity;
 
-import com.neway_creative.ideasy_calendar.enumeration.BaseStatusEnum;
+import com.neway_creative.ideasy_calendar.enumeration.StatusEnum;
+import com.neway_creative.ideasy_calendar.enumeration.RoleEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,19 +15,17 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
-import javax.persistence.FetchType;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Customer Entity
@@ -35,6 +35,7 @@ import java.util.Set;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "customer")
 @EntityListeners(AuditingEntityListener.class)
@@ -54,30 +55,29 @@ public class Customer extends BaseEntity implements UserDetails {
     @Column(name = "password", nullable = false)
     private String password;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private int status;
+    private StatusEnum status;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
+    private RoleEnum role;
 
     @OneToMany(mappedBy = "customer")
     private List<Order> orders;
 
-    @OneToMany(mappedBy = "customer")
-    private List<Payment> payments;
+    @Column(name = "otp")
+    private String otp;
 
-    public Customer() {
-        this.status = BaseStatusEnum.INACTIVE.getValue();
-    }
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_role",
-            joinColumns = @JoinColumn(name = "customer_id", referencedColumnName = "customer_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "role_id"))
-    private Set<Role> roles = new HashSet<>();
+    @Column(name = "otp_generated_time")
+    private LocalDateTime otpGeneratedTime;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream()
-                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName().toUpperCase()))
-                .toList();
+        List<SimpleGrantedAuthority> authorityList = new ArrayList<>();
+        authorityList.add(new SimpleGrantedAuthority("ROLE_"+getRole().name().toUpperCase()));
+
+        return authorityList;
     }
 
     @Override

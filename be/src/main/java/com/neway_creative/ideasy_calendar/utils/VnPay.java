@@ -103,7 +103,6 @@ public class VnPay {
         }
 
         return hmacSHA512(VnPayConstant.SECRET_KEY, sb.toString());
-
     }
 
     public static String hmacSHA512(final String key, final String data) {
@@ -164,5 +163,23 @@ public class VnPay {
 
         return sb.toString();
 
+    }
+
+    public static String generateRefundHashData(Map<String, String> payload) {
+        return String.join("|",
+                payload.get("vnp_RequestId"),
+                payload.get("vnp_Version"),
+                payload.get("vnp_Command"),
+                payload.get("vnp_TmnCode"),
+                payload.get("vnp_TransactionType"),
+                payload.get("vnp_TxnRef"),
+                payload.get("vnp_Amount"),
+                payload.get("vnp_TransactionNo"),
+                payload.get("vnp_TransactionDate"),
+                payload.get("vnp_CreateBy"),
+                payload.get("vnp_CreateDate"),
+                payload.get("vnp_IpAddr"),
+                payload.get("vnp_OrderInfo")
+        );
     }
 }

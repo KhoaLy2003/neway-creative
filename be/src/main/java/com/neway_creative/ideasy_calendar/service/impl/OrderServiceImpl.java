@@ -1,6 +1,5 @@
 package com.neway_creative.ideasy_calendar.service.impl;
 
-import com.neway_creative.ideasy_calendar.repository.OrderDetailRepository;
 import com.neway_creative.ideasy_calendar.repository.OrderRepository;
 import com.neway_creative.ideasy_calendar.service.OrderService;
 import org.slf4j.Logger;
@@ -18,5 +17,4 @@ public class OrderServiceImpl implements OrderService {
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderServiceImpl.class);
 
     @Autowired private OrderRepository orderRepository;
-    @Autowired private OrderDetailRepository orderDetailRepository;
 }

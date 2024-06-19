@@ -2,12 +2,12 @@ name: neway creative be ci
 
 on:
   push:
-    branches: ["test-cicd"]
+    branches: ["production"]
     paths:
       - "be/**"
       - ".github/workflows/neway-creative-be-ci.yaml"
   pull_request:
-    branches: ["test-cicd"]
+    branches: ["production"]
     paths:
       - "be/**"
       - ".github/workflows/neway-creative-be-ci.yaml"
