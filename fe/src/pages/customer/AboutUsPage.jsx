@@ -21,14 +21,7 @@ const AboutUsPage = () => {
             display: "flex",
             justifyContent: "center",
           }}
-        >
-          {/* <h3>What is Content Calendar</h3> */}
-          <img
-            src={aboutUsHeading}
-            alt="About Us Heading"
-            style={{ width: "90%", height: "250px", objectFit: "cover" }}
-          />
-        </div>
+        ></div>
 
         <div
           style={{
@@ -39,7 +32,7 @@ const AboutUsPage = () => {
         >
           <div className="vision mb-5">
             <div className="row">
-              <div className="col-md-6">
+              <div className="col-md-7">
                 <h1 style={{ fontWeight: "bold" }} className="mb-5">
                   Vision - Tầm nhìn
                 </h1>
@@ -61,12 +54,11 @@ const AboutUsPage = () => {
                   trên thế giới!
                 </p>
               </div>
-              <div class="col-md-6">
+              <div class="col-md-5" style={{ textAlign: "center" }}>
                 <img
-                  src={aboutUs1}
-                  alt="About Us 1"
-                  className="img-fluid"
-                  style={{ width: "95%", height: "95%", objectFit: "cover" }}
+                  src="https://res.cloudinary.com/df75ybox6/image/upload/v1716114694/ideasy/auoftyvadj75rnx15ste.jpg"
+                  alt=""
+                  style={{ width: "80%" }}
                 />
               </div>
             </div>
@@ -82,15 +74,14 @@ const AboutUsPage = () => {
         >
           <div className="mission mb-5">
             <div className="row">
-              <div className="col-md-6">
+              <div className="col-md-5" style={{ textAlign: "center" }}>
                 <img
-                  src={aboutUs1}
-                  alt="About Us 1"
-                  className="img-fluid"
-                  style={{ width: "95%", height: "95%", objectFit: "cover" }}
+                  src="https://res.cloudinary.com/df75ybox6/image/upload/v1716114694/ideasy/auoftyvadj75rnx15ste.jpg"
+                  alt=""
+                  style={{ width: "80%" }}
                 />
               </div>
-              <div className="col-md-6">
+              <div className="col-md-7">
                 <h1 style={{ fontWeight: "bold" }} className="mb-5">
                   Mission - Sứ mệnh
                 </h1>

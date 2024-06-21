@@ -1,7 +1,6 @@
 import React from "react";
 import "./About.css";
 import "../../assets/root.css";
-import featureImage from "../../assets/feature-image.jpg";
 import { Button, Card, Col, Divider, List, Row } from "antd";
 import { Link } from "react-router-dom";
 import Logo from "../../assets/ideasy.jpg";
@@ -16,7 +15,7 @@ const About = () => {
               <h2 style={{ color: "#000000" }}>Giới thiệu về Ideasy</h2>
             </Divider>
           </div>
-          <div className="col-md-6">
+          <div className="col-md-8">
             <div className="left-content">
               <p>
                 Chào mừng bạn đến với Ideasy, người bạn đồng hành đáng tin cậy
@@ -40,9 +39,13 @@ const About = () => {
             </div>
           </div>
 
-          <div className="col-md-6">
-            <div className="right-image">
-              <img src={featureImage} alt="" />
+          <div className="col-md-4">
+            <div className="right-image" style={{ textAlign: "center" }}>
+              <img
+                src="https://res.cloudinary.com/df75ybox6/image/upload/v1716114694/ideasy/auoftyvadj75rnx15ste.jpg"
+                alt=""
+                style={{ width: 350 }}
+              />
             </div>
           </div>
 

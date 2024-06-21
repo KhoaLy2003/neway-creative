@@ -73,7 +73,7 @@ const CalendarDetail = ({ calendarDetail }) => {
           <div className="col-md-12 my-5">
             <Breadcrumb calendarName={calendarDetail.title} />
           </div>
-          <div className="col-md-4">
+          <div className="col-md-6">
             <img
               className="card-img-top mb-5 mb-md-0"
               src={calendarDetail.image}
