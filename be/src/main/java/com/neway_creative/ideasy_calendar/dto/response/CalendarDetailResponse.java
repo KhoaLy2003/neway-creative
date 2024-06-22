@@ -18,4 +18,5 @@ public class CalendarDetailResponse implements Serializable {
     private String image;
     private CategoryDto category;
     private List<PackageResponse> packages;
+    private List<String> images;
 }

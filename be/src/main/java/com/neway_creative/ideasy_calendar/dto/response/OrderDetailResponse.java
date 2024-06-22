@@ -1,6 +1,5 @@
 package com.neway_creative.ideasy_calendar.dto.response;
 
-import com.neway_creative.ideasy_calendar.entity.Package;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,7 +7,6 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Calendar;
 import java.util.Set;
 
 @NoArgsConstructor

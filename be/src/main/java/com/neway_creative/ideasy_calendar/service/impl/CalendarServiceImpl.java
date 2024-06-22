@@ -14,6 +14,7 @@ import com.neway_creative.ideasy_calendar.dto.response.CalendarDetailResponse;
 import com.neway_creative.ideasy_calendar.dto.response.PackageAdminResponse;
 import com.neway_creative.ideasy_calendar.dto.response.PackageResponse;
 import com.neway_creative.ideasy_calendar.entity.Calendar;
+import com.neway_creative.ideasy_calendar.entity.CalendarImage;
 import com.neway_creative.ideasy_calendar.entity.Category;
 import com.neway_creative.ideasy_calendar.entity.Package;
 import com.neway_creative.ideasy_calendar.enumeration.DurationUnitEnum;
@@ -23,7 +24,6 @@ import com.neway_creative.ideasy_calendar.repository.CategoryRepository;
 import com.neway_creative.ideasy_calendar.service.CalendarService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -90,6 +90,10 @@ public class CalendarServiceImpl implements CalendarService {
 
         Optional<Calendar> calendar = calendarRepository.findById(id);
         if (calendar.isPresent()) {
+            List<String> imageUrls = calendar.get().getImages().stream()
+                    .map(CalendarImage::getImageUrl)
+                    .toList();
+
             CalendarDetailResponse calendarDetailResponse = CalendarDetailResponse
                     .builder()
                     .calendarId(calendar.get().getCalendarId())
@@ -98,6 +102,7 @@ public class CalendarServiceImpl implements CalendarService {
                     .category(CategoryMapper.INSTANCE.entityToDTO(calendar.get().getCategory()))
                     .description(calendar.get().getDescription())
                     .packages(mapPackages(calendar.get().getPackages()))
+                    .images(imageUrls)
                     .build();
 
             LOGGER.info("Get calendar successfully with id {}", id);

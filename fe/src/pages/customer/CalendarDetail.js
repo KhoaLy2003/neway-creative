@@ -16,6 +16,7 @@ const DetailPage = () => {
       try {
         const data = await fetchCalendarDetail(parseInt(calendarId));
         setCalendarData(data);
+        console.log("Calendar: ", data);
       } catch (error) {
         console.error("Error fetching calendar detail:", error.message);
         setError(true);

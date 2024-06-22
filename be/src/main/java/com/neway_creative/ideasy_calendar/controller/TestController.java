@@ -1,7 +1,6 @@
 package com.neway_creative.ideasy_calendar.controller;
 
 import com.neway_creative.ideasy_calendar.constant.MessageConstant;
-import com.neway_creative.ideasy_calendar.constant.UriConstant;
 import com.neway_creative.ideasy_calendar.dto.LoginGoogleInfoDto;
 import com.neway_creative.ideasy_calendar.dto.request.CreatePaymentRequest;
 import com.neway_creative.ideasy_calendar.dto.request.LoginRequest;
@@ -26,7 +25,13 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
