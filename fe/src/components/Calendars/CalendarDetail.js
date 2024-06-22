@@ -1,9 +1,8 @@
 import { React, useContext, useEffect, useState } from "react";
 import "../../assets/root.css";
 import Breadcrumb from "../Layouts/Breadcrumb";
-import { Button, Table, Tag, Typography } from "antd";
+import { Button, Carousel, Flex, Image, Table, Tag, Typography } from "antd";
 import Title from "antd/es/typography/Title";
-import { useNavigate } from "react-router-dom";
 import { getColorByPackageType } from "../../utils/GetColor";
 import { notification } from "antd";
 import { UserContext } from "../../context/AuthContext";
@@ -15,7 +14,7 @@ const CalendarDetail = ({ calendarDetail }) => {
   const [selectedRowKey, setSelectedRowKey] = useState(null);
   const [selectedRow, setSelectedRow] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
-  const navigate = useNavigate();
+  const [carouselImages, setCarouselImages] = useState([]);
   const { email } = useContext(UserContext);
 
   // const handleOrderClick = () => {
@@ -36,7 +35,7 @@ const CalendarDetail = ({ calendarDetail }) => {
     const isItemInCart = cart.some((cartItem) => {
       const cartItemCalendarDetail = JSON.parse(cartItem.calendarDetail);
       const itemCalendarDetail = JSON.parse(item.calendarDetail);
-        
+
       return (
         cartItemCalendarDetail.calendarId === itemCalendarDetail.calendarId
       );
@@ -66,6 +65,13 @@ const CalendarDetail = ({ calendarDetail }) => {
     }
   }, [selectedRowKey, calendarDetail]);
 
+  useEffect(() => {
+    if (calendarDetail) {
+      const images = [calendarDetail.image, ...calendarDetail.images];
+      setCarouselImages(images);
+    }
+  }, [calendarDetail]);
+
   return (
     <div className="custom-container my-4">
       {calendarDetail && (
@@ -73,12 +79,36 @@ const CalendarDetail = ({ calendarDetail }) => {
           <div className="col-md-12 my-5">
             <Breadcrumb calendarName={calendarDetail.title} />
           </div>
-          <div className="col-md-4">
-            <img
-              className="card-img-top mb-5 mb-md-0"
-              src={calendarDetail.image}
-              alt={calendarDetail.title}
-            />
+          <div className="col-md-6">
+            <Carousel autoplay arrows effect="fade">
+              {carouselImages.map((imageUrl, index) => (
+                <Image
+                  width={"100%"}
+                  height={350}
+                  key={index}
+                  src={imageUrl}
+                  alt={`Calendar Image ${index + 1}`}
+                />
+              ))}
+            </Carousel>
+            <Image.PreviewGroup>
+              <Flex
+                gap={"middle"}
+                justify="flex-start"
+                style={{ marginTop: 30 }}
+              >
+                {carouselImages.map((imageUrl, index) => (
+                  <Image
+                    key={index}
+                    width={100}
+                    height={100}
+                    src={imageUrl}
+                    alt={`Calendar Image ${index + 1}`}
+                    style={{ cursor: "pointer" }}
+                  />
+                ))}
+              </Flex>
+            </Image.PreviewGroup>
           </div>
           <div className="col-md-6">
             <Title level={1}>{calendarDetail.title}</Title>

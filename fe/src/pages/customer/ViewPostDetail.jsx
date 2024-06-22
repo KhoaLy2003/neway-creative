@@ -3,7 +3,7 @@ import PageHeading from "../../components/Layouts/PageHeading";
 import { Footer } from "antd/es/layout/layout";
 import { getPost } from "../../api/post";
 import { useNavigate, useParams } from "react-router-dom";
-import { Button } from "antd";
+import { Button, Flex, Space } from "antd";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 
 export default function ViewPostDetail() {
@@ -34,72 +34,62 @@ export default function ViewPostDetail() {
     <Fragment>
       <PageHeading />
 
-      <Button
-        type="primary"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          marginLeft: "7px",
-          marginTop: "7px",
-          padding: "0 24px",
-          height: "40px",
-          backgroundColor: "#6C36FE",
-          borderColor: "#6C36FE",
-          color: "#fff",
-          fontSize: "16px",
-          borderRadius: "8px",
-          boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-        }}
-        icon={<ArrowLeftOutlined />}
-        onClick={() => navigate(-1)}
-      >
-        Quay lại
-      </Button>
-
-      {post ? (
-        <div className="post mb-3">
-          <h1
-            style={{
-              textAlign: "center",
-              fontWeight: "bold",
-              marginBottom: "20px",
-            }}
-          >
-            {post.title}
-          </h1>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
+      <div style={{ marginTop: 50 }}>
+        {post ? (
+          <div className="post mb-3">
+            <h1
+              style={{
+                textAlign: "center",
+                fontWeight: "bold",
+                marginBottom: "20px",
+              }}
+            >
+              {post.title}
+            </h1>
             <div
               style={{
-                width: "45%",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
+                justifyContent: "center",
               }}
             >
-              <div style={{ marginBottom: "35px" }}>
-                <h3>{post.description}</h3>
+              <div
+                style={{
+                  width: "45%",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
+                <div style={{ marginBottom: "35px" }}>
+                  <h3>{post.description}</h3>
+                </div>
+                <img
+                  width={500}
+                  src={post.thumbnail}
+                  alt="test img"
+                  style={{ borderRadius: "25px", marginBottom: "35px" }}
+                />
+                <div dangerouslySetInnerHTML={{ __html: post.content }}></div>
               </div>
-              <img
-                width={500}
-                src={post.thumbnail}
-                alt="test img"
-                style={{ borderRadius: "25px", marginBottom: "35px" }}
-              />
-              <div dangerouslySetInnerHTML={{ __html: post.content }}></div>
             </div>
           </div>
-        </div>
-      ) : (
-        <p>Loading...</p>
-      )}
+        ) : (
+          <p>Loading...</p>
+        )}
+      </div>
+
+      <Flex justify="center" style={{ marginTop: 40 }}>
+        <Button
+          size="large"
+          type="primary"
+          icon={<ArrowLeftOutlined />}
+          onClick={() => navigate(-1)}
+        >
+          Quay lại
+        </Button>
+      </Flex>
 
       <Footer />
     </Fragment>

@@ -20,7 +20,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.List;
-import java.util.TimeZone;
 
 /**
  * Calendar Entity
@@ -59,4 +58,7 @@ public class Calendar extends BaseEntity implements Serializable {
 
     @OneToMany(mappedBy = "calendar", cascade = CascadeType.ALL)
     private List<Package> packages;
+
+    @OneToMany(mappedBy = "calendar", cascade = CascadeType.ALL)
+    private List<CalendarImage> images;
 }
