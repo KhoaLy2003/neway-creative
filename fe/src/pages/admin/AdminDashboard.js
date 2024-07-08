@@ -1,13 +1,84 @@
-import React from "react";
-import { UserOutlined } from "@ant-design/icons";
+import React, { useEffect, useState } from "react";
+import { UserOutlined, ShoppingOutlined, OrderedListOutlined } from "@ant-design/icons";
 import { Space, Typography, Row, Col, Card, Statistic, Layout, theme } from "antd";
+import { fetchCustomerForAdmin } from "../../api/customer";
+import { getLatestCalendars } from "../../api/calendar";
+import { fetchOrderHistoryAdmin } from "../../api/order";
+
 const { Content } = Layout;
 
 const AdminDashboard = () => {
+  const [customerCount, setCustomerCount] = useState(0);
+  const [calendarCount, setCalendarCount] = useState(0);
+  const [orderCount, setOrderCount] = useState(0);
+  const [orderHistory, setOrderHistory] = useState([]);
+
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
+  useEffect(() => {
+    const fetchCustomers = async () => {
+      try {
+        const customers = await fetchCustomerForAdmin();
+        //console.log(customers);
+        setCustomerCount(customers.data.customers.length);
+      } catch (error) {
+        console.error("Error fetching customers:", error);
+      }
+    };
+
+    fetchCustomers();
+  }, []);
+
+  useEffect(() => {
+    const fetchCalendar = async () => {
+      try {
+        const calendar = await getLatestCalendars();
+        //console.log(calendar);
+        setCalendarCount(calendar.data.length);
+      } catch (error) {
+        console.error("Error fetching customers:", error);
+      }
+    };
+
+    fetchCalendar();
+  }, []);
+
+  useEffect(() => {
+    const fetchOrder = async () => {
+      try {
+        const order = await fetchOrderHistoryAdmin();
+        //console.log(order);
+        setOrderCount(order.data.orderList.length);
+      } catch (error) {
+        console.error("Error fetching customers:", error);
+      }
+    };
+
+    fetchOrder();
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await fetchOrderHistoryAdmin();
+
+        const ordersWithFormattedDate = data.data.orderList.map((order) => {
+          const transactionCode = "IDEASY(" + order.orderId + ")";
+          const [year, month, day] = order.orderDate;
+          const formattedDate = `${day}/${month}/${year}`;
+          return { ...order, transactionCode, formattedDate };
+        });
+        console.log(ordersWithFormattedDate);
+        setOrderHistory(ordersWithFormattedDate);
+      } catch (error) {
+        console.error("Error fetching customers:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
   return (
     <Layout>
       <Space
@@ -33,13 +104,13 @@ const AdminDashboard = () => {
                 />
               }
               title={"Customer"}
-              //   value={customers}
+              value={customerCount}
             />
           </Col>
           <Col span={8}>
             <DashboardCard
               icon={
-                <UserOutlined
+                <ShoppingOutlined
                   style={{
                     color: "purple",
                     backgroundColor: "rgba(0,255,255,0.25)",
@@ -49,14 +120,14 @@ const AdminDashboard = () => {
                   }}
                 />
               }
-              title={"Customer"}
-              //   value={customers}
+              title={"Product"}
+              value={calendarCount}
             />
           </Col>
           <Col span={8}>
             <DashboardCard
               icon={
-                <UserOutlined
+                <OrderedListOutlined
                   style={{
                     color: "purple",
                     backgroundColor: "rgba(0,255,255,0.25)",
@@ -66,8 +137,8 @@ const AdminDashboard = () => {
                   }}
                 />
               }
-              title={"Customer"}
-              //   value={customers}
+              title={"Total Order"}
+              value={orderCount}
             />
           </Col>
         </Row>
@@ -85,7 +156,7 @@ const AdminDashboard = () => {
             borderRadius: borderRadiusLG,
           }}
         >
-          content
+          Order History Chart
         </div>
       </Content>
     </Layout>
