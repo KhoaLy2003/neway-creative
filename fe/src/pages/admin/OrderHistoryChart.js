@@ -1,58 +1,56 @@
-// import React, { useEffect, useState } from "react";
-// import { Line } from "react-chartjs-2";
+import React from "react";
+import { Bar } from "react-chartjs-2";
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Legend } from "chart.js";
 
-// const OrderHistoryChart = () => {
-//   const [data, setData] = useState([]);
+ChartJS.register (
+    BarElement,
+    Legend,
+    CategoryScale,
+    LinearScale
+);
 
-  
-//   useEffect(() => {
-//     // Fetch order history data
-//     const fetchData = async () => {
-//       try {
-//         const response = await fetch('/api/order-history'); // Replace with your API endpoint
-//         const result = await response.json();
-//         setData(result.data); // Assuming the data is in result.data
-//       } catch (error) {
-//         console.error('Error fetching order history:', error);
-//       }
-//     };
+const OrderHistoryChart = ({ data }) => {
+  const chartData = {
+    labels: Object.keys(data),
+    datasets: [
+      {
+        label: "Number of Orders",
+        data: Object.values(data),
+        backgroundColor: "rgb(75, 192, 192)",
+      },
+    ],
+  };
 
-//     fetchData();
-//   }, []);
+  const options = {
+    maintainAspectRatio: false,
+    scales: {
+      x: {
+        grid: {
+          display: true,
+        },
+      },
+      y: {
+        beginAtZero: true,
+        ticks: {
+            stepSize: 1
+        }
+      },
+    },
+    plugins: {
+      legend: {
+        display: false,
+      },
+    },
+  };
 
-//   const config = {
-//     data,
-//     xField: 'date',
-//     yField: 'orderCount',
-//     xAxis: {
-//       type: 'timeCat', 
-//       tickCount: 5, // Number of ticks on the x-axis
-//     },
-//     yAxis: {
-//       label: {
-//         formatter: (v) => `${v}`, // Custom formatter for the y-axis labels
-//       },
-//     },
-//     point: {
-//       size: 5,
-//       shape: 'diamond',
-//     },
-//     tooltip: {
-//       showMarkers: true,
-//     },
-//     state: {
-//       active: {
-//         style: {
-//           shadowBlur: 4,
-//           stroke: '#000',
-//           fill: 'red',
-//         },
-//       },
-//     },
-//     interactions: [{ type: 'marker-active' }],
-//   };
+  return (
+    <div style={{ width: "100%", maxWidth: "700px", margin: "0 auto" }}>
+      <h2>Order History</h2>
+      <div style={{ height: "500px" }}>
+        <Bar data={chartData} options={options} />
+      </div>
+    </div>
+  );
+};
 
-//   return <Line {...config} />;
-// };
-
-// export default OrderHistoryChart;
+export default OrderHistoryChart;

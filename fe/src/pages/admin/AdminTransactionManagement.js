@@ -63,11 +63,11 @@ const AdminTransactionManagement = () => {
     try {
       const data = await fetchCustomerOrderDetail(customerId, orderId);
 
-      setOrderDetail(data.data); // Set order detail in state
+      setOrderDetail(data.data);
       const [year, month, day] = data.data.orderDate;
       const formattedDate = `${day}/${month}/${year}`;
       data.data.orderDate = formattedDate;
-      setModalVisible(true); // Show modal
+      setModalVisible(true);
       console.log("Order Detail:", data);
     } catch (error) {
       console.error("Error fetching customer order detail:", error);

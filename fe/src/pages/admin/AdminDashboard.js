@@ -13,11 +13,12 @@ import {
   Statistic,
   Layout,
   theme,
+  Table
 } from "antd";
-import { Line } from "react-chartjs-2";
 import { fetchCustomerForAdmin } from "../../api/customer";
 import { getLatestCalendars } from "../../api/calendar";
 import { fetchOrderHistoryAdmin } from "../../api/order";
+import OrderHistoryChart from "./OrderHistoryChart";
 
 const { Content } = Layout;
 
@@ -26,6 +27,8 @@ const AdminDashboard = () => {
   const [calendarCount, setCalendarCount] = useState(0);
   const [orderCount, setOrderCount] = useState(0);
   const [orderHistory, setOrderHistory] = useState({});
+  const [totalElements, setTotalElements] = useState(0);
+  const [orderTable, setOrderTable] = useState([]);
 
   const {
     token: { colorBgContainer, borderRadiusLG },
@@ -79,6 +82,13 @@ const AdminDashboard = () => {
         const response = await fetchOrderHistoryAdmin();
         const orders = response.data.orderList;
 
+        const orderForTable = response.data.orderList.map((order) => {
+          const transactionCode = "IDEASY(" + order.orderId + ")";
+          const [year, month, day] = order.orderDate;
+          const formattedDate = `${day}/${month}/${year}`;
+          return { ...order, transactionCode, formattedDate };
+        });
+
         const ordersByDate = orders.reduce((acc, order) => {
           const [year, month, day] = order.orderDate;
           const formattedDate = `${day}/${month}/${year}`;
@@ -93,30 +103,50 @@ const AdminDashboard = () => {
           return acc;
         }, {});
 
-        console.log(ordersByDate); 
-        
-        const chartData = {
-          labels: 'Dataset',
-          datasets: [
-            {
-              label: "Number of Orders",
-              data: null,
-              fill: false,
-              borderColor: "rgb(75, 192, 192)",
-              tension: 0.1,
-            },
-          ],
-        };
-
-        setOrderHistory(chartData);
+        console.log(ordersByDate);
+        setOrderHistory(ordersByDate);
+        setOrderTable(orderForTable);
+        setTotalElements(orderForTable.length);
       } catch (error) {
         console.error("Error fetching order history:", error);
-        setOrderHistory({}); // Handle error state by setting orderHistory to an empty object
       }
     };
 
     fetchData();
   }, []);
+
+  const columns = [
+    {
+      title: "Transaction Code",
+      dataIndex: "transactionCode",
+      key: "transactionCode",
+    },
+    {
+      title: "Customer Name",
+      dataIndex: "customerName",
+      key: "customerName",
+    },
+    {
+      title: "Order Date",
+      dataIndex: "formattedDate",
+      key: "formattedDate",
+    },
+    {
+      title: "Price",
+      dataIndex: "price",
+      key: "price",
+      render: (price) => (
+        <span style={{ color: "green", fontWeight: "bold" }}>
+          {price.toLocaleString("de-DE") + " VNĐ"}
+        </span>
+      ),
+    },
+    {
+      title: "Packages",
+      dataIndex: "numOfPackages",
+      key: "numOfPackages",
+    },
+  ];
 
   return (
     <Layout>
@@ -188,16 +218,41 @@ const AdminDashboard = () => {
         }}
       >
         <Card title="Order History Chart">
-          <div
-            style={{
-              minHeight: 360,
-              background: colorBgContainer,
-              borderRadius: borderRadiusLG,
-              padding: 24,
-            }}
-          >
-            <Line data={orderHistory} />
-          </div>
+          <Row gutter={16}>
+            <Col span={14}>
+              <div
+                style={{
+                  minHeight: 500,
+                  background: colorBgContainer,
+                  borderRadius: borderRadiusLG,
+                  padding: 24,
+                }}
+              >
+                <OrderHistoryChart data={orderHistory} />
+              </div>
+            </Col>
+            <Col span={10}>
+              <div
+                style={{
+                  minHeight: 360,
+                  background: colorBgContainer,
+                  borderRadius: borderRadiusLG,
+                  padding: 24,
+                }}
+              >
+                <Table
+                  columns={columns}
+                  pagination={{
+                    position: ["bottomCenter"],
+                    total: totalElements,
+                    showSizeChanger: false,
+                    pageSize: 5,
+                  }}
+                  dataSource={orderTable}
+                />
+              </div>
+            </Col>
+          </Row>
         </Card>
       </Content>
     </Layout>
