@@ -1,6 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { UserOutlined, ShoppingOutlined, OrderedListOutlined } from "@ant-design/icons";
-import { Space, Typography, Row, Col, Card, Statistic, Layout, theme } from "antd";
+import {
+  UserOutlined,
+  ShoppingOutlined,
+  OrderedListOutlined,
+} from "@ant-design/icons";
+import {
+  Space,
+  Typography,
+  Row,
+  Col,
+  Card,
+  Statistic,
+  Layout,
+  theme,
+} from "antd";
+import { Line } from "react-chartjs-2";
 import { fetchCustomerForAdmin } from "../../api/customer";
 import { getLatestCalendars } from "../../api/calendar";
 import { fetchOrderHistoryAdmin } from "../../api/order";
@@ -11,7 +25,7 @@ const AdminDashboard = () => {
   const [customerCount, setCustomerCount] = useState(0);
   const [calendarCount, setCalendarCount] = useState(0);
   const [orderCount, setOrderCount] = useState(0);
-  const [orderHistory, setOrderHistory] = useState([]);
+  const [orderHistory, setOrderHistory] = useState({});
 
   const {
     token: { colorBgContainer, borderRadiusLG },
@@ -62,23 +76,48 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await fetchOrderHistoryAdmin();
+        const response = await fetchOrderHistoryAdmin();
+        const orders = response.data.orderList;
 
-        const ordersWithFormattedDate = data.data.orderList.map((order) => {
-          const transactionCode = "IDEASY(" + order.orderId + ")";
+        const ordersByDate = orders.reduce((acc, order) => {
           const [year, month, day] = order.orderDate;
           const formattedDate = `${day}/${month}/${year}`;
-          return { ...order, transactionCode, formattedDate };
-        });
-        console.log(ordersWithFormattedDate);
-        setOrderHistory(ordersWithFormattedDate);
+          console.log(formattedDate);
+
+          if (!acc[formattedDate]) {
+            acc[formattedDate] = 1;
+          } else {
+            acc[formattedDate]++;
+          }
+
+          return acc;
+        }, {});
+
+        console.log(ordersByDate); 
+        
+        const chartData = {
+          labels: 'Dataset',
+          datasets: [
+            {
+              label: "Number of Orders",
+              data: null,
+              fill: false,
+              borderColor: "rgb(75, 192, 192)",
+              tension: 0.1,
+            },
+          ],
+        };
+
+        setOrderHistory(chartData);
       } catch (error) {
-        console.error("Error fetching customers:", error);
+        console.error("Error fetching order history:", error);
+        setOrderHistory({}); // Handle error state by setting orderHistory to an empty object
       }
     };
 
     fetchData();
   }, []);
+
   return (
     <Layout>
       <Space
@@ -148,16 +187,18 @@ const AdminDashboard = () => {
           margin: "24px 16px 0",
         }}
       >
-        <div
-          style={{
-            padding: 24,
-            minHeight: 360,
-            background: colorBgContainer,
-            borderRadius: borderRadiusLG,
-          }}
-        >
-          Order History Chart
-        </div>
+        <Card title="Order History Chart">
+          <div
+            style={{
+              minHeight: 360,
+              background: colorBgContainer,
+              borderRadius: borderRadiusLG,
+              padding: 24,
+            }}
+          >
+            <Line data={orderHistory} />
+          </div>
+        </Card>
       </Content>
     </Layout>
   );
