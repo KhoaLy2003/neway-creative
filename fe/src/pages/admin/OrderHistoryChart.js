@@ -10,12 +10,16 @@ ChartJS.register (
 );
 
 const OrderHistoryChart = ({ data }) => {
+  const maxValue = Math.max(...Object.values(data), 10);
+
   const chartData = {
     labels: Object.keys(data),
+    // labels: sortedLabels,
     datasets: [
       {
         label: "Number of Orders",
         data: Object.values(data),
+        // data: sortedLabels.map(label => data[label]),
         backgroundColor: "rgb(75, 192, 192)",
       },
     ],
@@ -30,9 +34,11 @@ const OrderHistoryChart = ({ data }) => {
         },
       },
       y: {
-        beginAtZero: true,
+        beginAtZero: false,
+        min: 0,
+        max: maxValue,
         ticks: {
-            stepSize: 1
+            stepSize: 1,
         }
       },
     },

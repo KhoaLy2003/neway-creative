@@ -122,6 +122,10 @@ const AdminTransactionManagement = () => {
           message: "File uploaded successfully",
           duration: 2,
         });
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
       } else {
         throw new Error("File upload failed");
       }
