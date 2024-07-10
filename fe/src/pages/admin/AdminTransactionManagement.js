@@ -17,6 +17,7 @@ import {
   uploadOrderData,
 } from "../../api/order";
 import { updateOrder } from "../../api/payment";
+import * as XLSX from "xlsx";
 
 const { Option } = Select;
 
@@ -97,18 +98,30 @@ const AdminTransactionManagement = () => {
 
   const handleUpload = async () => {
     const formData = new FormData();
+
     fileList.forEach((file) => {
       formData.append("file", file);
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: "array" });
+        const sheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[sheetName];
+        const jsonData = XLSX.utils.sheet_to_json(worksheet);
+        console.log(jsonData); // Log Excel file content as JSON
+      };
+      reader.readAsArrayBuffer(file);
     });
 
     try {
       const response = await uploadOrderData(formData);
-      if (response.status === 200) {
+
+      if (response && response.status === 200) {
         notification.success({
           message: "File uploaded successfully",
           duration: 2,
         });
-        // Refresh data or perform any additional actions
       } else {
         throw new Error("File upload failed");
       }
@@ -225,21 +238,20 @@ const AdminTransactionManagement = () => {
         <Upload
           fileList={fileList}
           beforeUpload={(file) => {
-            setFileList([...fileList, file]);
+            setFileList([file]);
             return false;
           }}
-          onRemove={(file) => {
-            setFileList(fileList.filter((f) => f !== file));
-          }}
+          onRemove={() => setFileList([])}
         >
           <Button icon={<UploadOutlined />}>Select File</Button>
         </Upload>
+
         <Button
           type="primary"
           onClick={handleUpload}
-          disabled={!fileList.length}
+          disabled={fileList.length === 0}
         >
-          Upload File
+          Upload
         </Button>
         <Table
           columns={columns}
