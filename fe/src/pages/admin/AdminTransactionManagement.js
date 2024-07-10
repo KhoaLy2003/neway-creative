@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import {
   Layout,
   Space,
@@ -7,19 +8,15 @@ import {
   Button,
   notification,
   Modal,
+  Upload,
 } from "antd";
-import { useState, useEffect } from "react";
+import { UploadOutlined } from "@ant-design/icons";
 import {
   fetchOrderHistoryAdmin,
   fetchCustomerOrderDetail,
+  uploadOrderData,
 } from "../../api/order";
 import { updateOrder } from "../../api/payment";
-
-// TODO:
-// - Fetch api
-// - Set state list with fetched data
-// - Define column title
-// - Set datasource
 
 const { Option } = Select;
 
@@ -33,6 +30,7 @@ const AdminTransactionManagement = () => {
   const [selectedOrderId, setSelectedOrderId] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [orderDetail, setOrderDetail] = useState(null);
+  const [fileList, setFileList] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -96,12 +94,34 @@ const AdminTransactionManagement = () => {
       setIsLoading(false);
     }
   };
+
+  const handleUpload = async () => {
+    const formData = new FormData();
+    fileList.forEach((file) => {
+      formData.append("file", file);
+    });
+
+    try {
+      const response = await uploadOrderData(formData);
+      if (response.status === 200) {
+        notification.success({
+          message: "File uploaded successfully",
+          duration: 2,
+        });
+        // Refresh data or perform any additional actions
+      } else {
+        throw new Error("File upload failed");
+      }
+    } catch (error) {
+      notification.error({
+        message: "File upload failed",
+        description: error.message,
+        duration: 2,
+      });
+    }
+  };
+
   const columns = [
-    // {
-    //   title: "Customer ID",
-    //   dataIndex: "customerId",
-    //   key: "customerId",
-    // },
     {
       title: "Transaction Code",
       dataIndex: "transactionCode",
@@ -137,11 +157,9 @@ const AdminTransactionManagement = () => {
       dataIndex: "numOfPackages",
       key: "numOfPackages",
     },
-
     {
       title: "Status",
       key: "status",
-
       render: (_, record) => (
         <Select
           defaultValue={record.status}
@@ -190,6 +208,7 @@ const AdminTransactionManagement = () => {
       ),
     },
   ];
+
   return (
     <Layout>
       <Space
@@ -203,6 +222,25 @@ const AdminTransactionManagement = () => {
         <Typography.Title level={2} style={{ marginTop: "30px" }}>
           Order history
         </Typography.Title>
+        <Upload
+          fileList={fileList}
+          beforeUpload={(file) => {
+            setFileList([...fileList, file]);
+            return false;
+          }}
+          onRemove={(file) => {
+            setFileList(fileList.filter((f) => f !== file));
+          }}
+        >
+          <Button icon={<UploadOutlined />}>Select File</Button>
+        </Upload>
+        <Button
+          type="primary"
+          onClick={handleUpload}
+          disabled={!fileList.length}
+        >
+          Upload File
+        </Button>
         <Table
           columns={columns}
           pagination={{
@@ -226,7 +264,6 @@ const AdminTransactionManagement = () => {
       >
         {orderDetail && (
           <div style={{ padding: "16px" }}>
-            {" "}
             <p>
               <strong style={{ fontSize: "19px" }}>Ngày mua hàng:</strong>{" "}
               {orderDetail.orderDate}
@@ -263,11 +300,11 @@ const AdminTransactionManagement = () => {
                     case "FAILED":
                       return "Lỗi khi thanh toán";
                     case "COMPLETED":
-                      return "Thanh toán hoàn tất";
+                      return "Đã thanh toán";
                     case "CANCELLED":
-                      return "Hủy thanh toán";
+                      return "Đã huỷ";
                     default:
-                      return "LỖI";
+                      return orderDetail.status;
                   }
                 })()}
               </span>

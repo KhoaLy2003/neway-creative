@@ -44,3 +44,24 @@ export const fetchCustomerOrderDetail = async (customerId, orderId) => {
   }
 };
 
+export const uploadOrderData = async (file) => {
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const response = await fetch(`${baseUrl}/upload-order-data`, {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to upload order data");
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error uploading order data:", error);
+    return null;
+  }
+};
