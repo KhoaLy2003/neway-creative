@@ -11,32 +11,29 @@ export default function ViewPostPage() {
     try {
       const response = await getAllPosts();
       const allPosts = response.data;
-      setPosts(allPosts);
+
+      const sortedPosts = allPosts.sort((a, b) => {
+        const dateA = new Date(...a.createdAt);
+        const dateB = new Date(...b.createdAt);
+        return dateB - dateA;
+      });
+
+      console.log("Sorted posts: ", sortedPosts);
+
+      setPosts(sortedPosts);
     } catch (error) {
       console.error("Error fetching posts:", error.message);
     }
   };
 
-  const formatDate = (dateTimeStr) => {
-    dateTimeStr = dateTimeStr.toString();
+  const formatDate = (dateArray) => {
+    const date = new Date(dateArray[0], dateArray[1] - 1, dateArray[2]);
 
-    const year = dateTimeStr.substring(0, 4);
-    let month = "";
-    let day = "";
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
 
-    if (dateTimeStr.length >= 6) {
-      month = dateTimeStr.substring(4, 6).padStart(2, "0");
-    }
-    if (dateTimeStr.length >= 8) {
-      day = dateTimeStr.substring(6, 8).padStart(2, "0");
-    }
-
-    let formattedDate = "";
-    if (day && month) {
-      formattedDate = `${year}`;
-    }
-
-    return formattedDate;
+    return `${day}/${month}/${year}`;
   };
 
   useEffect(() => {
@@ -74,7 +71,7 @@ export default function ViewPostPage() {
               >
                 <div style={{ flex: "0 0 auto", marginRight: "70px" }}>
                   <img
-                    width={400}
+                    width={300}
                     alt="logo"
                     src={item.thumbnail}
                     style={{ borderRadius: "20px", marginBottom: "5px" }}
@@ -102,7 +99,7 @@ export default function ViewPostPage() {
                       marginTop: "20px",
                     }}
                   >
-                    <div>Đăng vào {formatDate(item.updatedAt)}</div>
+                    <div>Đăng vào {formatDate(item.createdAt)}</div>
                   </div>
                 </div>
               </List.Item>

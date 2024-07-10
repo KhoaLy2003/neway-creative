@@ -49,10 +49,13 @@ public class Customer extends BaseEntity implements UserDetails {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "email_address", nullable = false, unique = true)
+    @Column(name = "email_address", unique = true)
     private String emailAddress;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "facebook_url", unique = true)
+    private String facebookUrl;
+
+    @Column(name = "password")
     private String password;
 
     @Enumerated(EnumType.STRING)

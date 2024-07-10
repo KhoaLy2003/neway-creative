@@ -61,4 +61,6 @@ public final class MessageConstant {
     public static final String ORDER_DUPLICATE_CALENDAR = "customer.order_duplicate_calendar";
     public static final String GET_CUSTOMERS_ADMIN_FAILED = "customer.get_customer.failed";
     public static final String UPLOAD_POST_IMAGE_SUCCESSFULLY = "admin.post.upload_image_successfully";
+    public static final String UPLOAD_ORDER_FROM_EXCEL_SUCCESSFULLY = "admin.upload_order_from_excel_successfully";
+    public static final String UPLOAD_ORDER_FROM_EXCEL_FAILED = "admin.upload_order_from_excel_failed";
 }
