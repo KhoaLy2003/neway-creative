@@ -10,6 +10,7 @@ import com.neway_creative.ideasy_calendar.dto.response.CustomerOrderHistoryRespo
 import com.neway_creative.ideasy_calendar.dto.response.PaymentResultResponse;
 import com.neway_creative.ideasy_calendar.repository.OrderRepository;
 import com.neway_creative.ideasy_calendar.service.AuthenticationService;
+import com.neway_creative.ideasy_calendar.service.ExcelService;
 import com.neway_creative.ideasy_calendar.service.MailService;
 import com.neway_creative.ideasy_calendar.service.PaymentService;
 import com.neway_creative.ideasy_calendar.utils.MessageLocalization;
@@ -31,7 +32,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -52,11 +55,19 @@ public class TestController {
     private final RedisTemplate redisTemplate;
     private final MailService mailService;
     private final OrderRepository orderRepository;
+    private final ExcelService excelService;
+
+    @PostMapping("/upload-order-data")
+    public ResponseEntity<BaseResponse> uploadCustomersData(@RequestParam("file") MultipartFile file) {
+        excelService.saveOrderFromExcel(file);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new BaseResponse(HttpStatus.OK.value(), messageLocalization.getLocalizedMessage(MessageConstant.UPLOAD_ORDER_FROM_EXCEL_SUCCESSFULLY), file.getName()));
+    }
 
     @Operation(method = "POST", summary = "Register account", description = "Send a request via this API to register new account")
     @PostMapping("/register")
     public ResponseEntity<BaseResponse> register(@Valid @RequestBody RegisterRequest request, BindingResult result) {
-        if(result.hasErrors()) {
+        if (result.hasErrors()) {
             List<String> errorMessages = result.getFieldErrors()
                     .stream()
                     .map(FieldError::getDefaultMessage)
@@ -74,7 +85,7 @@ public class TestController {
 
     @PostMapping("/login")
     public ResponseEntity<BaseResponse> login(@Valid @RequestBody LoginRequest request, BindingResult result) {
-        if(result.hasErrors()) {
+        if (result.hasErrors()) {
             List<String> errorMessages = result.getFieldErrors()
                     .stream()
                     .map(FieldError::getDefaultMessage)
@@ -119,7 +130,7 @@ public class TestController {
     }
 
     @GetMapping("/result")
-    public ResponseEntity<BaseResponse> getPaymentResult(HttpServletRequest request){
+    public ResponseEntity<BaseResponse> getPaymentResult(HttpServletRequest request) {
         int paymentStatus = paymentService.getPaymentResult(request);
         PaymentResultResponse paymentResultResponse = new PaymentResultResponse();
 
@@ -163,7 +174,7 @@ public class TestController {
 
     @GetMapping("/packages/{orderId}")
     public List<Integer> getPackagesByOrderId(@PathVariable int orderId) {
-        return  orderRepository.findPackageIdsByOrderId(orderId);
+        return orderRepository.findPackageIdsByOrderId(orderId);
     }
 
     @CrossOrigin

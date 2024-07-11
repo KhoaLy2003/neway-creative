@@ -1,11 +1,14 @@
 package com.neway_creative.ideasy_calendar.repository;
 
+import com.neway_creative.ideasy_calendar.entity.Customer;
 import com.neway_creative.ideasy_calendar.entity.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * OrderRepository
@@ -21,5 +24,6 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     Order findByCustomerIdAndOrderId(int customerId, int orderId);
     @Query("SELECT p.packageId FROM Order o JOIN o.packages p WHERE o.orderId = :orderId")
     List<Integer> findPackageIdsByOrderId(int orderId);
-    List<Order> findAllByOrderByCreatedAtDesc();
+    List<Order> findAllByOrderByCreatedAt();
+    Optional<Order> findByCustomerAndOrderDate(Customer customer, LocalDateTime orderDate);
 }

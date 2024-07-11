@@ -1,50 +1,79 @@
 import React, { Fragment, useState } from "react";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { Button, Input } from "antd";
-import { createPost } from "../../api/post";
+import { Button, Input, Spin, Upload, notification } from "antd";
+import { createPost, uploadImage } from "../../api/post";
+import { UploadOutlined } from "@ant-design/icons";
 
 function AdminPostEditor() {
+  const [isLoading, setIsLoading] = useState(false);
   const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
   const [content, setContent] = useState("");
+  const [imageFile, setImageFile] = useState(null);
+  const [fileName, setFileName] = useState("");
 
   const handleEditorChange = (event, editor) => {
     const data = editor.getData();
-    console.log(event.target);
     setContent(data);
   };
 
   const postCreateDto = {
     title: title,
-    description: description,
+    description: "",
     content: content,
     thumbnail: "",
   };
 
   const handleCreatePost = async () => {
-    const response = await createPost(postCreateDto);
+    setIsLoading(true);
+    try {
+      const response = await createPost(postCreateDto);
+      if (response.status === 200) {
+        const postId = response.data.id;
+        console.log("Post: ", response.data);
+        if (imageFile) {
+          await uploadImage(postId, imageFile);
+        }
 
-    const data = response.data;
+        setTitle("");
+        setContent("");
+        setImageFile(null);
+        setFileName("");
 
-    console.log("Response with data: ", data);
-    console.log("Post created with content: ", content);
+        notification.success({
+          message: "Create post successfully",
+          duration: 2,
+        });
+      }
+    } catch (error) {
+      console.error("Error creating post:", error);
+      notification.error({
+        message: "Create post failed",
+        description: error.message,
+        duration: 2,
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleImageChange = (file) => {
+    setImageFile(file);
+    setFileName(file.name);
+    return false; // Prevents default upload behavior
   };
 
   return (
     <Fragment>
-      <div className="post mb-3">
-        <h2 className="mb-3">Post Title</h2>
+      <div style={{ marginBottom: 25 }}>
         <form method="POST">
           <Input
+            style={{ marginBottom: 25 }}
             name="title"
             variant="outlined"
+            value={title}
             onChange={(e) => setTitle(e.target.value)}
-          />
-          <Input
-            name="description"
-            variant="outlined"
-            onChange={(e) => setDescription(e.target.value)}
+            disabled={isLoading}
           />
           <CKEditor
             editor={ClassicEditor}
@@ -61,15 +90,36 @@ function AdminPostEditor() {
                 },
               },
             }}
+            data={content}
             onReady={(editor) => {
               console.log("Editor is ready to use!", editor);
             }}
             onChange={handleEditorChange}
+            disabled={isLoading}
           />
+          <Upload
+            beforeUpload={handleImageChange}
+            showUploadList={false}
+            disabled={isLoading}
+          >
+            <Button style={{ marginTop: 25 }} icon={<UploadOutlined />}>
+              Select Image
+            </Button>
+          </Upload>
+          {fileName && (
+            <div style={{ marginTop: 10 }}>
+              <strong>Selected file:</strong> {fileName}
+            </div>
+          )}
         </form>
       </div>
-      <Button onClick={handleCreatePost} type="primary" htmlType="submit">
-        Create Post
+      <Button
+        onClick={handleCreatePost}
+        type="primary"
+        htmlType="submit"
+        disabled={isLoading}
+      >
+        {isLoading ? <Spin /> : "Create Post"}
       </Button>
     </Fragment>
   );

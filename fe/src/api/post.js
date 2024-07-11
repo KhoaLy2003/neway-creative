@@ -2,7 +2,7 @@ const baseUrl = process.env.REACT_APP_BACK_END_URL;
 
 export async function createPost(postCreateDto) {
   try {
-    const response = await fetch(`${baseUrl}/posts/admin/create`, {
+    const response = await fetch(`${baseUrl}/posts`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -12,6 +12,27 @@ export async function createPost(postCreateDto) {
 
     if (!response.ok) {
       throw new Error("Failed to create post");
+    }
+
+    return response.json();
+  } catch (error) {
+    console.log(error.message);
+    throw error;
+  }
+}
+
+export async function uploadImage(postId, imageFile) {
+  try {
+    const formData = new FormData();
+    formData.append("imageFile", imageFile);
+
+    const response = await fetch(`${baseUrl}/posts/upload?id=${postId}`, {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to upload image");
     }
 
     return response.json();

@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import {
   Layout,
   Space,
@@ -7,19 +8,17 @@ import {
   Button,
   notification,
   Modal,
+  Upload,
+  Flex,
 } from "antd";
-import { useState, useEffect } from "react";
+import { UploadOutlined } from "@ant-design/icons";
 import {
   fetchOrderHistoryAdmin,
   fetchCustomerOrderDetail,
+  uploadOrderData,
 } from "../../api/order";
 import { updateOrder } from "../../api/payment";
-
-// TODO:
-// - Fetch api
-// - Set state list with fetched data
-// - Define column title
-// - Set datasource
+import * as XLSX from "xlsx";
 
 const { Option } = Select;
 
@@ -33,6 +32,7 @@ const AdminTransactionManagement = () => {
   const [selectedOrderId, setSelectedOrderId] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [orderDetail, setOrderDetail] = useState(null);
+  const [fileList, setFileList] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -63,11 +63,11 @@ const AdminTransactionManagement = () => {
     try {
       const data = await fetchCustomerOrderDetail(customerId, orderId);
 
-      setOrderDetail(data.data); // Set order detail in state
+      setOrderDetail(data.data);
       const [year, month, day] = data.data.orderDate;
       const formattedDate = `${day}/${month}/${year}`;
       data.data.orderDate = formattedDate;
-      setModalVisible(true); // Show modal
+      setModalVisible(true);
       console.log("Order Detail:", data);
     } catch (error) {
       console.error("Error fetching customer order detail:", error);
@@ -96,14 +96,55 @@ const AdminTransactionManagement = () => {
       setIsLoading(false);
     }
   };
+
+  const handleUpload = async () => {
+    setIsLoading(true);
+    const formData = new FormData();
+
+    fileList.forEach((file) => {
+      formData.append("file", file);
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: "array" });
+        const sheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[sheetName];
+        const jsonData = XLSX.utils.sheet_to_json(worksheet);
+        console.log(jsonData); // Log Excel file content as JSON
+      };
+      reader.readAsArrayBuffer(file);
+    });
+
+    try {
+      const response = await uploadOrderData(formData);
+
+      if (response && response.status === 200) {
+        notification.success({
+          message: "File uploaded successfully",
+          duration: 2,
+        });
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      } else {
+        throw new Error("File upload failed");
+      }
+    } catch (error) {
+      notification.error({
+        message: "File upload failed",
+        description: error.message,
+        duration: 2,
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const columns = [
-    // {
-    //   title: "Customer ID",
-    //   dataIndex: "customerId",
-    //   key: "customerId",
-    // },
     {
-      title: "Transaction Code",
+      title: "Code",
       dataIndex: "transactionCode",
       key: "transactionCode",
     },
@@ -118,7 +159,7 @@ const AdminTransactionManagement = () => {
       key: "customerEmail",
     },
     {
-      title: "Order Date",
+      title: "Date",
       dataIndex: "formattedDate",
       key: "formattedDate",
     },
@@ -137,11 +178,9 @@ const AdminTransactionManagement = () => {
       dataIndex: "numOfPackages",
       key: "numOfPackages",
     },
-
     {
       title: "Status",
       key: "status",
-
       render: (_, record) => (
         <Select
           defaultValue={record.status}
@@ -190,6 +229,7 @@ const AdminTransactionManagement = () => {
       ),
     },
   ];
+
   return (
     <Layout>
       <Space
@@ -203,6 +243,26 @@ const AdminTransactionManagement = () => {
         <Typography.Title level={2} style={{ marginTop: "30px" }}>
           Order history
         </Typography.Title>
+        <Flex gap={"large"}>
+          <Upload
+            fileList={fileList}
+            beforeUpload={(file) => {
+              setFileList([file]);
+              return false;
+            }}
+            onRemove={() => setFileList([])}
+          >
+            <Button icon={<UploadOutlined />}>Select File</Button>
+          </Upload>
+          <Button
+            type="primary"
+            onClick={handleUpload}
+            disabled={fileList.length === 0}
+          >
+            Upload
+          </Button>
+        </Flex>
+
         <Table
           columns={columns}
           pagination={{
@@ -226,7 +286,6 @@ const AdminTransactionManagement = () => {
       >
         {orderDetail && (
           <div style={{ padding: "16px" }}>
-            {" "}
             <p>
               <strong style={{ fontSize: "19px" }}>Ngày mua hàng:</strong>{" "}
               {orderDetail.orderDate}
@@ -263,11 +322,11 @@ const AdminTransactionManagement = () => {
                     case "FAILED":
                       return "Lỗi khi thanh toán";
                     case "COMPLETED":
-                      return "Thanh toán hoàn tất";
+                      return "Đã thanh toán";
                     case "CANCELLED":
-                      return "Hủy thanh toán";
+                      return "Đã huỷ";
                     default:
-                      return "LỖI";
+                      return orderDetail.status;
                   }
                 })()}
               </span>

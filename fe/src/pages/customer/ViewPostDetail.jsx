@@ -66,7 +66,7 @@ export default function ViewPostDetail() {
                   <h3>{post.description}</h3>
                 </div>
                 <img
-                  width={500}
+                  width={400}
                   src={post.thumbnail}
                   alt="test img"
                   style={{ borderRadius: "25px", marginBottom: "35px" }}
