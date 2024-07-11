@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
   UserOutlined,
-  ShoppingOutlined,
+  CalendarOutlined,
   OrderedListOutlined,
 } from "@ant-design/icons";
 import {
@@ -13,7 +13,8 @@ import {
   Statistic,
   Layout,
   theme,
-  Table
+  Table,
+  Spin,
 } from "antd";
 import { fetchCustomerForAdmin } from "../../api/customer";
 import { getLatestCalendars } from "../../api/calendar";
@@ -23,6 +24,7 @@ import OrderHistoryChart from "./OrderHistoryChart";
 const { Content } = Layout;
 
 const AdminDashboard = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [customerCount, setCustomerCount] = useState(0);
   const [calendarCount, setCalendarCount] = useState(0);
   const [orderCount, setOrderCount] = useState(0);
@@ -38,45 +40,30 @@ const AdminDashboard = () => {
     const fetchCustomers = async () => {
       try {
         const customers = await fetchCustomerForAdmin();
-        //console.log(customers);
         setCustomerCount(customers.data.customers.length);
       } catch (error) {
         console.error("Error fetching customers:", error);
       }
     };
 
-    fetchCustomers();
-  }, []);
-
-  useEffect(() => {
     const fetchCalendar = async () => {
       try {
         const calendar = await getLatestCalendars();
-        //console.log(calendar);
         setCalendarCount(calendar.data.length);
       } catch (error) {
-        console.error("Error fetching customers:", error);
+        console.error("Error fetching calendar:", error);
       }
     };
 
-    fetchCalendar();
-  }, []);
-
-  useEffect(() => {
     const fetchOrder = async () => {
       try {
         const order = await fetchOrderHistoryAdmin();
-        //console.log(order);
         setOrderCount(order.data.orderList.length);
       } catch (error) {
-        console.error("Error fetching customers:", error);
+        console.error("Error fetching orders:", error);
       }
     };
 
-    fetchOrder();
-  }, []);
-
-  useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetchOrderHistoryAdmin();
@@ -92,7 +79,6 @@ const AdminDashboard = () => {
         const ordersByDate = orders.reduce((acc, order) => {
           const [year, month, day] = order.orderDate;
           const formattedDate = `${day}/${month}/${year}`;
-          console.log(formattedDate);
 
           if (!acc[formattedDate]) {
             acc[formattedDate] = 1;
@@ -103,7 +89,6 @@ const AdminDashboard = () => {
           return acc;
         }, {});
 
-        console.log(ordersByDate);
         setOrderHistory(ordersByDate);
         setOrderTable(orderForTable);
         setTotalElements(orderForTable.length);
@@ -112,41 +97,19 @@ const AdminDashboard = () => {
       }
     };
 
-    fetchData();
-  }, []);
+    const fetchAllData = async () => {
+      setIsLoading(true);
+      await Promise.all([
+        fetchCustomers(),
+        fetchCalendar(),
+        fetchOrder(),
+        fetchData(),
+      ]);
+      setIsLoading(false);
+    };
 
-  const columns = [
-    {
-      title: "Transaction Code",
-      dataIndex: "transactionCode",
-      key: "transactionCode",
-    },
-    {
-      title: "Customer Name",
-      dataIndex: "customerName",
-      key: "customerName",
-    },
-    {
-      title: "Order Date",
-      dataIndex: "formattedDate",
-      key: "formattedDate",
-    },
-    {
-      title: "Price",
-      dataIndex: "price",
-      key: "price",
-      render: (price) => (
-        <span style={{ color: "green", fontWeight: "bold" }}>
-          {price.toLocaleString("de-DE") + " VNĐ"}
-        </span>
-      ),
-    },
-    {
-      title: "Packages",
-      dataIndex: "numOfPackages",
-      key: "numOfPackages",
-    },
-  ];
+    fetchAllData();
+  }, []);
 
   return (
     <Layout>
@@ -158,102 +121,80 @@ const AdminDashboard = () => {
         }}
       >
         <Typography.Title level={4}>Dashboard</Typography.Title>
-        <Row gutter={16}>
-          <Col span={8}>
-            <DashboardCard
-              icon={
-                <UserOutlined
-                  style={{
-                    color: "purple",
-                    backgroundColor: "rgba(0,255,255,0.25)",
-                    borderRadius: 20,
-                    fontSize: 24,
-                    padding: 8,
-                  }}
-                />
-              }
-              title={"Customer"}
-              value={customerCount}
-            />
-          </Col>
-          <Col span={8}>
-            <DashboardCard
-              icon={
-                <ShoppingOutlined
-                  style={{
-                    color: "purple",
-                    backgroundColor: "rgba(0,255,255,0.25)",
-                    borderRadius: 20,
-                    fontSize: 24,
-                    padding: 8,
-                  }}
-                />
-              }
-              title={"Product"}
-              value={calendarCount}
-            />
-          </Col>
-          <Col span={8}>
-            <DashboardCard
-              icon={
-                <OrderedListOutlined
-                  style={{
-                    color: "purple",
-                    backgroundColor: "rgba(0,255,255,0.25)",
-                    borderRadius: 20,
-                    fontSize: 24,
-                    padding: 8,
-                  }}
-                />
-              }
-              title={"Total Order"}
-              value={orderCount}
-            />
-          </Col>
-        </Row>
+        <Spin spinning={isLoading}>
+          <Row gutter={16}>
+            <Col span={8}>
+              <DashboardCard
+                icon={
+                  <UserOutlined
+                    style={{
+                      color: "purple",
+                      backgroundColor: "rgba(0,255,255,0.25)",
+                      borderRadius: 20,
+                      fontSize: 24,
+                      padding: 8,
+                    }}
+                  />
+                }
+                title={"Customer"}
+                value={customerCount}
+              />
+            </Col>
+            <Col span={8}>
+              <DashboardCard
+                icon={
+                  <CalendarOutlined
+                    style={{
+                      color: "purple",
+                      backgroundColor: "rgba(0,255,255,0.25)",
+                      borderRadius: 20,
+                      fontSize: 24,
+                      padding: 8,
+                    }}
+                  />
+                }
+                title={"Calendar"}
+                value={calendarCount}
+              />
+            </Col>
+            <Col span={8}>
+              <DashboardCard
+                icon={
+                  <OrderedListOutlined
+                    style={{
+                      color: "purple",
+                      backgroundColor: "rgba(0,255,255,0.25)",
+                      borderRadius: 20,
+                      fontSize: 24,
+                      padding: 8,
+                    }}
+                  />
+                }
+                title={"Total Order"}
+                value={orderCount}
+              />
+            </Col>
+          </Row>
+        </Spin>
       </Space>
       <Content
         style={{
           margin: "24px 16px 0",
         }}
       >
-        <Card title="Order History Chart">
-          <Row gutter={16}>
-            <Col span={14}>
-              <div
-                style={{
-                  minHeight: 500,
-                  background: colorBgContainer,
-                  borderRadius: borderRadiusLG,
-                  padding: 24,
-                }}
-              >
-                <OrderHistoryChart data={orderHistory} />
-              </div>
-            </Col>
-            <Col span={10}>
-              <div
-                style={{
-                  minHeight: 360,
-                  background: colorBgContainer,
-                  borderRadius: borderRadiusLG,
-                  padding: 24,
-                }}
-              >
-                <Table
-                  columns={columns}
-                  pagination={{
-                    position: ["bottomCenter"],
-                    total: totalElements,
-                    showSizeChanger: false,
-                    pageSize: 5,
-                  }}
-                  dataSource={orderTable}
-                />
-              </div>
-            </Col>
-          </Row>
-        </Card>
+        <Spin spinning={isLoading}>
+          <Card title="">
+            <div
+              style={{
+                background: colorBgContainer,
+                borderRadius: borderRadiusLG,
+                padding: 24,
+              }}
+            >
+              <OrderHistoryChart data={orderHistory} />
+            </div>
+          </Card>
+        </Spin>
       </Content>
     </Layout>
   );

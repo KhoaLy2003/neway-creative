@@ -9,6 +9,7 @@ import {
   notification,
   Modal,
   Upload,
+  Flex,
 } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import {
@@ -97,6 +98,7 @@ const AdminTransactionManagement = () => {
   };
 
   const handleUpload = async () => {
+    setIsLoading(true);
     const formData = new FormData();
 
     fileList.forEach((file) => {
@@ -125,7 +127,7 @@ const AdminTransactionManagement = () => {
 
         setTimeout(() => {
           window.location.reload();
-        }, 1500);
+        }, 1000);
       } else {
         throw new Error("File upload failed");
       }
@@ -135,12 +137,14 @@ const AdminTransactionManagement = () => {
         description: error.message,
         duration: 2,
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const columns = [
     {
-      title: "Transaction Code",
+      title: "Code",
       dataIndex: "transactionCode",
       key: "transactionCode",
     },
@@ -155,7 +159,7 @@ const AdminTransactionManagement = () => {
       key: "customerEmail",
     },
     {
-      title: "Order Date",
+      title: "Date",
       dataIndex: "formattedDate",
       key: "formattedDate",
     },
@@ -239,24 +243,26 @@ const AdminTransactionManagement = () => {
         <Typography.Title level={2} style={{ marginTop: "30px" }}>
           Order history
         </Typography.Title>
-        <Upload
-          fileList={fileList}
-          beforeUpload={(file) => {
-            setFileList([file]);
-            return false;
-          }}
-          onRemove={() => setFileList([])}
-        >
-          <Button icon={<UploadOutlined />}>Select File</Button>
-        </Upload>
+        <Flex gap={"large"}>
+          <Upload
+            fileList={fileList}
+            beforeUpload={(file) => {
+              setFileList([file]);
+              return false;
+            }}
+            onRemove={() => setFileList([])}
+          >
+            <Button icon={<UploadOutlined />}>Select File</Button>
+          </Upload>
+          <Button
+            type="primary"
+            onClick={handleUpload}
+            disabled={fileList.length === 0}
+          >
+            Upload
+          </Button>
+        </Flex>
 
-        <Button
-          type="primary"
-          onClick={handleUpload}
-          disabled={fileList.length === 0}
-        >
-          Upload
-        </Button>
         <Table
           columns={columns}
           pagination={{

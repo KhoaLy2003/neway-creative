@@ -8,6 +8,7 @@ import com.neway_creative.ideasy_calendar.enumeration.StatusEnum;
 import com.neway_creative.ideasy_calendar.repository.PostRepository;
 import com.neway_creative.ideasy_calendar.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,24 +30,26 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post createPost(CreatePostRequest createPostRequest) {
-       Post post = Post.builder()
-               .title(createPostRequest.getTitle())
-               .description(createPostRequest.getDescription())
-               .content(createPostRequest.getContent())
-               .thumbnail(createPostRequest.getThumbnail())
-               .status(StatusEnum.ACTIVE)
-               .build();
+        Post post = Post.builder()
+                .title(createPostRequest.getTitle())
+                .content(createPostRequest.getContent())
+                .thumbnail(Strings.EMPTY)
+                .status(StatusEnum.ACTIVE)
+                .build();
 
-       postRepository.save(post);
+        postRepository.save(post);
 
         return post;
     }
 
     @Override
     public Post getPostByPostId(int id) {
-        Post post = postRepository.findById(id).orElse(null);
-
-        return post;
+        Optional<Post> post = postRepository.findById(id);
+        if (post.isPresent()) {
+            return post.get();
+        } else {
+            throw new ResourceNotFoundException("No post with id " + id);
+        }
     }
 
     @Override
