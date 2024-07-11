@@ -11,15 +11,8 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreatePostRequest implements Serializable {
-
     @NotBlank
     private String title;
-
-    private String description;
-
     @NotBlank
     private String content;
-
-    private String thumbnail;
-
 }

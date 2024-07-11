@@ -3,7 +3,7 @@ const baseUrl = process.env.REACT_APP_BACK_END_URL;
 export const fetchOrderHistory = async (customerId) => {
   try {
     const response = await fetch(
-      `${baseUrl}/orders/${customerId}/order-history`,
+      `${baseUrl}/orders/${customerId}/order-history`
     );
     if (!response.ok) {
       throw new Error("Failed to fetch data");
@@ -31,7 +31,7 @@ export const fetchOrderHistoryAdmin = async () => {
 export const fetchCustomerOrderDetail = async (customerId, orderId) => {
   try {
     const response = await fetch(
-      `${baseUrl}/orders/${customerId}/order-history/${orderId}`,
+      `${baseUrl}/orders/${customerId}/order-history/${orderId}`
     );
     if (!response.ok) {
       throw new Error("Failed to fetch customer order detail");
@@ -44,3 +44,21 @@ export const fetchCustomerOrderDetail = async (customerId, orderId) => {
   }
 };
 
+export const uploadOrderData = async (formData) => {
+  try {
+    const response = await fetch(`${baseUrl}/testing/upload-order-data`, {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to upload order data");
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error uploading order data:", error);
+    throw error;
+  }
+};

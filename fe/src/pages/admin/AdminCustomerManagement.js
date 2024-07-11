@@ -27,44 +27,37 @@ const AdminCustomerMangment = () => {
 
   const columns = [
     {
-      title: 'Customer ID',
-      dataIndex: 'customerId',
-      key: 'customerId',
-      render: (text) => <a>{text}</a>,
+      title: "Email / Facebook",
+      key: "contact",
+      render: (record) => {
+        const contact = record.emailAddress || record.facebookUrl;
+        return contact ? contact : "N/A";
+      },
     },
     {
-      title: 'Email',
-      dataIndex: 'emailAddress',
-      key: 'email',
+      title: "Full Name",
+      dataIndex: "name",
+      key: "name",
     },
     {
-      title: 'Full Name',
-      dataIndex: 'name',
-      key: 'name',
-    },
-    {
-      title: 'Status',
-      key: 'status',
-      dataIndex: 'status',
+      title: "Status",
+      key: "status",
+      dataIndex: "status",
       render: (status) => {
         let color;
         switch (status.toUpperCase()) {
-          case 'ACTIVE':
-            color = 'green';
+          case "ACTIVE":
+            color = "green";
             break;
-          case 'INACTIVE':
-            color = 'red';
+          case "INACTIVE":
+            color = "red";
             break;
           default:
-            color = 'default';
+            color = "default";
         }
-        return (
-          <Tag color={color}>
-            {status.toUpperCase()}
-          </Tag>
-        );
+        return <Tag color={color}>{status.toUpperCase()}</Tag>;
       },
-    }
+    },
   ];
 
   return (
@@ -84,7 +77,7 @@ const AdminCustomerMangment = () => {
             pagination={{
               position: ["bottomCenter"],
               showSizeChanger: false,
-              pageSize: 7, 
+              pageSize: 7,
               total: customerData.length,
               onChange: (page) => setCurrentPage(page),
             }}

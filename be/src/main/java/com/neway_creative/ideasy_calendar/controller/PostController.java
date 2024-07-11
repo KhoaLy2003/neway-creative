@@ -41,7 +41,7 @@ public class PostController {
                 .body(new BaseResponse(HttpStatus.OK.value(), MessageConstant.SUCCESSFUL_MESSAGE, allPosts));
     }
 
-    @PostMapping(UriConstant.POST_CREATE)
+    @PostMapping
     public ResponseEntity<BaseResponse> createPost(@RequestBody CreatePostRequest createPostRequest) {
         if (createPostRequest == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -50,6 +50,7 @@ public class PostController {
         Post post = postService.createPost(createPostRequest);
 
         PostResponse postResponse = PostResponse.builder()
+                .id(post.getPostId())
                 .title(post.getTitle())
                 .description(post.getDescription())
                 .content(post.getContent())
@@ -69,6 +70,7 @@ public class PostController {
         Post post = postService.getPostByPostId(postId);
 
         PostResponse postResponse = PostResponse.builder()
+                .id(post.getPostId())
                 .title(post.getTitle())
                 .description(post.getDescription())
                 .content(post.getContent())

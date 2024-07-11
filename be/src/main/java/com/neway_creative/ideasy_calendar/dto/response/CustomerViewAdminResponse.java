@@ -15,4 +15,5 @@ public class CustomerViewAdminResponse {
     private String name;
     private String emailAddress;
     private StatusEnum status;
+    private String facebookUrl;
 }

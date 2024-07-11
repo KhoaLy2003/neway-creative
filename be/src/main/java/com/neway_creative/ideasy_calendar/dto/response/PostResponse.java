@@ -10,6 +10,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PostResponse implements Serializable {
+    private int id;
     private String title;
     private String description;
     private String content;

@@ -79,10 +79,6 @@ public final class UriConstant {
      */
     public static final String CUSTOMER_ORDER_DETAIL = "/{customerId}/order-history/{orderId}";
     /**
-     * The constant POST_CREATE.
-     */
-    public static final String POST_CREATE = "/admin/create";
-    /**
      * The constant CALENDAR_CREATE.
      */
     public static final String CALENDAR_CREATE_URI = "/admin/create";
