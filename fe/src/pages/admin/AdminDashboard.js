@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
   UserOutlined,
-  CalendarOutlined,
+  DollarOutlined,
   OrderedListOutlined,
 } from "@ant-design/icons";
 import {
@@ -17,8 +17,10 @@ import {
   Spin,
 } from "antd";
 import { fetchCustomerForAdmin } from "../../api/customer";
-import { getLatestCalendars } from "../../api/calendar";
-import { fetchOrderHistoryAdmin } from "../../api/order";
+import {
+  fetchOrderHistoryAdmin,
+  fetchTotalPriceOfCompletedOrders,
+} from "../../api/order";
 import OrderHistoryChart from "./OrderHistoryChart";
 
 const { Content } = Layout;
@@ -26,7 +28,8 @@ const { Content } = Layout;
 const AdminDashboard = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [customerCount, setCustomerCount] = useState(0);
-  const [calendarCount, setCalendarCount] = useState(0);
+  const [totalPriceOfCompletedOrders, setTotalPriceOfCompletedOrders] =
+    useState(0);
   const [orderCount, setOrderCount] = useState(0);
   const [orderHistory, setOrderHistory] = useState({});
   const [totalElements, setTotalElements] = useState(0);
@@ -46,10 +49,10 @@ const AdminDashboard = () => {
       }
     };
 
-    const fetchCalendar = async () => {
+    const fetchTotalPrice = async () => {
       try {
-        const calendar = await getLatestCalendars();
-        setCalendarCount(calendar.data.length);
+        const totalPrice = await fetchTotalPriceOfCompletedOrders();
+        setTotalPriceOfCompletedOrders(totalPrice.data);
       } catch (error) {
         console.error("Error fetching calendar:", error);
       }
@@ -101,7 +104,7 @@ const AdminDashboard = () => {
       setIsLoading(true);
       await Promise.all([
         fetchCustomers(),
-        fetchCalendar(),
+        fetchTotalPrice(),
         fetchOrder(),
         fetchData(),
       ]);
@@ -143,7 +146,7 @@ const AdminDashboard = () => {
             <Col span={8}>
               <DashboardCard
                 icon={
-                  <CalendarOutlined
+                  <DollarOutlined
                     style={{
                       color: "purple",
                       backgroundColor: "rgba(0,255,255,0.25)",
@@ -153,8 +156,12 @@ const AdminDashboard = () => {
                     }}
                   />
                 }
-                title={"Calendar"}
-                value={calendarCount}
+                title={"Total value"}
+                value={
+                  (totalPriceOfCompletedOrders !== null
+                    ? totalPriceOfCompletedOrders.toLocaleString("de-DE")
+                    : "0") + " VNĐ"
+                }
               />
             </Col>
             <Col span={8}>

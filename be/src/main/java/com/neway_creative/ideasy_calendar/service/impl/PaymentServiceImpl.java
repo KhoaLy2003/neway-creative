@@ -41,7 +41,6 @@ public class PaymentServiceImpl implements PaymentService {
     private final OrderRepository orderRepository;
     private final PackageRepository packageRepository;
     private final CustomerRepository customerRepository;
-    private final CalendarRepository calendarRepository;
     private final MailService mailService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PaymentServiceImpl.class);
@@ -424,5 +423,10 @@ public class PaymentServiceImpl implements PaymentService {
         return AdminViewOrderHistory.builder()
                 .orderList(orderResponses)
                 .build();
+    }
+
+    @Override
+    public Long getTotalPriceOfCompletedOrders() {
+        return orderRepository.getTotalPriceByStatus(OrderEnum.COMPLETED);
     }
 }

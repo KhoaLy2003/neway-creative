@@ -62,3 +62,19 @@ export const uploadOrderData = async (formData) => {
     throw error;
   }
 };
+
+export const fetchTotalPriceOfCompletedOrders = async () => {
+  try {
+    const response = await fetch(
+      `${baseUrl}/orders/total-price/completed`
+    );
+    if (!response.ok) {
+      throw new Error("Failed to fetch total price of completed orders");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching total price of completed orders:", error);
+    return null;
+  }
+};

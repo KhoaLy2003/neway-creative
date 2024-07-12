@@ -69,4 +69,10 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new BaseResponse(HttpStatus.OK.value(), messageLocalization.getLocalizedMessage(MessageConstant.UPLOAD_ORDER_FROM_EXCEL_SUCCESSFULLY), file.getName()));
     }
+
+    @GetMapping("/total-price/completed")
+    public ResponseEntity<BaseResponse> getTotalPriceOfCompletedOrders() {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new BaseResponse(HttpStatus.OK.value(), MessageConstant.SUCCESSFUL_MESSAGE, paymentService.getTotalPriceOfCompletedOrders()));
+    }
 }
