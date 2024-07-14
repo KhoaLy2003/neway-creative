@@ -2,8 +2,10 @@ package com.neway_creative.ideasy_calendar.repository;
 
 import com.neway_creative.ideasy_calendar.entity.Customer;
 import com.neway_creative.ideasy_calendar.entity.Order;
+import com.neway_creative.ideasy_calendar.enumeration.OrderEnum;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -26,4 +28,6 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     List<Integer> findPackageIdsByOrderId(int orderId);
     List<Order> findAllByOrderByCreatedAt();
     Optional<Order> findByCustomerAndOrderDate(Customer customer, LocalDateTime orderDate);
+    @Query("SELECT SUM(o.price) FROM Order o WHERE o.status = :status")
+    Long getTotalPriceByStatus(@Param("status") OrderEnum status);
 }
